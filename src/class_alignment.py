@@ -64,7 +64,7 @@ class Fingerprints(object):
             # for line in data:
             #     print(line)
             # gere le multiline
-            for linePosition in range(0, len(data)):
+            for linePosition in range(0, min( self.orf, len(data))):
                 # split the text in n slice in chunck
                 # line = "".join(data[linePosition:linePosition+2])
                 line = "".join(data[linePosition:]) #for the demo break is needed because it generate noise need fix
