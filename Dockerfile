@@ -14,21 +14,24 @@ RUN apk add --no-cache procps bash
 
 
 RUN apk add --no-cache graphviz
+RUN pip3 install --upgrade pip
 RUN pip3 install gprof2dot
 
 ENV DOCKYARD_SRC=duplication
 #Directory in container for all project files
 ENV DOCKYARD_SRVHOME=/srv
 #Directory in container for project source files
-ENV DOCKYARD_SRVPROJ=/srv/src
+ENV DOCKYARD_SRVPROJ=/srv/hegpdup
 #Update the default application repository sources list
 
 # Create application subdirectories
 # RUN mkdir $DOCKYARD_SRVHOME
-ADD src /srv/src
+ADD . /srv/hegpdup
 COPY data/demo.txt /tmp
 # Install Python Source
 WORKDIR $DOCKYARD_SRVPROJ
+RUN pip3 install .
+
 #to start the server uncomment this
 RUN touch /home/logs.txt
 # CMD ["tail -f /ho;e/logs.txt"]

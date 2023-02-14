@@ -1,7 +1,7 @@
 from intervaltree import IntervalTree
 from itertools import product
 
-from lib import intersection, compareCounter, returnUniq, sortBy, flat2gen
+from .lib import intersection, compareCounter, returnUniq, sortBy, flat2gen
 import logging
 logger = logging.getLogger(__name__)
 logging.basicConfig(format="""%(asctime)s -- %(name)s - %(levelname)s :
