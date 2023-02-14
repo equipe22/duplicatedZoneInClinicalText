@@ -1,0 +1,39 @@
+{
+    "_description": "Leading and trailing patterns in both source and target",
+    "failing": true,
+    "settings": {
+        "orf": 1,
+        "fingerprint_length": 2,
+        "min_duplicate_length": 4
+    },
+    "docs": [
+        {
+            "id": "D0",
+            "text": "Hello, how are you?"
+        },
+        {
+            "id": "D1",
+            "text": "Hello, what's up with you?"
+        }
+    ],
+    "duplicates": [
+        {
+            "source_doc_id": "D0",
+            "target_doc_id": "D1",
+            "source_start": 0,
+            "source_end": 7,
+            "target_start": 0,
+            "target_end": 7,
+            "text": "Hello, "
+        },
+        {
+            "source_doc_id": "D0",
+            "target_doc_id": "D1",
+            "source_start": 14,
+            "source_end": 19,
+            "target_start": 21,
+            "target_end": 26,
+            "text": " you?"
+        }
+    ]
+}

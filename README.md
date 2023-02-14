@@ -14,3 +14,8 @@ run the script build.sh in order to construct an image which will contain the du
 
 run the script run.sh, it will output our sample text 
 the offset is set to 3 and the fingerpint to 15
+
+# How to run tests
+
+1. Install package in editable mode with test dependencies by running `pip install -e ".[tests]"` in the repo directory
+2. Launch `pytest tests/`
