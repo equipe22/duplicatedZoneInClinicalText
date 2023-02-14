@@ -160,7 +160,7 @@ class DocTrees:
             logger.debug("#############")
             for duplication in sorted(self.resultTree[comparison]):
                 candidateOverlap = sorted(
-                    self.resultTree[comparison].search(
+                    self.resultTree[comparison].overlap(
                         duplication.end - 1, duplication.end + 1
                     )
                 )

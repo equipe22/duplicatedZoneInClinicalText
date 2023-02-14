@@ -1,7 +1,7 @@
 FROM python:3.7.0-alpine3.8
 MAINTAINER William Digan william.digan@aphp.fr
 WORKDIR /home
-RUN pip3 install -I intervaltree==2.1.0
+RUN pip3 install -I intervaltree==3.1.0
 RUN apk update \
   && apk add --no-cache  --virtual build-deps gcc python3-dev musl-dev \
   && apk add postgresql-dev \
