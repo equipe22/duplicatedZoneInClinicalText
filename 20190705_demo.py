@@ -2,24 +2,27 @@ from hegpdup.fingerprint_builder import FingerprintBuilder
 from hegpdup.duplicate_finder import DuplicateFinder
 
 
-def generateLink(duplicatesByDocNameFrom, docNameTo, threshold):
+def generateLink(duplicates, docNameTo, threshold):
     link = []
     scoreDup = 0
-    for docNameFrom, duplicates in duplicatesByDocNameFrom.items():
-        alreadyseen = []
-        for duplication in duplicates:
-            targetSpan = duplication.targetSpan
-            if targetSpan.length <= threshold or targetSpan in alreadyseen:
-                continue
-            scoreDup = scoreDup + targetSpan.length
-            alreadyseen.append(targetSpan)
-            sourceSpan = duplication.sourceSpan
-            fromData = (
-                docNameFrom + "," + str(sourceSpan.start) + "," + str(sourceSpan.end)
-            )
-            # to,start,end
-            toData = docNameTo + "," + str(targetSpan.start) + "," + str(targetSpan.end)
-            link.append(fromData + "," + toData)
+    alreadyseen = []
+    for duplication in duplicates:
+        targetSpan = duplication.targetSpan
+        if targetSpan.length <= threshold or targetSpan in alreadyseen:
+            continue
+        scoreDup = scoreDup + targetSpan.length
+        alreadyseen.append(targetSpan)
+        sourceSpan = duplication.sourceSpan
+        fromData = (
+            duplication.sourceDocName
+            + ","
+            + str(sourceSpan.start)
+            + ","
+            + str(sourceSpan.end)
+        )
+        # to,start,end
+        toData = docNameTo + "," + str(targetSpan.start) + "," + str(targetSpan.end)
+        link.append(fromData + "," + toData)
     return (link, scoreDup)
 
 
@@ -38,12 +41,12 @@ for texts in dataset:
 
     for i, text in enumerate(texts):
         name = f"D{i}"
-        duplicatesByDocNameFrom = duplicateFinder.findDuplicates(name, text)
+        duplicates = duplicateFinder.findDuplicates(name, text)
         if i == 0:
             continue
         print("Duplicates")
-        print(duplicatesByDocNameFrom)
-        link, thisScore = generateLink(duplicatesByDocNameFrom, name, 15)
+        print(duplicates)
+        link, thisScore = generateLink(duplicates, name, 15)
 
         print("finish a sentence")
         print(link)

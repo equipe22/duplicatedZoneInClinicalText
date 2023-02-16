@@ -11,27 +11,27 @@ _TEST_CASES_DIR = Path(__file__).parent / "test_cases"
 _TEST_CASES_FILES = sorted(_TEST_CASES_DIR.glob("*.json"))
 
 
-def _getDuplicatesData(duplicatesByDocIdFrom, docIdTo, docText, minDuplicateLength):
+def _getDuplicatesData(duplicates, docIdTo, docText, minDuplicateLength):
     duplicatesData = []
-    for docIdFrom, duplicates in duplicatesByDocIdFrom.items():
-        seen = set()
-        for duplicate in duplicates:
-            if duplicate.targetSpan.length < minDuplicateLength:
-                continue
-            if duplicate.targetSpan in seen:
-                continue
-            text = docText[duplicate.targetSpan.start : duplicate.targetSpan.end]
-            duplicate_data = {
-                "source_doc_id": docIdFrom,
-                "target_doc_id": docIdTo,
-                "source_start": duplicate.sourceSpan.start,
-                "source_end": duplicate.sourceSpan.end,
-                "target_start": duplicate.targetSpan.start,
-                "target_end": duplicate.targetSpan.end,
-                "text": text,
-            }
-            duplicatesData.append(duplicate_data)
-            seen.add(duplicate.targetSpan)
+    seen = set()
+    for duplicate in duplicates:
+        if duplicate.targetSpan.length < minDuplicateLength:
+            continue
+        if duplicate.targetSpan in seen:
+            continue
+
+        text = docText[duplicate.targetSpan.start : duplicate.targetSpan.end]
+        duplicate_data = {
+            "source_doc_id": duplicate.sourceDocName,
+            "target_doc_id": docIdTo,
+            "source_start": duplicate.sourceSpan.start,
+            "source_end": duplicate.sourceSpan.end,
+            "target_start": duplicate.targetSpan.start,
+            "target_end": duplicate.targetSpan.end,
+            "text": text,
+        }
+        duplicatesData.append(duplicate_data)
+        seen.add(duplicate.targetSpan)
     return duplicatesData
 
 
@@ -54,9 +54,9 @@ def test_cases(testCaseFile):
     for doc_data in testCase["docs"]:
         docIdTo = doc_data["id"]
         docText = doc_data["text"]
-        duplicatesByDocIdFrom = duplicateFinder.findDuplicates(docIdTo, docText)
+        duplicates = duplicateFinder.findDuplicates(docIdTo, docText)
         duplicatesData += _getDuplicatesData(
-            duplicatesByDocIdFrom, docIdTo, docText, minDuplicateLength
+            duplicates, docIdTo, docText, minDuplicateLength
         )
 
     pprint(duplicatesData, sort_dicts=False)

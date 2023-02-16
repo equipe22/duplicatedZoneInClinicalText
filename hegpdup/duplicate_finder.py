@@ -12,9 +12,18 @@ class Document:
 
 
 class Duplicate:
-    __slots__ = "sourceSpan", "targetSpan", "fingerprint", "fromFingerprint"
+    __slots__ = (
+        "sourceDocName",
+        "sourceSpan",
+        "targetSpan",
+        "fingerprint",
+        "fromFingerprint",
+    )
 
-    def __init__(self, sourceSpan, targetSpan, fingerprint, fromFingerprint):
+    def __init__(
+        self, sourceDocName, sourceSpan, targetSpan, fingerprint, fromFingerprint
+    ):
+        self.sourceDocName = sourceDocName
         self.sourceSpan = sourceSpan
         self.targetSpan = targetSpan
         self.fingerprint = fingerprint
@@ -22,11 +31,17 @@ class Duplicate:
 
     def __hash__(self):
         return hash(
-            (self.sourceSpan, self.targetSpan, self.fingerprint, self.fromFingerprint)
+            (
+                self.sourceDocName,
+                self.sourceSpan,
+                self.targetSpan,
+                self.fingerprint,
+                self.fromFingerprint,
+            )
         )
 
     def __repr__(self):
-        return f"Duplicate(sourceSpan={self.sourceSpan!r}, targetSpan={self.targetSpan!r}, fingerprint={self.fingerprint}, fromFingerprint={self.fromFingerprint})"
+        return f"Duplicate(sourceDocName={self.sourceDocName}, sourceSpan={self.sourceSpan!r}, targetSpan={self.targetSpan!r}, fingerprint={self.fingerprint}, fromFingerprint={self.fromFingerprint})"
 
 
 class DuplicateFinder:
@@ -54,12 +69,13 @@ class DuplicateFinder:
 
         self.docTree[doc.name] = doc
 
-        duplicatesByDocName = {
-            name: [interval.data for interval in sorted(tree)]
-            for name, tree in comparisonTrees.items()
-        }
+        duplicates = [
+            interval.data
+            for tree in comparisonTrees.values()
+            for interval in sorted(tree)
+        ]
 
-        return duplicatesByDocName
+        return duplicates
 
     def buildComparisonTree(self, docFrom, docTo):
         interSct = docFrom.fingerprints.keys() & docTo.fingerprints.keys()
@@ -78,6 +94,7 @@ class DuplicateFinder:
         for fromLocated in docFrom.fingerprints[thisFinger]:
             for toLocated in docTo.fingerprints[thisFinger]:
                 to_positions = Duplicate(
+                    sourceDocName=docFrom.name,
                     sourceSpan=fromLocated,
                     targetSpan=toLocated,
                     fingerprint=[thisFinger],
@@ -137,6 +154,7 @@ class DuplicateFinder:
             return
 
         to_positions = Duplicate(
+            sourceDocName=prevToAspirant.sourceDocName,
             sourceSpan=positionFrom,
             targetSpan=positionTo,
             fingerprint=list(set(fingers)),
