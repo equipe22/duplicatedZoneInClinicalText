@@ -4,8 +4,8 @@ import logging
 import sys
 import time
 
-from hegpdup.class_alignment import Fingerprints
-from hegpdup.class_doctrees import DocTrees
+from hegpdup.fingerprints import Fingerprints
+from hegpdup.doctrees import DocTrees
 from intervaltree import IntervalTree
 
 

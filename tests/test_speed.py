@@ -1,8 +1,8 @@
 from pathlib import Path
 import timeit
 
-from hegpdup.class_alignment import Fingerprints
-from hegpdup.class_doctrees import DocTrees
+from hegpdup.fingerprints import Fingerprints
+from hegpdup.doctrees import DocTrees
 
 _TEXT_FILE = Path(__file__).parent / "sample_text.txt"
 _FINGERPRINT_LENGTH = 10

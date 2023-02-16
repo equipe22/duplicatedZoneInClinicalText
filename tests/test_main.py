@@ -4,8 +4,8 @@ from pprint import pprint
 
 import pytest
 
-from hegpdup.class_alignment import Fingerprints
-from hegpdup.class_doctrees import DocTrees
+from hegpdup.fingerprints import Fingerprints
+from hegpdup.doctrees import DocTrees
 
 _TEST_CASES_DIR = Path(__file__).parent / "test_cases"
 _TEST_CASES_FILES = sorted(_TEST_CASES_DIR.glob("*.json"))
