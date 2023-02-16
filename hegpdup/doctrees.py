@@ -123,24 +123,16 @@ class DocTrees:
 
     def buildComparisons(self, docFrom, docTo, thisFinger, comparekey):
         for fromLocated in docFrom.fingerprints[thisFinger]:
-            fromPos = self.checkCandidate(docFrom, fromLocated)
             for toLocated in docTo.fingerprints[thisFinger]:
-                toPos = self.checkCandidate(docTo, toLocated)
                 to_positions = Duplicate(
-                    start=toPos[0],
-                    end=toPos[1],
+                    start=toLocated.start,
+                    end=toLocated.end,
                     fingerprint=[thisFinger],
                     fromFingerprint=[thisFinger],
                 )
-                self.resultTree[comparekey][fromPos[0] : fromPos[1]] = to_positions
-
-    def checkCandidate(self, doc, thisCandidate):
-        if thisCandidate.name == doc.name:
-            start = thisCandidate.start
-            end = thisCandidate.end
-            return [start, end]
-        else:
-            return []
+                self.resultTree[comparekey][
+                    fromLocated.start : fromLocated.end
+                ] = to_positions
 
     def expandOverlap(self):
         logger.debug(self.resultTree.keys())
