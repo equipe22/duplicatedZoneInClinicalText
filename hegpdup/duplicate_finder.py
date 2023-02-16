@@ -217,46 +217,39 @@ class DuplicateFinder:
         if len(overlappingIntervals) <= 1:
             return
 
-        duplicates = [interval.data for interval in overlappingIntervals]
-
         for i in range(0, len(overlappingIntervals) - 1):
-            prevDuplicate = duplicates[i]
-            nextDuplicate = duplicates[i + 1]
-            mergedDuplicate = _mergeDuplicates(prevDuplicate, nextDuplicate)
-            if mergedDuplicate is None:
+            prevDuplicate = overlappingIntervals[i].data
+            nextDuplicate = overlappingIntervals[i + 1].data
+
+            if nextDuplicate.targetSpan.end < prevDuplicate.targetSpan.start:
+                return None
+
+            mergedSourceSpan = _mergeSpans(
+                prevDuplicate.sourceSpan, nextDuplicate.sourceSpan
+            )
+            mergedTargetSpan = _mergeSpans(
+                prevDuplicate.targetSpan, nextDuplicate.targetSpan
+            )
+
+            # ignore duplication if from/to spans end up having different lengths
+            # after merge
+            if mergedSourceSpan.length != mergedTargetSpan.length:
                 continue
+
+            mergedDuplicate = Duplicate(
+                prevDuplicate.sourceDocId,
+                mergedSourceSpan,
+                mergedTargetSpan,
+            )
 
             # remove all intervals and their associated Duplicate objects
             # (will include the 2 we merged but maybe also others!)
             # note that we are mutating the interval tree but we already extracted some intervals
             # from it which may not be valid anymore
-            mergedSourceSpan = mergedDuplicate.sourceSpan
             comparisonTree.remove_envelop(mergedSourceSpan.start, mergedSourceSpan.end)
             comparisonTree[
                 mergedSourceSpan.start : mergedSourceSpan.end
             ] = mergedDuplicate
-
-
-def _mergeDuplicates(prevDuplicate, nextDuplicate):
-    """Merge 2 duplicates into a new `Duplicate` object covering their source and target spans"""
-
-    if nextDuplicate.targetSpan.end < prevDuplicate.targetSpan.start:
-        return None
-
-    sourceSpan = _mergeSpans(prevDuplicate.sourceSpan, nextDuplicate.sourceSpan)
-    targetSpan = _mergeSpans(prevDuplicate.targetSpan, nextDuplicate.targetSpan)
-
-    # ignore duplication if from/to spans end up having different lengths
-    # after merge
-    if sourceSpan.length != targetSpan.length:
-        return None
-
-    mergedDuplicate = Duplicate(
-        sourceDocId=prevDuplicate.sourceDocId,
-        sourceSpan=sourceSpan,
-        targetSpan=targetSpan,
-    )
-    return mergedDuplicate
 
 
 def _mergeSpans(span1, span2):
