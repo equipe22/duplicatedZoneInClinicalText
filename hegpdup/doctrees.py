@@ -55,6 +55,10 @@ class Span:
         self.start = start
         self.end = end
 
+    @property
+    def length(self):
+        return self.end - self.start
+
     def __hash__(self):
         return hash(self.start, self.end)
 
@@ -164,9 +168,9 @@ class DocTrees:
         positionFrom = _mergeSpans(fromAspirant[pos], fromAspirant[pos + 1])
         positionTo = _mergeSpans(toAspirant[pos], toAspirant[pos + 1])
 
-        if (positionFrom.end - positionFrom.start) != (
-            positionTo.end - positionTo.start
-        ):
+        # ignore duplication if from/to spans end up having different lengths
+        # after merge
+        if positionFrom.length != positionTo.length:
             return
 
         if toAspirant[pos + 1].end < toAspirant[pos].start:
