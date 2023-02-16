@@ -71,7 +71,7 @@ class DocTrees:
 
     def buildTree_comparisons(self, fingerprintDict):
         for thisFingerprint in fingerprintDict.keys():
-            if fingerprintDict[thisFingerprint].frequence > 1:
+            if fingerprintDict[thisFingerprint].foundIn:
                 candidateList = sorted(
                     returnUniq(fingerprintDict[thisFingerprint].foundIn),
                     key=lambda l: l.name,

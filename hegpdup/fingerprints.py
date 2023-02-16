@@ -1,9 +1,8 @@
 class Fingerprint:
-    __slots__ = "fingerprint", "frequence", "foundIn"
+    __slots__ = "fingerprint", "foundIn"
 
     def __init__(self, fingerprint):
         self.fingerprint = fingerprint
-        self.frequence = 0
         self.foundIn = []
 
     def __repr__(self):
@@ -173,9 +172,6 @@ class Fingerprints:
                     )
 
                 self.figprint[fprint.lower()][-1] += 1
-                self.figprintId[
-                    self.figprint[fprint.lower()][0]
-                ].frequence = self.figprint[fprint.lower()][-1]
                 otherCandidate = FingerprintLocation(
                     name=thisFileName.split("/")[-1],
                     start=start,
