@@ -73,20 +73,21 @@ class DuplicateFinder:
             docFrom = self.docTree[docNameFrom]
             docTo = self.docTree[docNameTo]
 
-            self.buildComparisonTree(docFrom, docTo)
+            comparisonTree = self.buildComparisonTree(docFrom, docTo)
+            if comparisonTree is None:
+                continue
+            comparekey = (docFrom.name, docTo.name)
+            self.resultTree[comparekey] = comparisonTree
+
         logger.debug("DONE FIRST PART")
 
     def buildComparisonTree(self, docFrom, docTo):
         interSct = docFrom.fingerprints.keys() & docTo.fingerprints.keys()
         logger.debug(interSct)
         if len(interSct) < self.nbFinger:
-            return
+            return None
 
-        comparekey = (docFrom.name, docTo.name)
-        comparisonTree = self.resultTree.get(comparekey)
-        if comparisonTree is None:
-            comparisonTree = IntervalTree()
-            self.resultTree[comparekey] = comparisonTree
+        comparisonTree = IntervalTree()
         # pour chaque fingerprint trouvé
         for thisFinger in interSct:
             # pour chaque localisation du figerprint en from
@@ -94,6 +95,8 @@ class DuplicateFinder:
             logger.debug(thisFinger)
             logger.debug(docFrom.fingerprints[thisFinger])
             self.fillComparisonTree(docFrom, docTo, thisFinger, comparisonTree)
+
+        return comparisonTree
 
     def fillComparisonTree(self, docFrom, docTo, thisFinger, comparisonTree):
         for fromLocated in docFrom.fingerprints[thisFinger]:
