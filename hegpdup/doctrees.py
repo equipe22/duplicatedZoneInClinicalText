@@ -110,8 +110,10 @@ class DocTrees:
 
         interSct = sorted(interSct)
         comparekey = (docFrom.name, docTo.name)
-        if comparekey not in self.resultTree.keys():
-            self.resultTree[comparekey] = IntervalTree()
+        comparisonTree = self.resultTree.get(comparekey)
+        if comparisonTree is None:
+            comparisonTree = IntervalTree()
+            self.resultTree[comparekey] = comparisonTree
         # pour chaque fingerprint trouvé
         for thisFinger in interSct:
             # pour chaque localisation du figerprint en from
@@ -119,9 +121,9 @@ class DocTrees:
             logger.debug(thisFinger)
             logger.debug(docFrom.fingerprints[thisFinger])
             logger.debug(figprintId[thisFinger])
-            self.buildComparisons(docFrom, docTo, thisFinger, comparekey)
+            self.buildComparisons(docFrom, docTo, thisFinger, comparisonTree)
 
-    def buildComparisons(self, docFrom, docTo, thisFinger, comparekey):
+    def buildComparisons(self, docFrom, docTo, thisFinger, comparisonTree):
         for fromLocated in docFrom.fingerprints[thisFinger]:
             for toLocated in docTo.fingerprints[thisFinger]:
                 to_positions = Duplicate(
@@ -130,26 +132,23 @@ class DocTrees:
                     fingerprint=[thisFinger],
                     fromFingerprint=[thisFinger],
                 )
-                self.resultTree[comparekey][
-                    fromLocated.start : fromLocated.end
-                ] = to_positions
+                comparisonTree[fromLocated.start : fromLocated.end] = to_positions
 
     def expandOverlap(self):
         logger.debug(self.resultTree.keys())
         logger.debug(len(self.resultTree.keys()))
 
         for comparison in sorted(self.resultTree.keys()):
+            comparisonTree = self.resultTree[comparison]
             logger.debug(comparison)
-            logger.debug(len(self.resultTree[comparison]))
+            logger.debug(len(comparisonTree))
             logger.debug("#############")
-            for duplication in sorted(self.resultTree[comparison]):
-                self.expandDuplication(duplication, comparison)
+            for duplication in sorted(comparisonTree):
+                self.expandDuplication(duplication, comparisonTree)
 
-    def expandDuplication(self, duplication, comparison):
+    def expandDuplication(self, duplication, comparisonTree):
         candidateOverlap = sorted(
-            self.resultTree[comparison].overlap(
-                duplication.end - 1, duplication.end + 1
-            )
+            comparisonTree.overlap(duplication.end - 1, duplication.end + 1)
         )
         if len(candidateOverlap) <= 1:
             return
@@ -160,9 +159,9 @@ class DocTrees:
         fromAspirant = [Span(el.begin, el.end) for el in candidateOverlap]
 
         for pos in range(0, len(candidateOverlap) - 1):
-            self.addLeaf(fromAspirant, toAspirant, comparison, pos)
+            self.addLeaf(fromAspirant, toAspirant, comparisonTree, pos)
 
-    def addLeaf(self, fromAspirant, toAspirant, comparison, pos):
+    def addLeaf(self, fromAspirant, toAspirant, comparisonTree, pos):
         positionFrom = Span(
             min(fromAspirant[pos].start, fromAspirant[pos + 1].start),
             max(fromAspirant[pos].end, fromAspirant[pos + 1].end),
@@ -194,10 +193,8 @@ class DocTrees:
             # should this be list(set((fromfingers))?
             fromFingerprint=list(set(fingers)),
         )
-        self.resultTree[comparison].remove_envelop(positionFrom.start, positionFrom.end)
-        self.resultTree[comparison][
-            positionFrom.start : positionFrom.end
-        ] = to_positions
+        comparisonTree.remove_envelop(positionFrom.start, positionFrom.end)
+        comparisonTree[positionFrom.start : positionFrom.end] = to_positions
 
 
 # https://stackoverflow.com/questions/7828867/how-to-efficiently-compare-two-unordered-lists-not-sets-in-python
