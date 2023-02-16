@@ -1,14 +1,3 @@
-class Fingerprint:
-    __slots__ = "fingerprint", "foundIn"
-
-    def __init__(self, fingerprint):
-        self.fingerprint = fingerprint
-        self.foundIn = []
-
-    def __repr__(self):
-        return f"Fingerprint(fingerprint={self.fingerprint}, foundIn={self.foundIn!r})"
-
-
 class FingerprintLocation:
     __slots__ = "name", "start", "end"
 
@@ -155,7 +144,7 @@ class Fingerprints:
         if fprint not in self.figprint.keys():
             nbFigprints = len(self.figprint) + 1
             self.figprint[fprint] = nbFigprints
-            self.figprintId[nbFigprints] = Fingerprint(fingerprint=fprint)
+            self.figprintId[nbFigprints] = []
 
         start = thisrealposition + thisChunk
         # NB fprint might be shorter than fingerprintLenght
@@ -165,4 +154,4 @@ class Fingerprints:
             start=start,
             end=end,
         )
-        self.figprintId[self.figprint[fprint]].foundIn.append(otherCandidate)
+        self.figprintId[self.figprint[fprint]].append(otherCandidate)

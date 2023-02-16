@@ -70,11 +70,11 @@ class DocTrees:
 
     def buildTree_comparisons(self, fingerprintDict):
         for thisFingerprint in fingerprintDict.keys():
-            if not fingerprintDict[thisFingerprint].foundIn:
+            if not fingerprintDict[thisFingerprint]:
                 continue
 
             candidateList = sorted(
-                set(fingerprintDict[thisFingerprint].foundIn),
+                set(fingerprintDict[thisFingerprint]),
                 key=lambda l: l.name,
             )
             # return uniq and an ordered list
