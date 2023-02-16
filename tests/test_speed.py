@@ -40,7 +40,8 @@ def test_speed():
     def run():
         fingerprintBuilder = FingerprintBuilder([_FINGERPRINT_LENGTH], _ORF)
         duplicateFinder = DuplicateFinder(fingerprintBuilder)
-        duplicateFinder.buildTree_comparisons(texts)
+        for i, text in enumerate(texts):
+            duplicateFinder.buildComparisonTrees(f"D{i}", text)
 
     time = timeit.timeit(run, number=10)
     print(time)

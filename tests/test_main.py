@@ -11,9 +11,14 @@ _TEST_CASES_DIR = Path(__file__).parent / "test_cases"
 _TEST_CASES_FILES = sorted(_TEST_CASES_DIR.glob("*.json"))
 
 
-def _extractDuplicatesFromTrees(trees, minDuplicateLength, docTextsById):
+def _extractDuplicatesFromTrees(
+    trees,
+    docIdTo,
+    docText,
+    minDuplicateLength,
+):
     duplicatesData = []
-    for (docIdFrom, docIdTo), tree in trees.items():
+    for docIdFrom, tree in trees.items():
         seen = set()
         for interval in sorted(tree):
             if (interval.end - interval.begin) < minDuplicateLength:
@@ -23,7 +28,7 @@ def _extractDuplicatesFromTrees(trees, minDuplicateLength, docTextsById):
 
             targetStart = interval.data.start
             targetEnd = interval.data.end
-            text = docTextsById[docIdTo][targetStart:targetEnd]
+            text = docText[targetStart:targetEnd]
 
             duplicatesData.append(
                 {
@@ -51,16 +56,19 @@ def test_cases(testCaseFile):
     fingerprintLength = testCase["settings"]["fingerprint_length"]
     orf = testCase["settings"]["orf"]
     minDuplicateLength = testCase["settings"]["min_duplicate_length"]
-    docTexts = [doc["text"] for doc in testCase["docs"]]
 
     fingerprintBuilder = FingerprintBuilder([fingerprintLength], orf)
     duplicateFinder = DuplicateFinder(fingerprintBuilder)
-    duplicateFinder.buildTree_comparisons(docTexts)
 
-    docTextsById = {docData["id"]: docData["text"] for docData in testCase["docs"]}
-    duplicatesData = _extractDuplicatesFromTrees(
-        duplicateFinder.resultTree, minDuplicateLength, docTextsById
-    )
+    duplicatesData = []
+
+    for docData in testCase["docs"]:
+        docIdTo = docData["id"]
+        docText = docData["text"]
+        comparisonTrees = duplicateFinder.buildComparisonTrees(docIdTo, docText)
+        duplicatesData += _extractDuplicatesFromTrees(
+            comparisonTrees, docIdTo, docText, minDuplicateLength
+        )
 
     pprint(duplicatesData, sort_dicts=False)
 

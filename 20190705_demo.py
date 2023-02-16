@@ -43,17 +43,24 @@ orf = 3
 fingerprintList = [10]
 
 for texts in dataset:
+    print(texts)
+
     fingerprintBuilder = FingerprintBuilder(fingerprintList, orf)
     duplicateFinder = DuplicateFinder(fingerprintBuilder)
-    duplicateFinder.buildTree_comparisons(texts)
-    print(texts)
-    link, thisScore = generateLink(duplicateFinder.resultTree, 15)
-    print("Data tree")
-    print(duplicateFinder.resultTree)
-    print("finish a sentence")
-    print(link)
-    for el in link:
-        thisexp = el.split(",")
-        print(texts[0][int(thisexp[1]) : int(thisexp[2])])
-        print(texts[1][int(thisexp[4]) : int(thisexp[5])])
-        print("**********")
+
+    for i, text in enumerate(texts):
+        name = f"D{i}"
+        comparisonTrees = duplicateFinder.buildComparisonTrees(name, text)
+        if i == 0:
+            continue
+        print("Data tree")
+        print(comparisonTrees)
+        link, thisScore = generateLink(comparisonTrees, 15)
+
+        print("finish a sentence")
+        print(link)
+        for el in link:
+            thisexp = el.split(",")
+            print(texts[0][int(thisexp[1]) : int(thisexp[2])])
+            print(texts[1][int(thisexp[4]) : int(thisexp[5])])
+            print("**********")

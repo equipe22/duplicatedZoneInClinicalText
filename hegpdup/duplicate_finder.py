@@ -45,28 +45,26 @@ class DuplicateFinder:
 
         self.fingerprintBuilder = fingerprintBuilder
         self.docTree = dict()
-        # a new tree where results are store by comparison
-        self.resultTree = dict()
 
-    def buildTree_comparisons(self, filesInformation):
-        for i, text in enumerate(filesInformation):
-            name = f"D{i}"
-            self.addDocTree(name, text)
+    def buildComparisonTrees(self, name, text):
+        if name in self.docTree:
+            raise Exception(f"Already processed document with name {name}")
 
-    def addDocTree(self, name, text):
         fingerprintDict = self.fingerprintBuilder.buildFingerprints(text)
         doc = Document(name, fingerprintDict)
 
+        comparisonTrees = {}
         for previousDoc in self.docTree.values():
             comparisonTree = self.buildComparisonTree(docFrom=previousDoc, docTo=doc)
             if comparisonTree is None:
                 continue
             self.expandComparisonTree(comparisonTree)
 
-            comparekey = (previousDoc.name, doc.name)
-            self.resultTree[comparekey] = comparisonTree
+            comparisonTrees[previousDoc.name] = comparisonTree
 
         self.docTree[doc.name] = doc
+
+        return comparisonTrees
 
     def buildComparisonTree(self, docFrom, docTo):
         interSct = docFrom.fingerprints.keys() & docTo.fingerprints.keys()
