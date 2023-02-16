@@ -10,7 +10,7 @@ class Span:
         return self.end - self.start
 
     def __hash__(self):
-        return hash(self.start, self.end)
+        return hash((self.start, self.end))
 
     def __repr__(self):
         return f"Span(start={self.start}, end={self.end})"

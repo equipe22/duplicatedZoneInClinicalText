@@ -12,21 +12,21 @@ class Document:
 
 
 class Duplicate:
-    __slots__ = "start", "end", "fingerprint", "fromFingerprint"
+    __slots__ = "sourceSpan", "targetSpan", "fingerprint", "fromFingerprint"
 
-    def __init__(self, start, end, fingerprint, fromFingerprint):
-        self.start = start
-        self.end = end
+    def __init__(self, sourceSpan, targetSpan, fingerprint, fromFingerprint):
+        self.sourceSpan = sourceSpan
+        self.targetSpan = targetSpan
         self.fingerprint = fingerprint
         self.fromFingerprint = fromFingerprint
 
     def __hash__(self):
         return hash(
-            (self.name, self.start, self.end, self.fingerprint, self.fromFingerprint)
+            (self.sourceSpan, self.targetSpan, self.fingerprint, self.fromFingerprint)
         )
 
     def __repr__(self):
-        return f"Duplicate(start={self.start}, end={self.end}, fingerprint={self.fingerprint}, fromFingerprint={self.fromFingerprint})"
+        return f"Duplicate(sourceSpan={self.sourceSpan!r}, targetSpan={self.targetSpan!r}, fingerprint={self.fingerprint}, fromFingerprint={self.fromFingerprint})"
 
 
 class DuplicateFinder:
@@ -73,8 +73,8 @@ class DuplicateFinder:
         for fromLocated in docFrom.fingerprints[thisFinger]:
             for toLocated in docTo.fingerprints[thisFinger]:
                 to_positions = Duplicate(
-                    start=toLocated.start,
-                    end=toLocated.end,
+                    sourceSpan=fromLocated,
+                    targetSpan=toLocated,
                     fingerprint=[thisFinger],
                     fromFingerprint=[thisFinger],
                 )
@@ -115,11 +115,11 @@ class DuplicateFinder:
         nextToAspirant,
         comparisonTree,
     ):
-        if nextToAspirant.end < prevToAspirant.start:
+        if nextToAspirant.targetSpan.end < prevToAspirant.targetSpan.start:
             return
 
         positionFrom = _mergeSpans(prevFromAspirant, nextFromAspirant)
-        positionTo = _mergeSpans(prevToAspirant, nextToAspirant)
+        positionTo = _mergeSpans(prevToAspirant.targetSpan, nextToAspirant.targetSpan)
 
         # ignore duplication if from/to spans end up having different lengths
         # after merge
@@ -132,8 +132,8 @@ class DuplicateFinder:
             return
 
         to_positions = Duplicate(
-            start=positionTo.start,
-            end=positionTo.end,
+            sourceSpan=positionFrom,
+            targetSpan=positionTo,
             fingerprint=list(set(fingers)),
             # should this be list(set((fromfingers))?
             fromFingerprint=list(set(fingers)),

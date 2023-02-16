@@ -7,29 +7,20 @@ def generateLink(docIntervalTree, threshold):
     scoreDup = 0
     for comparison in docIntervalTree.keys():
         alreadyseen = []
-        for duplication in sorted(docIntervalTree[comparison]):
-            # from,start,end
-            if (duplication.data.end - duplication.data.start) <= threshold or (
-                duplication.data.end,
-                duplication.data.start,
-            ) in alreadyseen:
+        for interval in sorted(docIntervalTree[comparison]):
+            duplication = interval.data
+            targetSpan = duplication.targetSpan
+            if targetSpan.length <= threshold or targetSpan in alreadyseen:
                 continue
-            scoreDup = scoreDup + (duplication.data.end - duplication.data.start)
-            alreadyseen.append((duplication.data.end, duplication.data.start))
+            scoreDup = scoreDup + targetSpan.length
+            alreadyseen.append(targetSpan)
+            sourceSpan = duplication.sourceSpan
             fromData = (
-                comparison[0]
-                + ","
-                + str(duplication.begin)
-                + ","
-                + str(duplication.end)
+                comparison[0] + "," + str(sourceSpan.start) + "," + str(sourceSpan.end)
             )
             # to,start,end
             toData = (
-                comparison[1]
-                + ","
-                + str(duplication.data.start)
-                + ","
-                + str(duplication.data.end)
+                comparison[1] + "," + str(targetSpan.start) + "," + str(targetSpan.end)
             )
             link.append(fromData + "," + toData)
     return (link, scoreDup)
