@@ -55,7 +55,6 @@ class DuplicateFinder:
             self.addDocTree(name, text)
 
         self.buildComparisonTrees()
-        self.expandComparisonTrees()
 
     def addDocTree(self, name, text):
         fingerprintDict = self.fingerprintBuilder.buildFingerprints(text)
@@ -76,6 +75,8 @@ class DuplicateFinder:
             comparisonTree = self.buildComparisonTree(docFrom, docTo)
             if comparisonTree is None:
                 continue
+            self.expandComparisonTree(comparisonTree)
+
             comparekey = (docFrom.name, docTo.name)
             self.resultTree[comparekey] = comparisonTree
 
@@ -108,17 +109,6 @@ class DuplicateFinder:
                     fromFingerprint=[thisFinger],
                 )
                 comparisonTree[fromLocated.start : fromLocated.end] = to_positions
-
-    def expandComparisonTrees(self):
-        logger.debug(self.resultTree.keys())
-        logger.debug(len(self.resultTree.keys()))
-
-        for comparison in sorted(self.resultTree.keys()):
-            comparisonTree = self.resultTree[comparison]
-            logger.debug(comparison)
-            logger.debug(len(comparisonTree))
-            logger.debug("#############")
-            self.expandComparisonTree(comparisonTree)
 
     def expandComparisonTree(self, comparisonTree):
         for duplication in sorted(comparisonTree):
