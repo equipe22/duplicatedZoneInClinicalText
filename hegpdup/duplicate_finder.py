@@ -90,9 +90,6 @@ class DuplicateFinder:
         fingerprintDict = self.fingerprintBuilder.generateFingerprints(name, text)
 
         for thisFingerprint in fingerprintDict.keys():
-            if not fingerprintDict[thisFingerprint]:
-                continue
-
             candidateList = sorted(
                 set(fingerprintDict[thisFingerprint]),
                 key=lambda l: l.name,
