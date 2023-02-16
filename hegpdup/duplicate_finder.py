@@ -90,11 +90,7 @@ class DuplicateFinder:
         fingerprintDict = self.fingerprintBuilder.generateFingerprints(name, text)
 
         for thisFingerprint in fingerprintDict.keys():
-            candidateList = sorted(
-                set(fingerprintDict[thisFingerprint]),
-                key=lambda l: l.name,
-            )
-            # return uniq and an ordered list
+            candidateList = fingerprintDict[thisFingerprint]
             for thisCandidate in candidateList:
                 # add a fingerprint
                 doc.addFinger(thisFingerprint, thisCandidate)
