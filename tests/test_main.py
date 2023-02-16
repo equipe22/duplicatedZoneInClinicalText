@@ -4,7 +4,7 @@ from pprint import pprint
 
 import pytest
 
-from hegpdup.fingerprints import Fingerprints
+from hegpdup.fingerprint_builder import FingerprintBuilder
 from hegpdup.duplicate_finder import DuplicateFinder
 
 _TEST_CASES_DIR = Path(__file__).parent / "test_cases"
@@ -53,11 +53,11 @@ def test_cases(testCaseFile):
     minDuplicateLength = testCase["settings"]["min_duplicate_length"]
     docTexts = [doc["text"] for doc in testCase["docs"]]
 
-    fingerprints = Fingerprints([fingerprintLength], orf, docTexts)
+    fingerprintBuilder = FingerprintBuilder([fingerprintLength], orf, docTexts)
 
     duplicateFinder = DuplicateFinder()
-    duplicateFinder.buildTree_comparisons(fingerprints.figprintId)
-    duplicateFinder.mergeOverlap(fingerprints.figprintId)
+    duplicateFinder.buildTree_comparisons(fingerprintBuilder.figprintId)
+    duplicateFinder.mergeOverlap(fingerprintBuilder.figprintId)
     duplicateFinder.expandOverlap()
 
     docTextsById = {docData["id"]: docData["text"] for docData in testCase["docs"]}

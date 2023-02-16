@@ -18,7 +18,7 @@ class FingerprintLocation:
 _CHUNKS_TO_IGNORE = {"\n", "\r\n"}
 
 
-class Fingerprints:
+class FingerprintBuilder:
     # thisFolder, fingerprintList, orf
 
     def __init__(self, fingerprintList, orf, fileInformations):

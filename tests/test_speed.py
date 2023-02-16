@@ -1,7 +1,7 @@
 from pathlib import Path
 import timeit
 
-from hegpdup.fingerprints import Fingerprints
+from hegpdup.fingerprint_builder import FingerprintBuilder
 from hegpdup.duplicate_finder import DuplicateFinder
 
 _TEXT_FILE = Path(__file__).parent / "sample_text.txt"
@@ -38,10 +38,10 @@ def test_speed():
     texts = _getSampleTexts()
 
     def run():
-        fingerprints = Fingerprints([_FINGERPRINT_LENGTH], _ORF, texts)
+        fingerprintBuilder = FingerprintBuilder([_FINGERPRINT_LENGTH], _ORF, texts)
         duplicateFinder = DuplicateFinder()
-        duplicateFinder.buildTree_comparisons(fingerprints.figprintId)
-        duplicateFinder.mergeOverlap(fingerprints.figprintId)
+        duplicateFinder.buildTree_comparisons(fingerprintBuilder.figprintId)
+        duplicateFinder.mergeOverlap(fingerprintBuilder.figprintId)
         duplicateFinder.expandOverlap()
 
     time = timeit.timeit(run, number=10)

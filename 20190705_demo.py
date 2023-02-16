@@ -1,4 +1,4 @@
-from hegpdup.fingerprints import Fingerprints
+from hegpdup.fingerprint_builder import FingerprintBuilder
 from hegpdup.duplicate_finder import DuplicateFinder
 
 
@@ -43,10 +43,12 @@ orf = 3
 fingerprintList = [10]
 
 for candicate in range(0, len(dataset)):
-    figerprintsId = Fingerprints(fingerprintList, orf, dataset[candicate][0:2])
+    fingerprintBuilder = FingerprintBuilder(
+        fingerprintList, orf, dataset[candicate][0:2]
+    )
     duplicateFinder = DuplicateFinder()
-    duplicateFinder.buildTree_comparisons(figerprintsId.figprintId)
-    duplicateFinder.mergeOverlap(figerprintsId.figprintId)
+    duplicateFinder.buildTree_comparisons(fingerprintBuilder.figprintId)
+    duplicateFinder.mergeOverlap(fingerprintBuilder.figprintId)
     print(candicate)
     duplicateFinder.expandOverlap()
     link, thisScore = generateLink(duplicateFinder.resultTree, 15)
