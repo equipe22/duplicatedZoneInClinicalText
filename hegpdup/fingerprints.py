@@ -75,19 +75,22 @@ class Fingerprints:
 
         for thisfile in range(0, len(fileInformations)):
             data = fileInformations[thisfile]
-            # lowercase so we aren't case sensitive
-            data = data.lower()
-            # found the right position in text
-            realposition = 0
-            # Cadre de lecture
-            # gere le multiline
-            for linePosition in range(0, min(self.orf, len(data))):
-                # split the text in n slice in chunck
-                line = "".join(data[linePosition:])
-                # gere cadre de lecture[0 et +1]
-                self.createChunks(line, realposition, "D" + str(thisfile))
-                # Update linePosition value
-                realposition = realposition + len(data[linePosition])
+            self.generateFingeprintForFile(thisfile, data)
+
+    def generateFingeprintForFile(self, thisfile, data):
+        # lowercase so we aren't case sensitive
+        data = data.lower()
+        # found the right position in text
+        realposition = 0
+        # Cadre de lecture
+        # gere le multiline
+        for linePosition in range(0, min(self.orf, len(data))):
+            # split the text in n slice in chunck
+            line = "".join(data[linePosition:])
+            # gere cadre de lecture[0 et +1]
+            self.createChunks(line, realposition, "D" + str(thisfile))
+            # Update linePosition value
+            realposition = realposition + len(data[linePosition])
 
     def createChunks(self, line, realposition, thisfile):
         """For a given line, create the appropriate
@@ -106,17 +109,20 @@ class Fingerprints:
         # gere cadre de lecture[0 et +1]
         for fingerprintLen in self.fingerprintList:
             listCadreLecture = range(0, len(line), self.orf)
-            self.treatChunks(
-                listCadreLecture,
-                thisfile,
-                line,
-                realposition,
-                fingerprintLen,
-            )
+            for i in listCadreLecture:
+                self.treatChunk(
+                    i,
+                    thisfile,
+                    line,
+                    realposition,
+                    fingerprintLen,
+                )
+                if i + fingerprintLen >= len(line):
+                    break
 
-    def treatChunks(
+    def treatChunk(
         self,
-        thisChunks,
+        thisChunk,
         thisFileName,
         thisLine,
         thisrealposition,
@@ -126,7 +132,7 @@ class Fingerprints:
 
         Parameters
         ----------
-        thisChunks : int
+        thisChunk : int
             a round number which will split text size
             by the lengght of the fingerprint.
         thisFileName : str
@@ -138,24 +144,25 @@ class Fingerprints:
         fingerprintLenght : int
             fingerprint length to generate.
         """
-        for i in thisChunks:
-            beginF = i
-            endF = beginF + fingerprintLenght
-            fprint = thisLine[beginF:endF]
-            start = thisrealposition + beginF
-            # NB fprint might be shorter than fingerprintLenght
-            end = start + len(fprint)
-            if fprint not in ["\n", "\r\n"]:
-                if fprint not in self.figprint.keys():
-                    nbFigprints = len(self.figprint) + 1
-                    self.figprint[fprint] = nbFigprints
-                    self.figprintId[nbFigprints] = Fingerprint(fingerprint=fprint)
 
-                otherCandidate = FingerprintLocation(
-                    name=thisFileName.split("/")[-1],
-                    start=start,
-                    end=end,
-                )
-                self.figprintId[self.figprint[fprint]].foundIn.append(otherCandidate)
-            if endF >= len(thisLine):
-                break
+        beginF = thisChunk
+        endF = beginF + fingerprintLenght
+        fprint = thisLine[beginF:endF]
+        start = thisrealposition + thisChunk
+        # NB fprint might be shorter than fingerprintLenght
+        end = start + len(fprint)
+
+        if fprint in ["\n", "\r\n"]:
+            return
+
+        if fprint not in self.figprint.keys():
+            nbFigprints = len(self.figprint) + 1
+            self.figprint[fprint] = nbFigprints
+            self.figprintId[nbFigprints] = Fingerprint(fingerprint=fprint)
+
+        otherCandidate = FingerprintLocation(
+            name=thisFileName.split("/")[-1],
+            start=start,
+            end=end,
+        )
+        self.figprintId[self.figprint[fprint]].foundIn.append(otherCandidate)

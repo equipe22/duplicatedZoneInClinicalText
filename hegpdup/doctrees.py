@@ -71,14 +71,16 @@ class DocTrees:
 
     def buildTree_comparisons(self, fingerprintDict):
         for thisFingerprint in fingerprintDict.keys():
-            if fingerprintDict[thisFingerprint].foundIn:
-                candidateList = sorted(
-                    returnUniq(fingerprintDict[thisFingerprint].foundIn),
-                    key=lambda l: l.name,
-                )
-                # return uniq and an ordered list
-                for thisCandidate in candidateList:
-                    self.addACandidateToDocTree(thisCandidate, thisFingerprint)
+            if not fingerprintDict[thisFingerprint].foundIn:
+                continue
+
+            candidateList = sorted(
+                returnUniq(fingerprintDict[thisFingerprint].foundIn),
+                key=lambda l: l.name,
+            )
+            # return uniq and an ordered list
+            for thisCandidate in candidateList:
+                self.addACandidateToDocTree(thisCandidate, thisFingerprint)
 
     def addACandidateToDocTree(self, location, thisFingerprint):
         if location.name not in self.docTree.keys():
@@ -107,19 +109,21 @@ class DocTrees:
         # Get element which are in comon between two lists
         interSct = intersection(fromFingerprints, toFingerprints)
         logger.debug(interSct)
-        if len(interSct) >= nbFinger:
-            interSct.sort()
-            comparekey = (docFrom.name, docTo.name)
-            if comparekey not in self.resultTree.keys():
-                self.resultTree[comparekey] = IntervalTree()
-            # pour chaque fingerprint trouvé
-            for thisFinger in interSct:
-                # pour chaque localisation du figerprint en from
-                logger.debug("######################################")
-                logger.debug(thisFinger)
-                logger.debug(docFrom.fingerprints[thisFinger])
-                logger.debug(figprintId[thisFinger])
-                self.buildComparisons(docFrom, docTo, thisFinger, comparekey)
+        if len(interSct) < nbFinger:
+            return
+
+        interSct.sort()
+        comparekey = (docFrom.name, docTo.name)
+        if comparekey not in self.resultTree.keys():
+            self.resultTree[comparekey] = IntervalTree()
+        # pour chaque fingerprint trouvé
+        for thisFinger in interSct:
+            # pour chaque localisation du figerprint en from
+            logger.debug("######################################")
+            logger.debug(thisFinger)
+            logger.debug(docFrom.fingerprints[thisFinger])
+            logger.debug(figprintId[thisFinger])
+            self.buildComparisons(docFrom, docTo, thisFinger, comparekey)
 
     def buildComparisons(self, docFrom, docTo, thisFinger, comparekey):
         for fromLocated in docFrom.fingerprints[thisFinger]:
@@ -137,27 +141,31 @@ class DocTrees:
     def expandOverlap(self):
         logger.debug(self.resultTree.keys())
         logger.debug(len(self.resultTree.keys()))
+
         for comparison in sorted(self.resultTree.keys()):
             logger.debug(comparison)
             logger.debug(len(self.resultTree[comparison]))
             logger.debug("#############")
             for duplication in sorted(self.resultTree[comparison]):
-                candidateOverlap = sorted(
-                    self.resultTree[comparison].overlap(
-                        duplication.end - 1, duplication.end + 1
-                    )
-                )
-                if len(candidateOverlap) > 1:
-                    logger.debug("found a candidate")
-                    logger.debug(candidateOverlap)
-                    toAspirant = [this.data for this in candidateOverlap]
-                    fromAspirant = [Span(el.begin, el.end) for el in candidateOverlap]
-                    for pos in range(0, len(fromAspirant)):
-                        # the iterator is for from and to
-                        if (pos + 1 < len(toAspirant)) and (
-                            pos + 1 < len(fromAspirant)
-                        ):
-                            self.addLeaf(fromAspirant, toAspirant, comparison, pos)
+                self.expandDuplication(duplication, comparison)
+
+    def expandDuplication(self, duplication, comparison):
+        candidateOverlap = sorted(
+            self.resultTree[comparison].overlap(
+                duplication.end - 1, duplication.end + 1
+            )
+        )
+        if len(candidateOverlap) <= 1:
+            return
+
+        logger.debug("found a candidate")
+        logger.debug(candidateOverlap)
+        toAspirant = [this.data for this in candidateOverlap]
+        fromAspirant = [Span(el.begin, el.end) for el in candidateOverlap]
+        for pos in range(0, len(fromAspirant)):
+            # the iterator is for from and to
+            if (pos + 1 < len(toAspirant)) and (pos + 1 < len(fromAspirant)):
+                self.addLeaf(fromAspirant, toAspirant, comparison, pos)
 
     def addLeaf(self, fromAspirant, toAspirant, comparison, pos):
         positionFrom = Span(
@@ -169,41 +177,38 @@ class DocTrees:
             max(toAspirant[pos].end, toAspirant[pos + 1].end),
         )
 
-        if (positionFrom.end - positionFrom.start) == (
+        if (positionFrom.end - positionFrom.start) != (
             positionTo.end - positionTo.start
         ):
-            self.CheckCandidatesPositions(
-                comparison, toAspirant, positionFrom, positionTo, pos
-            )
+            return
 
-    def CheckCandidatesPositions(
-        self, comparison, toAspirant, positionFrom, positionTo, pos
-    ):
-        if toAspirant[pos + 1].end >= toAspirant[pos].start:
-            fingers = list(
-                flat2gen([toAspirant[pos].fingerprint, toAspirant[pos + 1].fingerprint])
+        if toAspirant[pos + 1].end < toAspirant[pos].start:
+            return
+
+        fingers = list(
+            flat2gen([toAspirant[pos].fingerprint, toAspirant[pos + 1].fingerprint])
+        )
+        fingers.sort()
+        fromfingers = list(
+            flat2gen(
+                [
+                    toAspirant[pos].fromFingerprint,
+                    toAspirant[pos + 1].fromFingerprint,
+                ]
             )
-            fingers.sort()
-            fromfingers = list(
-                flat2gen(
-                    [
-                        toAspirant[pos].fromFingerprint,
-                        toAspirant[pos + 1].fromFingerprint,
-                    ]
-                )
-            )
-            fromfingers.sort()
-            if compareCounter(fingers, fromfingers):
-                to_positions = Duplicate(
-                    start=positionTo.start,
-                    end=positionTo.end,
-                    fingerprint=returnUniq(fingers),
-                    # should this be returnUniq(fromfingers)d?
-                    fromFingerprint=returnUniq(fingers),
-                )
-                self.resultTree[comparison].remove_envelop(
-                    positionFrom.start, positionFrom.end
-                )
-                self.resultTree[comparison][
-                    positionFrom.start : positionFrom.end
-                ] = to_positions
+        )
+        fromfingers.sort()
+        if not compareCounter(fingers, fromfingers):
+            return
+
+        to_positions = Duplicate(
+            start=positionTo.start,
+            end=positionTo.end,
+            fingerprint=returnUniq(fingers),
+            # should this be returnUniq(fromfingers)d?
+            fromFingerprint=returnUniq(fingers),
+        )
+        self.resultTree[comparison].remove_envelop(positionFrom.start, positionFrom.end)
+        self.resultTree[comparison][
+            positionFrom.start : positionFrom.end
+        ] = to_positions
