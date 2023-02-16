@@ -42,11 +42,11 @@ dataset = [
 orf = 3
 fingerprintList = [10]
 
-for candicate in range(0, len(dataset)):
+for texts in dataset:
     fingerprintBuilder = FingerprintBuilder(fingerprintList, orf)
     duplicateFinder = DuplicateFinder(fingerprintBuilder)
-    duplicateFinder.buildTree_comparisons(dataset[candicate][0:2])
-    print(candicate)
+    duplicateFinder.buildTree_comparisons(texts)
+    print(texts)
     link, thisScore = generateLink(duplicateFinder.resultTree, 15)
     print("Data tree")
     print(duplicateFinder.resultTree)
@@ -54,6 +54,6 @@ for candicate in range(0, len(dataset)):
     print(link)
     for el in link:
         thisexp = el.split(",")
-        print(dataset[candicate][0][int(thisexp[1]) : int(thisexp[2])])
-        print(dataset[candicate][1][int(thisexp[4]) : int(thisexp[5])])
+        print(texts[0][int(thisexp[1]) : int(thisexp[2])])
+        print(texts[1][int(thisexp[4]) : int(thisexp[5])])
         print("**********")
