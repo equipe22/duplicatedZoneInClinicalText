@@ -84,6 +84,9 @@ class DuplicateFinder:
         self.expandOverlap()
 
     def addDocTree(self, name, text):
+        # create a document
+        doc = Document(name)
+
         fingerprintDict = self.fingerprintBuilder.generateFingerprints(name, text)
 
         for thisFingerprint in fingerprintDict.keys():
@@ -96,14 +99,10 @@ class DuplicateFinder:
             )
             # return uniq and an ordered list
             for thisCandidate in candidateList:
-                self.addACandidateToDocTree(thisCandidate, thisFingerprint)
+                # add a fingerprint
+                doc.addFinger(thisFingerprint, thisCandidate)
 
-    def addACandidateToDocTree(self, location, thisFingerprint):
-        if location.name not in self.docTree.keys():
-            # create a document
-            self.docTree[location.name] = Document(location.name)
-        # add a fingerprint
-        self.docTree[location.name].addFinger(thisFingerprint, location)
+        self.docTree[doc.name] = doc
 
     def mergeOverlap(self):
         # list of Docs name
