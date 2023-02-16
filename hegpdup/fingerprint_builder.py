@@ -44,28 +44,9 @@ class FingerprintBuilder:
         self.orf = orf
         # contains list of fingerprint
         self.figprint = dict()
-        self.figprintId = dict()
 
-    def generateFingerprint(self, fileInformations):
-        """Main script to generate Fingerprint.
-
-        Parameters
-        ----------
-        fileInformations : list
-            the attribute from DuplicationMetaData object. It contains list
-            of patient files.
-        Returns
-        -------
-        type
-             set the figprint and figprintId attributes.
-
-        """
-
-        for thisfile in range(0, len(fileInformations)):
-            data = fileInformations[thisfile]
-            self.generateFingeprintForFile(thisfile, data)
-
-    def generateFingeprintForFile(self, thisfile, data):
+    def generateFingerprints(self, name, data):
+        figprintId = {}
         # lowercase so we aren't case sensitive
         data = data.lower()
         # found the right position in text
@@ -76,11 +57,13 @@ class FingerprintBuilder:
             # split the text in n slice in chunck
             line = "".join(data[linePosition:])
             # gere cadre de lecture[0 et +1]
-            self.createChunks(line, realposition, "D" + str(thisfile))
+            self.createChunks(line, realposition, name, figprintId)
             # Update linePosition value
             realposition = realposition + len(data[linePosition])
 
-    def createChunks(self, line, realposition, thisfile):
+        return figprintId
+
+    def createChunks(self, line, realposition, thisfile, figprintId):
         """For a given line, create the appropriate
         text chunks to generate fingerprint.
 
@@ -104,6 +87,7 @@ class FingerprintBuilder:
                     line,
                     realposition,
                     fingerprintLen,
+                    figprintId,
                 )
                 if i + fingerprintLen >= len(line):
                     break
@@ -115,6 +99,7 @@ class FingerprintBuilder:
         thisLine,
         thisrealposition,
         fingerprintLenght,
+        figprintId,
     ):
         """generate fingerprints
 
@@ -140,7 +125,6 @@ class FingerprintBuilder:
         if fprint not in self.figprint.keys():
             nbFigprints = len(self.figprint) + 1
             self.figprint[fprint] = nbFigprints
-            self.figprintId[nbFigprints] = []
 
         start = thisrealposition + thisChunk
         # NB fprint might be shorter than fingerprintLenght
@@ -150,4 +134,5 @@ class FingerprintBuilder:
             start=start,
             end=end,
         )
-        self.figprintId[self.figprint[fprint]].append(otherCandidate)
+
+        figprintId.setdefault(self.figprint[fprint], []).append(otherCandidate)

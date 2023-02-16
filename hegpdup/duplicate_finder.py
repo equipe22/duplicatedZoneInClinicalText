@@ -76,8 +76,15 @@ class DuplicateFinder:
         self.resultTree = dict()
 
     def buildTree_comparisons(self, filesInformation):
-        self.fingerprintBuilder.generateFingerprint(filesInformation)
-        fingerprintDict = self.fingerprintBuilder.figprintId
+        for i, text in enumerate(filesInformation):
+            name = f"D{i}"
+            self.addDocTree(name, text)
+
+        self.mergeOverlap()
+        self.expandOverlap()
+
+    def addDocTree(self, name, text):
+        fingerprintDict = self.fingerprintBuilder.generateFingerprints(name, text)
 
         for thisFingerprint in fingerprintDict.keys():
             if not fingerprintDict[thisFingerprint]:
@@ -90,9 +97,6 @@ class DuplicateFinder:
             # return uniq and an ordered list
             for thisCandidate in candidateList:
                 self.addACandidateToDocTree(thisCandidate, thisFingerprint)
-
-        self.mergeOverlap()
-        self.expandOverlap()
 
     def addACandidateToDocTree(self, location, thisFingerprint):
         if location.name not in self.docTree.keys():
