@@ -169,16 +169,16 @@ class Fingerprints:
             if fprint not in ["\n", "\r\n"]:
                 if fprint not in self.figprint.keys():
                     thisFingerCounter += 1
-                    self.figprint[fprint] = [thisFingerCounter, 0]
+                    self.figprint[fprint] = thisFingerCounter
                     self.figprintId[thisFingerCounter] = Fingerprint(fingerprint=fprint)
 
-                self.figprint[fprint][-1] += 1
                 otherCandidate = FingerprintLocation(
                     name=thisFileName.split("/")[-1],
                     start=start,
                     end=end,
                 )
-                self.figprintId[self.figprint[fprint][0]].foundIn.append(otherCandidate)
+                self.figprintId[self.figprint[fprint]].foundIn.append(otherCandidate)
             if endF >= len(thisLine):
                 break
+
         return thisFingerCounter
