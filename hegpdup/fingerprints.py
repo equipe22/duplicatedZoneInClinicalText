@@ -76,6 +76,8 @@ class Fingerprints:
         figCounter = 0
         for thisfile in range(0, len(fileInformations)):
             data = fileInformations[thisfile]
+            # lowercase so we aren't case sensitive
+            data = data.lower()
             # found the right position in text
             realposition = 0
             # Cadre de lecture
@@ -164,21 +166,17 @@ class Fingerprints:
             start = thisrealposition + beginF
             end = start + fingerprintLenght
             if fprint not in ["\n", "\r\n"]:
-                if not fprint.lower() in self.figprint.keys():
+                if fprint not in self.figprint.keys():
                     thisFingerCounter += 1
-                    self.figprint[fprint.lower()] = [thisFingerCounter, 0]
-                    self.figprintId[thisFingerCounter] = Fingerprint(
-                        fingerprint=fprint.lower()
-                    )
+                    self.figprint[fprint] = [thisFingerCounter, 0]
+                    self.figprintId[thisFingerCounter] = Fingerprint(fingerprint=fprint)
 
-                self.figprint[fprint.lower()][-1] += 1
+                self.figprint[fprint][-1] += 1
                 otherCandidate = FingerprintLocation(
                     name=thisFileName.split("/")[-1],
                     start=start,
                     end=end,
                 )
-                self.figprintId[self.figprint[fprint.lower()][0]].foundIn.append(
-                    otherCandidate
-                )
+                self.figprintId[self.figprint[fprint][0]].foundIn.append(otherCandidate)
 
         return thisFingerCounter
