@@ -111,24 +111,39 @@ class DuplicateFinder:
         fromAspirant = [Span(el.begin, el.end) for el in candidateOverlap]
 
         for pos in range(0, len(candidateOverlap) - 1):
-            self.addLeaf(fromAspirant, toAspirant, comparisonTree, pos)
+            prevFromAspirant = fromAspirant[pos]
+            prevToAspirant = toAspirant[pos]
+            nextFromAspirant = fromAspirant[pos + 1]
+            nextToAspirant = toAspirant[pos + 1]
+            self.addLeaf(
+                prevFromAspirant,
+                prevToAspirant,
+                nextFromAspirant,
+                nextToAspirant,
+                comparisonTree,
+            )
 
-    def addLeaf(self, fromAspirant, toAspirant, comparisonTree, pos):
-        if toAspirant[pos + 1].end < toAspirant[pos].start:
+    def addLeaf(
+        self,
+        prevFromAspirant,
+        prevToAspirant,
+        nextFromAspirant,
+        nextToAspirant,
+        comparisonTree,
+    ):
+        if nextToAspirant.end < prevToAspirant.start:
             return
 
-        positionFrom = _mergeSpans(fromAspirant[pos], fromAspirant[pos + 1])
-        positionTo = _mergeSpans(toAspirant[pos], toAspirant[pos + 1])
+        positionFrom = _mergeSpans(prevFromAspirant, nextFromAspirant)
+        positionTo = _mergeSpans(prevToAspirant, nextToAspirant)
 
         # ignore duplication if from/to spans end up having different lengths
         # after merge
         if positionFrom.length != positionTo.length:
             return
 
-        fingers = toAspirant[pos].fingerprint + toAspirant[pos + 1].fingerprint
-        fromfingers = (
-            toAspirant[pos].fromFingerprint + toAspirant[pos + 1].fromFingerprint
-        )
+        fingers = prevToAspirant.fingerprint + nextToAspirant.fingerprint
+        fromfingers = prevToAspirant.fromFingerprint + nextToAspirant.fromFingerprint
         if not _compareCounter(fingers, fromfingers):
             return
 
