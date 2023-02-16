@@ -55,7 +55,7 @@ class DuplicateFinder:
             self.addDocTree(name, text)
 
         self.buildComparisonTrees()
-        self.expandOverlap()
+        self.expandComparisonTrees()
 
     def addDocTree(self, name, text):
         fingerprintDict = self.fingerprintBuilder.buildFingerprints(text)
@@ -106,7 +106,7 @@ class DuplicateFinder:
                 )
                 comparisonTree[fromLocated.start : fromLocated.end] = to_positions
 
-    def expandOverlap(self):
+    def expandComparisonTrees(self):
         logger.debug(self.resultTree.keys())
         logger.debug(len(self.resultTree.keys()))
 
@@ -115,8 +115,11 @@ class DuplicateFinder:
             logger.debug(comparison)
             logger.debug(len(comparisonTree))
             logger.debug("#############")
-            for duplication in sorted(comparisonTree):
-                self.expandDuplication(duplication, comparisonTree)
+            self.expandComparisonTree(comparisonTree)
+
+    def expandComparisonTree(self, comparisonTree):
+        for duplication in sorted(comparisonTree):
+            self.expandDuplication(duplication, comparisonTree)
 
     def expandDuplication(self, duplication, comparisonTree):
         candidateOverlap = sorted(
