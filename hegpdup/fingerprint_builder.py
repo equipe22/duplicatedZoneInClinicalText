@@ -21,7 +21,7 @@ _CHUNKS_TO_IGNORE = {"\n", "\r\n"}
 class FingerprintBuilder:
     # thisFolder, fingerprintList, orf
 
-    def __init__(self, fingerprintList, orf, fileInformations):
+    def __init__(self, fingerprintList, orf):
         """Create object Fingerprints which contains all
         docs fingerprints for a patient fingerprint.
 
@@ -32,9 +32,6 @@ class FingerprintBuilder:
         orf : int
             define the open reading frame length. the size of the shift
             when a text is read.
-        fileInformations : list
-            the attribute from DuplicationMetaData object. It contains list
-            of patient files.
 
         Returns
         -------
@@ -48,7 +45,6 @@ class FingerprintBuilder:
         # contains list of fingerprint
         self.figprint = dict()
         self.figprintId = dict()
-        self.generateFingerprint(fileInformations)
 
     def generateFingerprint(self, fileInformations):
         """Main script to generate Fingerprint.

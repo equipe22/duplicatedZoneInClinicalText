@@ -53,10 +53,9 @@ def test_cases(testCaseFile):
     minDuplicateLength = testCase["settings"]["min_duplicate_length"]
     docTexts = [doc["text"] for doc in testCase["docs"]]
 
-    fingerprintBuilder = FingerprintBuilder([fingerprintLength], orf, docTexts)
-
-    duplicateFinder = DuplicateFinder()
-    duplicateFinder.buildTree_comparisons(fingerprintBuilder.figprintId)
+    fingerprintBuilder = FingerprintBuilder([fingerprintLength], orf)
+    duplicateFinder = DuplicateFinder(fingerprintBuilder)
+    duplicateFinder.buildTree_comparisons(docTexts)
 
     docTextsById = {docData["id"]: docData["text"] for docData in testCase["docs"]}
     duplicatesData = _extractDuplicatesFromTrees(

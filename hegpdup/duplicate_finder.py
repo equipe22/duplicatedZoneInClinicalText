@@ -67,13 +67,18 @@ class Span:
 
 
 class DuplicateFinder:
-    def __init__(self, nbFinger=2):
+    def __init__(self, fingerprintBuilder, nbFinger=2):
         self.nbFinger = nbFinger
+
+        self.fingerprintBuilder = fingerprintBuilder
         self.docTree = dict()
         # a new tree where results are store by comparison
         self.resultTree = dict()
 
-    def buildTree_comparisons(self, fingerprintDict):
+    def buildTree_comparisons(self, filesInformation):
+        self.fingerprintBuilder.generateFingerprint(filesInformation)
+        fingerprintDict = self.fingerprintBuilder.figprintId
+
         for thisFingerprint in fingerprintDict.keys():
             if not fingerprintDict[thisFingerprint]:
                 continue
