@@ -67,12 +67,13 @@ class Span:
 
 
 class DuplicateFinder:
-    def __init__(self):
+    def __init__(self, nbFinger=2):
+        self.nbFinger = nbFinger
         self.docTree = dict()
         # a new tree where results are store by comparison
         self.resultTree = dict()
 
-    def buildTree_comparisons(self, fingerprintDict, nbFinger=2):
+    def buildTree_comparisons(self, fingerprintDict):
         for thisFingerprint in fingerprintDict.keys():
             if not fingerprintDict[thisFingerprint]:
                 continue
@@ -85,7 +86,7 @@ class DuplicateFinder:
             for thisCandidate in candidateList:
                 self.addACandidateToDocTree(thisCandidate, thisFingerprint)
 
-        self.mergeOverlap(fingerprintDict, nbFinger)
+        self.mergeOverlap(fingerprintDict)
         self.expandOverlap()
 
     def addACandidateToDocTree(self, location, thisFingerprint):
@@ -95,7 +96,7 @@ class DuplicateFinder:
         # add a fingerprint
         self.docTree[location.name].addFinger(thisFingerprint, location)
 
-    def mergeOverlap(self, figprintId, nbFinger):
+    def mergeOverlap(self, figprintId):
         # list of Docs name
         # [Doc00,Doc01, Doc02,Doc03]
         docNames = sorted(self.docTree.keys())
@@ -106,13 +107,13 @@ class DuplicateFinder:
             docFrom = self.docTree[docNameFrom]
             docTo = self.docTree[docNameTo]
 
-            self.addComparisons(docFrom, docTo, figprintId, nbFinger)
+            self.addComparisons(docFrom, docTo, figprintId)
         logger.debug("DONE FIRST PART")
 
-    def addComparisons(self, docFrom, docTo, figprintId, nbFinger):
+    def addComparisons(self, docFrom, docTo, figprintId):
         interSct = docFrom.fingerprints.keys() & docTo.fingerprints.keys()
         logger.debug(interSct)
-        if len(interSct) < nbFinger:
+        if len(interSct) < self.nbFinger:
             return
 
         comparekey = (docFrom.name, docTo.name)
