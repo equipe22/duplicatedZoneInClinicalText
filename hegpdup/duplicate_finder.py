@@ -114,15 +114,15 @@ class DuplicateFinder:
             self.addLeaf(fromAspirant, toAspirant, comparisonTree, pos)
 
     def addLeaf(self, fromAspirant, toAspirant, comparisonTree, pos):
+        if toAspirant[pos + 1].end < toAspirant[pos].start:
+            return
+
         positionFrom = _mergeSpans(fromAspirant[pos], fromAspirant[pos + 1])
         positionTo = _mergeSpans(toAspirant[pos], toAspirant[pos + 1])
 
         # ignore duplication if from/to spans end up having different lengths
         # after merge
         if positionFrom.length != positionTo.length:
-            return
-
-        if toAspirant[pos + 1].end < toAspirant[pos].start:
             return
 
         fingers = toAspirant[pos].fingerprint + toAspirant[pos + 1].fingerprint
