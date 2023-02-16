@@ -72,7 +72,7 @@ class DuplicateFinder:
         # a new tree where results are store by comparison
         self.resultTree = dict()
 
-    def buildTree_comparisons(self, fingerprintDict):
+    def buildTree_comparisons(self, fingerprintDict, nbFinger=2):
         for thisFingerprint in fingerprintDict.keys():
             if not fingerprintDict[thisFingerprint]:
                 continue
@@ -85,6 +85,9 @@ class DuplicateFinder:
             for thisCandidate in candidateList:
                 self.addACandidateToDocTree(thisCandidate, thisFingerprint)
 
+        self.mergeOverlap(fingerprintDict, nbFinger)
+        self.expandOverlap()
+
     def addACandidateToDocTree(self, location, thisFingerprint):
         if location.name not in self.docTree.keys():
             # create a document
@@ -92,7 +95,7 @@ class DuplicateFinder:
         # add a fingerprint
         self.docTree[location.name].addFinger(thisFingerprint, location)
 
-    def mergeOverlap(self, figprintId, nbFinger=2):
+    def mergeOverlap(self, figprintId, nbFinger):
         # list of Docs name
         # [Doc00,Doc01, Doc02,Doc03]
         docNames = sorted(self.docTree.keys())

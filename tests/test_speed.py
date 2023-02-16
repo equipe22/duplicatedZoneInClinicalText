@@ -41,8 +41,6 @@ def test_speed():
         fingerprintBuilder = FingerprintBuilder([_FINGERPRINT_LENGTH], _ORF, texts)
         duplicateFinder = DuplicateFinder()
         duplicateFinder.buildTree_comparisons(fingerprintBuilder.figprintId)
-        duplicateFinder.mergeOverlap(fingerprintBuilder.figprintId)
-        duplicateFinder.expandOverlap()
 
     time = timeit.timeit(run, number=10)
     print(time)

@@ -57,8 +57,6 @@ def test_cases(testCaseFile):
 
     duplicateFinder = DuplicateFinder()
     duplicateFinder.buildTree_comparisons(fingerprintBuilder.figprintId)
-    duplicateFinder.mergeOverlap(fingerprintBuilder.figprintId)
-    duplicateFinder.expandOverlap()
 
     docTextsById = {docData["id"]: docData["text"] for docData in testCase["docs"]}
     duplicatesData = _extractDuplicatesFromTrees(
