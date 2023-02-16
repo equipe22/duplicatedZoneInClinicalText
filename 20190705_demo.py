@@ -16,7 +16,7 @@ def generateLink(docIntervalTree, threshold):
                 scoreDup = scoreDup + (duplication.data.end - duplication.data.start)
                 alreadyseen.append((duplication.data.end, duplication.data.start))
                 fromData = (
-                    comparison.split("_")[0]
+                    comparison[0]
                     + ","
                     + str(duplication.begin)
                     + ","
@@ -24,7 +24,7 @@ def generateLink(docIntervalTree, threshold):
                 )
                 # to,start,end
                 toData = (
-                    comparison.split("_")[1]
+                    comparison[1]
                     + ","
                     + str(duplication.data.start)
                     + ","

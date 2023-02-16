@@ -13,8 +13,7 @@ _TEST_CASES_FILES = sorted(_TEST_CASES_DIR.glob("*.json"))
 
 def _extractDuplicatesFromTrees(trees, minDuplicateLength, docTextsById):
     duplicatesData = []
-    for comparison, tree in trees.items():
-        docIdFrom, docIdTo = comparison.split("_")
+    for (docIdFrom, docIdTo), tree in trees.items():
         seen = set()
         for interval in sorted(tree):
             if (interval.end - interval.begin) < minDuplicateLength:

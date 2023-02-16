@@ -110,8 +110,8 @@ class DocTrees:
         if len(interSct) >= nbFinger:
             interSct.sort()
             comparekey = (docFrom.name, docTo.name)
-            if "_".join(comparekey) not in self.resultTree.keys():
-                self.resultTree["_".join(comparekey)] = IntervalTree()
+            if comparekey not in self.resultTree.keys():
+                self.resultTree[comparekey] = IntervalTree()
             # pour chaque fingerprint trouvé
             for thisFinger in interSct:
                 # pour chaque localisation du figerprint en from
@@ -119,7 +119,7 @@ class DocTrees:
                 logger.debug(thisFinger)
                 logger.debug(docFrom.fingerprints[thisFinger])
                 logger.debug(figprintId[thisFinger])
-                self.buildComparisons(docFrom, docTo, thisFinger, "_".join(comparekey))
+                self.buildComparisons(docFrom, docTo, thisFinger, comparekey)
 
     def buildComparisons(self, docFrom, docTo, thisFinger, comparekey):
         for fromLocated in docFrom.fingerprints[thisFinger]:
