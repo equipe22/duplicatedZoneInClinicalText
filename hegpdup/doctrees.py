@@ -162,14 +162,8 @@ class DocTrees:
             self.addLeaf(fromAspirant, toAspirant, comparisonTree, pos)
 
     def addLeaf(self, fromAspirant, toAspirant, comparisonTree, pos):
-        positionFrom = Span(
-            min(fromAspirant[pos].start, fromAspirant[pos + 1].start),
-            max(fromAspirant[pos].end, fromAspirant[pos + 1].end),
-        )
-        positionTo = Span(
-            min(toAspirant[pos].start, toAspirant[pos + 1].start),
-            max(toAspirant[pos].end, toAspirant[pos + 1].end),
-        )
+        positionFrom = _mergeSpans(fromAspirant[pos], fromAspirant[pos + 1])
+        positionTo = _mergeSpans(toAspirant[pos], toAspirant[pos + 1])
 
         if (positionFrom.end - positionFrom.start) != (
             positionTo.end - positionTo.start
@@ -201,3 +195,7 @@ class DocTrees:
 # O(n): The Counter() method is best (if your objects are hashable):
 def _compareCounter(s, t):
     return Counter(s) == Counter(t)
+
+
+def _mergeSpans(span1, span2):
+    return Span(min(span1.start, span2.start), max(span1.end, span2.end))
