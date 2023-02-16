@@ -14,7 +14,7 @@ def generateLink(duplicates, docNameTo, threshold):
         alreadyseen.append(targetSpan)
         sourceSpan = duplication.sourceSpan
         fromData = (
-            duplication.sourceDocName
+            duplication.sourceDocId
             + ","
             + str(sourceSpan.start)
             + ","

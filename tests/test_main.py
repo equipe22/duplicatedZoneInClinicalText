@@ -22,7 +22,7 @@ def _getDuplicatesData(duplicates, docIdTo, docText, minDuplicateLength):
 
         text = docText[duplicate.targetSpan.start : duplicate.targetSpan.end]
         duplicate_data = {
-            "source_doc_id": duplicate.sourceDocName,
+            "source_doc_id": duplicate.sourceDocId,
             "target_doc_id": docIdTo,
             "source_start": duplicate.sourceSpan.start,
             "source_end": duplicate.sourceSpan.end,

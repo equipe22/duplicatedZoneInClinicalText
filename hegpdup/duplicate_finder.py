@@ -6,68 +6,75 @@ from .span import Span
 
 
 class Document:
-    def __init__(self, name, fingerprints):
-        self.name = name
-        self.fingerprints = fingerprints
+    def __init__(self, id, spansByFingerprintId):
+        self.id = id
+        self.spansByFingerprintId = spansByFingerprintId
 
 
 class Duplicate:
     __slots__ = (
-        "sourceDocName",
+        "sourceDocId",
         "sourceSpan",
         "targetSpan",
-        "fingerprint",
-        "fromFingerprint",
+        "sourceFingerprintIds",
+        "targetFingerprintIds",
     )
 
     def __init__(
-        self, sourceDocName, sourceSpan, targetSpan, fingerprint, fromFingerprint
+        self,
+        sourceDocId,
+        sourceSpan,
+        targetSpan,
+        sourceFingerprintIds,
+        targetFingerprintIds,
     ):
-        self.sourceDocName = sourceDocName
+        self.sourceDocId = sourceDocId
         self.sourceSpan = sourceSpan
         self.targetSpan = targetSpan
-        self.fingerprint = fingerprint
-        self.fromFingerprint = fromFingerprint
+        self.sourceFingerprintIds = sourceFingerprintIds
+        self.targetFingerprintIds = targetFingerprintIds
 
     def __hash__(self):
         return hash(
             (
-                self.sourceDocName,
+                self.sourceDocId,
                 self.sourceSpan,
                 self.targetSpan,
-                self.fingerprint,
-                self.fromFingerprint,
+                self.sourceFingerprintIds,
+                self.targetFingerprintIds,
             )
         )
 
     def __repr__(self):
-        return f"Duplicate(sourceDocName={self.sourceDocName}, sourceSpan={self.sourceSpan!r}, targetSpan={self.targetSpan!r}, fingerprint={self.fingerprint}, fromFingerprint={self.fromFingerprint})"
+        return f"Duplicate(sourceDocId={self.sourceDocId}, sourceSpan={self.sourceSpan!r}, targetSpan={self.targetSpan!r}, sourceFingerprintIds={self.sourceFingerprintIds}, targetFingerprintIds={self.targetFingerprintIds})"
 
 
 class DuplicateFinder:
-    def __init__(self, fingerprintBuilder, nbFinger=2):
-        self.nbFinger = nbFinger
+    def __init__(self, fingerprintBuilder, minNbFingerprints=2):
+        self.minNbFingerprints = minNbFingerprints
 
         self.fingerprintBuilder = fingerprintBuilder
-        self.docTree = dict()
+        self._docsById = dict()
 
-    def findDuplicates(self, name, text):
-        if name in self.docTree:
-            raise Exception(f"Already processed document with name {name}")
+    def findDuplicates(self, docId, docText):
+        if docId in self._docsById:
+            raise Exception(f"Already processed document with id {docId}")
 
-        fingerprintDict = self.fingerprintBuilder.buildFingerprints(text)
-        doc = Document(name, fingerprintDict)
+        spansByFingerprintId = self.fingerprintBuilder.buildFingerprints(docText)
+        doc = Document(docId, spansByFingerprintId)
 
         comparisonTrees = {}
-        for previousDoc in self.docTree.values():
-            comparisonTree = self.buildComparisonTree(docFrom=previousDoc, docTo=doc)
+        for previousDoc in self._docsById.values():
+            comparisonTree = self.buildComparisonTree(
+                sourceDoc=previousDoc, targetDoc=doc
+            )
             if comparisonTree is None:
                 continue
             self.expandComparisonTree(comparisonTree)
 
-            comparisonTrees[previousDoc.name] = comparisonTree
+            comparisonTrees[previousDoc.id] = comparisonTree
 
-        self.docTree[doc.name] = doc
+        self._docsById[doc.id] = doc
 
         duplicates = [
             interval.data
@@ -77,47 +84,50 @@ class DuplicateFinder:
 
         return duplicates
 
-    def buildComparisonTree(self, docFrom, docTo):
-        interSct = docFrom.fingerprints.keys() & docTo.fingerprints.keys()
-        if len(interSct) < self.nbFinger:
+    def buildComparisonTree(self, sourceDoc, targetDoc):
+        commonFingerprintIds = (
+            sourceDoc.spansByFingerprintId.keys()
+            & targetDoc.spansByFingerprintId.keys()
+        )
+        if len(commonFingerprintIds) < self.minNbFingerprints:
             return None
 
         comparisonTree = IntervalTree()
         # pour chaque fingerprint trouvé
-        for thisFinger in interSct:
+        for fingerprintId in commonFingerprintIds:
             # pour chaque localisation du figerprint en from
-            self.fillComparisonTree(docFrom, docTo, thisFinger, comparisonTree)
+            self.fillComparisonTree(sourceDoc, targetDoc, fingerprintId, comparisonTree)
 
         return comparisonTree
 
-    def fillComparisonTree(self, docFrom, docTo, thisFinger, comparisonTree):
-        for fromLocated in docFrom.fingerprints[thisFinger]:
-            for toLocated in docTo.fingerprints[thisFinger]:
-                to_positions = Duplicate(
-                    sourceDocName=docFrom.name,
-                    sourceSpan=fromLocated,
-                    targetSpan=toLocated,
-                    fingerprint=[thisFinger],
-                    fromFingerprint=[thisFinger],
+    def fillComparisonTree(self, sourceDoc, targetDoc, fingerprintId, comparisonTree):
+        for sourceSpan in sourceDoc.spansByFingerprintId[fingerprintId]:
+            for targetSpan in targetDoc.spansByFingerprintId[fingerprintId]:
+                duplicate = Duplicate(
+                    sourceDocId=sourceDoc.id,
+                    sourceSpan=sourceSpan,
+                    targetSpan=targetSpan,
+                    sourceFingerprintIds=[fingerprintId],
+                    targetFingerprintIds=[fingerprintId],
                 )
-                comparisonTree[fromLocated.start : fromLocated.end] = to_positions
+                comparisonTree[sourceSpan.start : sourceSpan.end] = duplicate
 
     def expandComparisonTree(self, comparisonTree):
-        for duplication in sorted(comparisonTree):
-            self.expandDuplication(duplication, comparisonTree)
+        for interval in sorted(comparisonTree):
+            self.expandDuplication(interval, comparisonTree)
 
-    def expandDuplication(self, duplication, comparisonTree):
-        candidateOverlap = sorted(
-            comparisonTree.overlap(duplication.end - 1, duplication.end + 1)
+    def expandDuplication(self, interval, comparisonTree):
+        overlappingIntervals = sorted(
+            comparisonTree.overlap(interval.end - 1, interval.end + 1)
         )
-        if len(candidateOverlap) <= 1:
+        if len(overlappingIntervals) <= 1:
             return
 
-        duplicates = [this.data for this in candidateOverlap]
+        duplicates = [interval.data for interval in overlappingIntervals]
 
-        for pos in range(0, len(candidateOverlap) - 1):
-            prevDuplicate = duplicates[pos]
-            nextDuplicate = duplicates[pos + 1]
+        for i in range(0, len(overlappingIntervals) - 1):
+            prevDuplicate = duplicates[i]
+            nextDuplicate = duplicates[i + 1]
             self.addLeaf(
                 prevDuplicate,
                 nextDuplicate,
@@ -133,29 +143,33 @@ class DuplicateFinder:
         if nextDuplicate.targetSpan.end < prevDuplicate.targetSpan.start:
             return
 
-        positionFrom = _mergeSpans(prevDuplicate.sourceSpan, nextDuplicate.sourceSpan)
-        positionTo = _mergeSpans(prevDuplicate.targetSpan, nextDuplicate.targetSpan)
+        sourceSpan = _mergeSpans(prevDuplicate.sourceSpan, nextDuplicate.sourceSpan)
+        targetSpan = _mergeSpans(prevDuplicate.targetSpan, nextDuplicate.targetSpan)
 
         # ignore duplication if from/to spans end up having different lengths
         # after merge
-        if positionFrom.length != positionTo.length:
+        if sourceSpan.length != targetSpan.length:
             return
 
-        fingers = prevDuplicate.fingerprint + prevDuplicate.fingerprint
-        fromfingers = prevDuplicate.fromFingerprint + prevDuplicate.fromFingerprint
-        if not _compareCounter(fingers, fromfingers):
-            return
-
-        to_positions = Duplicate(
-            sourceDocName=prevDuplicate.sourceDocName,
-            sourceSpan=positionFrom,
-            targetSpan=positionTo,
-            fingerprint=list(set(fingers)),
-            # should this be list(set((fromfingers))?
-            fromFingerprint=list(set(fingers)),
+        targetFingerprintIds = (
+            prevDuplicate.targetFingerprintIds + prevDuplicate.targetFingerprintIds
         )
-        comparisonTree.remove_envelop(positionFrom.start, positionFrom.end)
-        comparisonTree[positionFrom.start : positionFrom.end] = to_positions
+        sourceFingerprintIds = (
+            prevDuplicate.sourceFingerprintIds + prevDuplicate.sourceFingerprintIds
+        )
+        if not _compareCounter(targetFingerprintIds, sourceFingerprintIds):
+            return
+
+        mergedDuplicate = Duplicate(
+            sourceDocId=prevDuplicate.sourceDocId,
+            sourceSpan=sourceSpan,
+            targetSpan=targetSpan,
+            # should this be list(set((sourceFingerprintIds))?
+            sourceFingerprintIds=list(set(targetFingerprintIds)),
+            targetFingerprintIds=list(set(targetFingerprintIds)),
+        )
+        comparisonTree.remove_envelop(sourceSpan.start, sourceSpan.end)
+        comparisonTree[sourceSpan.start : sourceSpan.end] = mergedDuplicate
 
 
 # https://stackoverflow.com/questions/7828867/how-to-efficiently-compare-two-unordered-lists-not-sets-in-python
