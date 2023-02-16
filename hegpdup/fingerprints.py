@@ -1,3 +1,32 @@
+class Fingerprint:
+    __slots__ = "fingerprint", "frequence", "foundIn"
+
+    def __init__(self, fingerprint):
+        self.fingerprint = fingerprint
+        self.frequence = 0
+        self.foundIn = []
+
+    def __repr__(self):
+        return f"Fingerprint(fingerprint={self.fingerprint}, foundIn={self.foundIn!r})"
+
+
+class FingerprintLocation:
+    __slots__ = "name", "start", "end"
+
+    def __init__(self, name, start, end):
+        self.name = name
+        self.start = start
+        self.end = end
+
+    def __hash__(self):
+        return hash((self.name, self.start, self.end))
+
+    def __repr__(self):
+        return (
+            f"FingerprintLocation(name={self.name}, start={self.start}, end={self.end})"
+        )
+
+
 class Fingerprints:
     # thisFolder, fingerprintList, orf
 
@@ -139,23 +168,20 @@ class Fingerprints:
                 if not fprint.lower() in self.figprint.keys():
                     thisFingerCounter += 1
                     self.figprint[fprint.lower()] = [thisFingerCounter, 0]
-                    tmpDict = {
-                        "fingerprint": fprint.lower(),
-                        "frequence": 0,
-                        "foundIn": [],
-                    }
-                    self.figprintId[thisFingerCounter] = tmpDict
+                    self.figprintId[thisFingerCounter] = Fingerprint(
+                        fingerprint=fprint.lower()
+                    )
 
                 self.figprint[fprint.lower()][-1] += 1
-                self.figprintId[self.figprint[fprint.lower()][0]][
-                    "frequence"
-                ] = self.figprint[fprint.lower()][-1]
-                otherCandidate = {
-                    "name": thisFileName.split("/")[-1],
-                    "start": start,
-                    "end": end,
-                }
-                self.figprintId[self.figprint[fprint.lower()][0]]["foundIn"].append(
+                self.figprintId[
+                    self.figprint[fprint.lower()][0]
+                ].frequence = self.figprint[fprint.lower()][-1]
+                otherCandidate = FingerprintLocation(
+                    name=thisFileName.split("/")[-1],
+                    start=start,
+                    end=end,
+                )
+                self.figprintId[self.figprint[fprint.lower()][0]].foundIn.append(
                     otherCandidate
                 )
 

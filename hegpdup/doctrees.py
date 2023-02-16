@@ -3,7 +3,8 @@ import logging
 
 from intervaltree import IntervalTree
 
-from .lib import intersection, compareCounter, returnUniq, sortBy, flat2gen
+from .lib import intersection, compareCounter, returnUniq, flat2gen
+
 
 logger = logging.getLogger(__name__)
 logging.basicConfig(
@@ -16,65 +17,75 @@ logging.basicConfig(
 
 class Document:
     def __init__(self, name):
-        # fingerprint :{ 'located': {'start':0,'end':0}}
         self.name = name
         self.fingerprints = dict()
         # docID :{fingerprintlist}
 
-    def addFinger(self, thisFingerprint, duplicationDict):
+    def addFinger(self, thisFingerprint, location):
         if thisFingerprint in self.fingerprints.keys():
-            self.fingerprints[thisFingerprint].append(
-                {
-                    "name": duplicationDict["name"],
-                    "start": duplicationDict["start"],
-                    "end": duplicationDict["end"],
-                }
-            )
+            self.fingerprints[thisFingerprint].append(location)
             logger.debug("found duplicate site inside fingerprint")
             logger.debug(self.name)
             logger.debug(self.fingerprints[thisFingerprint])
         else:
-            self.fingerprints[thisFingerprint] = [
-                {
-                    "name": duplicationDict["name"],
-                    "start": duplicationDict["start"],
-                    "end": duplicationDict["end"],
-                }
-            ]
+            self.fingerprints[thisFingerprint] = [location]
+
+
+class Duplicate:
+    __slots__ = "start", "end", "fingerprint", "fromFingerprint"
+
+    def __init__(self, start, end, fingerprint, fromFingerprint):
+        self.start = start
+        self.end = end
+        self.fingerprint = fingerprint
+        self.fromFingerprint = fromFingerprint
+
+    def __hash__(self):
+        return hash(
+            (self.name, self.start, self.end, self.fingerprint, self.fromFingerprint)
+        )
+
+    def __repr__(self):
+        return f"Duplicate(start={self.start}, end={self.end}, fingerprint={self.fingerprint}, fromFingerprint={self.fromFingerprint})"
+
+
+class Span:
+    __slots__ = "start", "end"
+
+    def __init__(self, start, end):
+        self.start = start
+        self.end = end
+
+    def __hash__(self):
+        return hash(self.start, self.end)
+
+    def __repr__(self):
+        return f"Span(start={self.start}, end={self.end})"
 
 
 class DocTrees:
     def __init__(self):
-        # fingerprint :{ 'located': {'start':0,'end':0}}
         self.docTree = dict()
         # a new tree where results are store by comparison
         self.resultTree = dict()
 
     def buildTree_comparisons(self, fingerprintDict):
         for thisFingerprint in fingerprintDict.keys():
-            if fingerprintDict[thisFingerprint]["frequence"] > 1:
-                candidateList = [
-                    (
-                        ("name", thisCandidate["name"]),
-                        ("start", thisCandidate["start"]),
-                        ("end", thisCandidate["end"]),
-                    )
-                    for thisCandidate in fingerprintDict[thisFingerprint]["foundIn"]
-                ]
-                candidateList = sortBy(returnUniq(candidateList), 0)
+            if fingerprintDict[thisFingerprint].frequence > 1:
+                candidateList = sorted(
+                    returnUniq(fingerprintDict[thisFingerprint].foundIn),
+                    key=lambda l: l.name,
+                )
                 # return uniq and an ordered list
                 for thisCandidate in candidateList:
-                    duplicationDict = dict(thisCandidate)
-                    self.addACandidateToDocTree(duplicationDict, thisFingerprint)
+                    self.addACandidateToDocTree(thisCandidate, thisFingerprint)
 
-    def addACandidateToDocTree(self, duplicationDict, thisFingerprint):
-        if duplicationDict["name"] not in self.docTree.keys():
+    def addACandidateToDocTree(self, location, thisFingerprint):
+        if location.name not in self.docTree.keys():
             # create a document
-            self.docTree[duplicationDict["name"]] = Document(duplicationDict["name"])
+            self.docTree[location.name] = Document(location.name)
         # add a fingerprint
-        self.docTree[duplicationDict["name"]].addFinger(
-            thisFingerprint, duplicationDict
-        )
+        self.docTree[location.name].addFinger(thisFingerprint, location)
 
     def mergeOverlap(self, figprintId, nbFinger=2):
         # list of Docs name
@@ -129,24 +140,23 @@ class DocTrees:
         for fromLocated in self.docTree[self.docsList[fromIterator]].fingerprints[
             thisFinger
         ]:
-            # [{'located': {'start': 10172, 'end': 10212}}]
             fromPos = self.checkCandidate(fromIterator, fromLocated)
             for toLocated in self.docTree[self.docsList[toIterator]].fingerprints[
                 thisFinger
             ]:
                 toPos = self.checkCandidate(toIterator, toLocated)
-                to_positions = {
-                    "start": toPos[0],
-                    "end": toPos[1],
-                    "fingerprint": [thisFinger],
-                    "fromFingerprint": [thisFinger],
-                }
+                to_positions = Duplicate(
+                    start=toPos[0],
+                    end=toPos[1],
+                    fingerprint=[thisFinger],
+                    fromFingerprint=[thisFinger],
+                )
                 self.resultTree[comparekey][fromPos[0] : fromPos[1]] = to_positions
 
     def checkCandidate(self, pos, thisCandidate):
-        if thisCandidate["name"] == self.docsList[pos]:
-            start = thisCandidate["start"]
-            end = thisCandidate["end"]
+        if thisCandidate.name == self.docsList[pos]:
+            start = thisCandidate.start
+            end = thisCandidate.end
             return [start, end]
         else:
             return []
@@ -167,16 +177,8 @@ class DocTrees:
                 if len(candidateOverlap) > 1:
                     logger.debug("found a candidate")
                     logger.debug(candidateOverlap)
-                    toAspirant = [
-                        (
-                            this.data["start"],
-                            this.data["end"],
-                            this.data["fromFingerprint"],
-                            this.data["fingerprint"],
-                        )
-                        for this in candidateOverlap
-                    ]
-                    fromAspirant = [(el.begin, el.end) for el in candidateOverlap]
+                    toAspirant = [this.data for this in candidateOverlap]
+                    fromAspirant = [Span(el.begin, el.end) for el in candidateOverlap]
                     for pos in range(0, len(fromAspirant)):
                         # the iterator is for from and to
                         if (pos + 1 < len(toAspirant)) and (
@@ -190,21 +192,21 @@ class DocTrees:
         dataKey = comparison.split("_")
         sizeDoc1 = docInfo_R[dataKey[0]]
         sizeDoc2 = docInfo_R[dataKey[1]]
-        positionFrom = (
-            # start 0
-            min(fromAspirant[pos][0], fromAspirant[pos + 1][0]),
-            # end 1
-            max(fromAspirant[pos][1], fromAspirant[pos + 1][1]),
+        positionFrom = Span(
+            min(fromAspirant[pos].start, fromAspirant[pos + 1].start),
+            max(fromAspirant[pos].end, fromAspirant[pos + 1].end),
         )
-        positionTo = (
-            min(toAspirant[pos][0], toAspirant[pos + 1][0]),
-            max(toAspirant[pos][1], toAspirant[pos + 1][1]),
+        positionTo = Span(
+            min(toAspirant[pos].start, toAspirant[pos + 1].start),
+            max(toAspirant[pos].end, toAspirant[pos + 1].end),
         )
 
-        if (positionFrom[1] <= sizeDoc1 and positionFrom[0] <= sizeDoc1) and (
-            positionTo[1] <= sizeDoc2 and positionTo[0] <= sizeDoc2
+        if (positionFrom.end <= sizeDoc1 and positionFrom.start <= sizeDoc1) and (
+            positionTo.end <= sizeDoc2 and positionTo.start <= sizeDoc2
         ):
-            if (positionFrom[1] - positionFrom[0]) == (positionTo[1] - positionTo[0]):
+            if (positionFrom.end - positionFrom.start) == (
+                positionTo.end - positionTo.start
+            ):
                 self.CheckCandidatesPositions(
                     comparison, toAspirant, positionFrom, positionTo, pos
                 )
@@ -212,21 +214,31 @@ class DocTrees:
     def CheckCandidatesPositions(
         self, comparison, toAspirant, positionFrom, positionTo, pos
     ):
-        if toAspirant[pos + 1][1] >= toAspirant[pos][0]:
-            fingers = list(flat2gen([toAspirant[pos][-1], toAspirant[pos + 1][-1]]))
+        if toAspirant[pos + 1].end >= toAspirant[pos].start:
+            fingers = list(
+                flat2gen([toAspirant[pos].fingerprint, toAspirant[pos + 1].fingerprint])
+            )
             fingers.sort()
-            fromfingers = list(flat2gen([toAspirant[pos][-2], toAspirant[pos + 1][-2]]))
+            fromfingers = list(
+                flat2gen(
+                    [
+                        toAspirant[pos].fromFingerprint,
+                        toAspirant[pos + 1].fromFingerprint,
+                    ]
+                )
+            )
             fromfingers.sort()
             if compareCounter(fingers, fromfingers):
-                to_positions = {
-                    "start": positionTo[0],
-                    "end": positionTo[1],
-                    "fingerprint": returnUniq(fingers),
-                    "fromFingerprint": returnUniq(fingers),
-                }
+                to_positions = Duplicate(
+                    start=positionTo.start,
+                    end=positionTo.end,
+                    fingerprint=returnUniq(fingers),
+                    # should this be returnUniq(fromfingers)d?
+                    fromFingerprint=returnUniq(fingers),
+                )
                 self.resultTree[comparison].remove_envelop(
-                    positionFrom[0], positionFrom[1]
+                    positionFrom.start, positionFrom.end
                 )
                 self.resultTree[comparison][
-                    positionFrom[0] : positionFrom[1]
+                    positionFrom.start : positionFrom.end
                 ] = to_positions

@@ -13,10 +13,8 @@ def generateLink(docIntervalTree, threshold):
                 duplication.end,
                 duplication.begin,
             ) not in alreadyseen:
-                scoreDup = scoreDup + (
-                    duplication.data["end"] - duplication.data["start"]
-                )
-                alreadyseen.append((duplication.data["end"], duplication.data["start"]))
+                scoreDup = scoreDup + (duplication.data.end - duplication.data.start)
+                alreadyseen.append((duplication.data.end, duplication.data.start))
                 fromData = (
                     comparison.split("_")[0]
                     + ","
@@ -28,9 +26,9 @@ def generateLink(docIntervalTree, threshold):
                 toData = (
                     comparison.split("_")[1]
                     + ","
-                    + str(duplication.data["start"])
+                    + str(duplication.data.start)
                     + ","
-                    + str(duplication.data["end"])
+                    + str(duplication.data.end)
                 )
                 link.append(fromData + "," + toData)
     return (link, scoreDup)
