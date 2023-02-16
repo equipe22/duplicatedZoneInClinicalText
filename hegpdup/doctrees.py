@@ -108,7 +108,6 @@ class DocTrees:
         if len(interSct) < nbFinger:
             return
 
-        interSct = sorted(interSct)
         comparekey = (docFrom.name, docTo.name)
         comparisonTree = self.resultTree.get(comparekey)
         if comparisonTree is None:
