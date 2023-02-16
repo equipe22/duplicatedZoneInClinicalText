@@ -1,10 +1,7 @@
 import logging
-import sys
-import time
 
 from hegpdup.fingerprints import Fingerprints
 from hegpdup.doctrees import DocTrees
-from intervaltree import IntervalTree
 
 
 def generateLink(docIntervalTree, threshold):
@@ -13,13 +10,11 @@ def generateLink(docIntervalTree, threshold):
     for comparison in docIntervalTree.keys():
         alreadyseen = []
         for duplication in sorted(docIntervalTree[comparison]):
-            # logger.debug(duplication)
             # from,start,end
             if (duplication.end - duplication.begin) > threshold and (
                 duplication.end,
                 duplication.begin,
             ) not in alreadyseen:
-                # scoreDup=scoreDup+(duplication.end - duplication.begin)
                 scoreDup = scoreDup + (
                     duplication.data["end"] - duplication.data["start"]
                 )
@@ -56,25 +51,16 @@ dataset = [
 ]
 orf = 3
 fingerprintList = [10]
-results = []
 
 for candicate in range(0, len(dataset)):
     figerprintsId = Fingerprints(fingerprintList, orf, dataset[candicate][0:2])
-    # ~ print(figerprintsId.figprint)
-    # logger.info(figerprintsId.figprint)
-    # logger.info(figerprintsId.figprintId)
-    thisDocTree = DocTrees("akey")
+    thisDocTree = DocTrees()
     thisDocTree.buildTree_comparisons(figerprintsId.figprintId)
-    thisDocTree.mergeOverlap(
-        "myPatientDuplication.patientTexts", "keyRoot", figerprintsId.figprintId
-    )
+    thisDocTree.mergeOverlap(figerprintsId.figprintId)
     print(candicate)
     dictData = {"D0": len(dataset[candicate][0]), "D1": len(dataset[candicate][1])}
     thisDocTree.expandOverlap(dictData)
     link, thisScore = generateLink(thisDocTree.resultTree, 15)
-    # thisScore*1.0/(dictData["D0"]+dictData["D1"])
-    # thisScore*1.0/dictData["D1"]
-    results.append([candicate, thisScore, dictData["D0"], dictData["D1"], link])
     print("Data tree")
     print(thisDocTree.resultTree)
     print("finish a sentence")

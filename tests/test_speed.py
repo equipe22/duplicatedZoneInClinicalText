@@ -39,11 +39,9 @@ def test_speed():
 
     def run():
         fingerprints = Fingerprints([_FINGERPRINT_LENGTH], _ORF, texts)
-        doctrees = DocTrees("akey")
+        doctrees = DocTrees()
         doctrees.buildTree_comparisons(fingerprints.figprintId)
-        doctrees.mergeOverlap(
-            "myPatientDuplication.patientTexts", "keyRoot", fingerprints.figprintId
-        )
+        doctrees.mergeOverlap(fingerprints.figprintId)
         doctrees.expandOverlap({f"D{i}": len(text) for i, text in enumerate(texts)})
 
     time = timeit.timeit(run, number=10)

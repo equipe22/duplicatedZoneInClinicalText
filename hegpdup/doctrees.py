@@ -1,8 +1,9 @@
-from intervaltree import IntervalTree
 from itertools import product
+import logging
+
+from intervaltree import IntervalTree
 
 from .lib import intersection, compareCounter, returnUniq, sortBy, flat2gen
-import logging
 
 logger = logging.getLogger(__name__)
 logging.basicConfig(
@@ -13,14 +14,12 @@ logging.basicConfig(
 )
 
 
-class Document(object):
+class Document:
     def __init__(self, name):
         # fingerprint :{ 'located': {'start':0,'end':0}}
         self.name = name
         self.fingerprints = dict()
         # docID :{fingerprintlist}
-        self.docsNeighbors = dict()
-        # all fingerprint position
 
     def addFinger(self, thisFingerprint, duplicationDict):
         if thisFingerprint in self.fingerprints.keys():
@@ -44,30 +43,14 @@ class Document(object):
             ]
 
 
-class DocTrees(object):
-    def __init__(self, name):
+class DocTrees:
+    def __init__(self):
         # fingerprint :{ 'located': {'start':0,'end':0}}
-        self.name = name
         self.docTree = dict()
         # a new tree where results are store by comparison
         self.resultTree = dict()
 
     def buildTree_comparisons(self, fingerprintDict):
-        """Short summary.
-
-        Parameters
-        ----------
-        figerprintsId : type
-            Description of parameter `figerprintsId`.
-        namesDict : type
-            Description of parameter `namesDict`.
-
-        Returns
-        -------
-        type
-            Description of returned object.
-
-        """
         for thisFingerprint in fingerprintDict.keys():
             if fingerprintDict[thisFingerprint]["frequence"] > 1:
                 candidateList = [
@@ -83,7 +66,6 @@ class DocTrees(object):
                 for thisCandidate in candidateList:
                     duplicationDict = dict(thisCandidate)
                     self.addACandidateToDocTree(duplicationDict, thisFingerprint)
-        return self.docTree
 
     def addACandidateToDocTree(self, duplicationDict, thisFingerprint):
         if duplicationDict["name"] not in self.docTree.keys():
@@ -93,9 +75,8 @@ class DocTrees(object):
         self.docTree[duplicationDict["name"]].addFinger(
             thisFingerprint, duplicationDict
         )
-        return 1
 
-    def mergeOverlap(self, patientTexts, rootPath, figprintId, nbFinger=2):
+    def mergeOverlap(self, figprintId, nbFinger=2):
         # list of Docs name
         # [Doc00,Doc01, Doc02,Doc03]
         self.docsList = [key for key in self.docTree.keys()]
@@ -107,19 +88,16 @@ class DocTrees(object):
             range(0, len(self.docsList) - 1), range(1, len(self.docsList))
         ):
             if fromIterator < toIterator:
-                # if(self.docsList[fromIterator] != self.docsList[toIterator]):
                 logger.debug(self.docsList[fromIterator], self.docsList[toIterator])
                 comparekey = [self.docsList[fromIterator], self.docsList[toIterator]]
                 logger.debug(comparekey)
                 self.addComparisons(
-                    rootPath, fromIterator, toIterator, comparekey, figprintId, nbFinger
+                    fromIterator, toIterator, comparekey, figprintId, nbFinger
                 )
-                # if "_".join(comparekey) in resultTree.keys():
         logger.debug("DONE FIRST PART")
-        return self.resultTree
 
     def addComparisons(
-        self, keyRoot, fromIterator, toIterator, comparekey, figprintId, nbFinger
+        self, fromIterator, toIterator, comparekey, figprintId, nbFinger
     ):
         fromFingerprints = [
             key for key in self.docTree[self.docsList[fromIterator]].fingerprints.keys()
@@ -146,7 +124,6 @@ class DocTrees(object):
                 self.buildComparisons(
                     fromIterator, toIterator, thisFinger, "_".join(comparekey)
                 )
-        return 1
 
     def buildComparisons(self, fromIterator, toIterator, thisFinger, comparekey):
         for fromLocated in self.docTree[self.docsList[fromIterator]].fingerprints[
@@ -165,7 +142,6 @@ class DocTrees(object):
                     "fromFingerprint": [thisFinger],
                 }
                 self.resultTree[comparekey][fromPos[0] : fromPos[1]] = to_positions
-        return 1
 
     def checkCandidate(self, pos, thisCandidate):
         if thisCandidate["name"] == self.docsList[pos]:
@@ -178,10 +154,7 @@ class DocTrees(object):
     def expandOverlap(self, docInfo_R):
         logger.debug(self.resultTree.keys())
         logger.debug(len(self.resultTree.keys()))
-        # keysss=sorted(self.resultTree.keys())
         for comparison in sorted(self.resultTree.keys()):
-            # for it in range(0,10):
-            # comparison=keysss[it]
             logger.debug(comparison)
             logger.debug(len(self.resultTree[comparison]))
             logger.debug("#############")
@@ -213,8 +186,6 @@ class DocTrees(object):
                                 fromAspirant, toAspirant, comparison, pos, docInfo_R
                             )
 
-        return 1
-
     def addLeaf(self, fromAspirant, toAspirant, comparison, pos, docInfo_R):
         dataKey = comparison.split("_")
         sizeDoc1 = docInfo_R[dataKey[0]]
@@ -235,20 +206,17 @@ class DocTrees(object):
         ):
             if (positionFrom[1] - positionFrom[0]) == (positionTo[1] - positionTo[0]):
                 self.CheckCandidatesPositions(
-                    comparison, toAspirant, fromAspirant, positionFrom, positionTo, pos
+                    comparison, toAspirant, positionFrom, positionTo, pos
                 )
-        return 1
 
     def CheckCandidatesPositions(
-        self, comparison, toAspirant, fromAspirant, positionFrom, positionTo, pos
+        self, comparison, toAspirant, positionFrom, positionTo, pos
     ):
         if toAspirant[pos + 1][1] >= toAspirant[pos][0]:
             fingers = list(flat2gen([toAspirant[pos][-1], toAspirant[pos + 1][-1]]))
             fingers.sort()
             fromfingers = list(flat2gen([toAspirant[pos][-2], toAspirant[pos + 1][-2]]))
             fromfingers.sort()
-            # ~ print(fingers)
-            # ~ print(fromfingers)
             if compareCounter(fingers, fromfingers):
                 to_positions = {
                     "start": positionTo[0],
@@ -262,4 +230,3 @@ class DocTrees(object):
                 self.resultTree[comparison][
                     positionFrom[0] : positionFrom[1]
                 ] = to_positions
-        return 1

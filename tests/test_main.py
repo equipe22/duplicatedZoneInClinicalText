@@ -56,11 +56,9 @@ def test_cases(testCaseFile):
 
     fingerprints = Fingerprints([fingerprintLength], orf, docTexts)
 
-    doctrees = DocTrees("akey")
+    doctrees = DocTrees()
     doctrees.buildTree_comparisons(fingerprints.figprintId)
-    doctrees.mergeOverlap(
-        "myPatientDuplication.patientTexts", "keyRoot", fingerprints.figprintId
-    )
+    doctrees.mergeOverlap(fingerprints.figprintId)
     doctrees.expandOverlap({f"D{i}": len(text) for i, text in enumerate(docTexts)})
 
     docTextsById = {docData["id"]: docData["text"] for docData in testCase["docs"]}
