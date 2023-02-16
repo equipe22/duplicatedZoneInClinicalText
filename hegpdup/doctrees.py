@@ -3,7 +3,7 @@ import logging
 
 from intervaltree import IntervalTree
 
-from .lib import intersection, compareCounter, returnUniq, flat2gen
+from .lib import compareCounter, returnUniq, flat2gen
 
 
 logger = logging.getLogger(__name__)
@@ -104,15 +104,12 @@ class DocTrees:
         logger.debug("DONE FIRST PART")
 
     def addComparisons(self, docFrom, docTo, figprintId, nbFinger):
-        fromFingerprints = [key for key in docFrom.fingerprints.keys()]
-        toFingerprints = [key for key in docTo.fingerprints.keys()]
-        # Get element which are in comon between two lists
-        interSct = intersection(fromFingerprints, toFingerprints)
+        interSct = docFrom.fingerprints.keys() & docTo.fingerprints.keys()
         logger.debug(interSct)
         if len(interSct) < nbFinger:
             return
 
-        interSct.sort()
+        interSct = sorted(interSct)
         comparekey = (docFrom.name, docTo.name)
         if comparekey not in self.resultTree.keys():
             self.resultTree[comparekey] = IntervalTree()
