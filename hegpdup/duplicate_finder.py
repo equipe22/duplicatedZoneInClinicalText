@@ -5,7 +5,7 @@ from intervaltree import IntervalTree
 from .span import Span
 
 
-class Document:
+class _Document:
     def __init__(self, id, spansByFingerprintId):
         self.id = id
         self.spansByFingerprintId = spansByFingerprintId
@@ -61,16 +61,16 @@ class DuplicateFinder:
             raise Exception(f"Already processed document with id {docId}")
 
         spansByFingerprintId = self.fingerprintBuilder.buildFingerprints(docText)
-        doc = Document(docId, spansByFingerprintId)
+        doc = _Document(docId, spansByFingerprintId)
 
         comparisonTrees = {}
         for previousDoc in self._docsById.values():
-            comparisonTree = self.buildComparisonTree(
+            comparisonTree = self._buildComparisonTree(
                 sourceDoc=previousDoc, targetDoc=doc
             )
             if comparisonTree is None:
                 continue
-            self.expandComparisonTree(comparisonTree)
+            self._mergeOverlappingDuplicates(comparisonTree)
 
             comparisonTrees[previousDoc.id] = comparisonTree
 
@@ -84,7 +84,7 @@ class DuplicateFinder:
 
         return duplicates
 
-    def buildComparisonTree(self, sourceDoc, targetDoc):
+    def _buildComparisonTree(self, sourceDoc, targetDoc):
         commonFingerprintIds = (
             sourceDoc.spansByFingerprintId.keys()
             & targetDoc.spansByFingerprintId.keys()
@@ -96,11 +96,13 @@ class DuplicateFinder:
         # pour chaque fingerprint trouvé
         for fingerprintId in commonFingerprintIds:
             # pour chaque localisation du figerprint en from
-            self.fillComparisonTree(sourceDoc, targetDoc, fingerprintId, comparisonTree)
+            self._fillComparisonTree(
+                sourceDoc, targetDoc, fingerprintId, comparisonTree
+            )
 
         return comparisonTree
 
-    def fillComparisonTree(self, sourceDoc, targetDoc, fingerprintId, comparisonTree):
+    def _fillComparisonTree(self, sourceDoc, targetDoc, fingerprintId, comparisonTree):
         for sourceSpan in sourceDoc.spansByFingerprintId[fingerprintId]:
             for targetSpan in targetDoc.spansByFingerprintId[fingerprintId]:
                 duplicate = Duplicate(
@@ -112,11 +114,11 @@ class DuplicateFinder:
                 )
                 comparisonTree[sourceSpan.start : sourceSpan.end] = duplicate
 
-    def expandComparisonTree(self, comparisonTree):
+    def _mergeOverlappingDuplicates(self, comparisonTree):
         for interval in sorted(comparisonTree):
-            self.expandDuplication(interval, comparisonTree)
+            self._mergeOverlappingDuplicatesAtInterval(interval, comparisonTree)
 
-    def expandDuplication(self, interval, comparisonTree):
+    def _mergeOverlappingDuplicatesAtInterval(self, interval, comparisonTree):
         overlappingIntervals = sorted(
             comparisonTree.overlap(interval.end - 1, interval.end + 1)
         )
@@ -128,13 +130,13 @@ class DuplicateFinder:
         for i in range(0, len(overlappingIntervals) - 1):
             prevDuplicate = duplicates[i]
             nextDuplicate = duplicates[i + 1]
-            self.addLeaf(
+            self._mergeDuplicates(
                 prevDuplicate,
                 nextDuplicate,
                 comparisonTree,
             )
 
-    def addLeaf(
+    def _mergeDuplicates(
         self,
         prevDuplicate,
         nextDuplicate,
