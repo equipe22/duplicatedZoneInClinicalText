@@ -1,5 +1,3 @@
-from collections import Counter
-
 from intervaltree import IntervalTree
 
 from .span import Span
@@ -17,22 +15,9 @@ class Duplicate:
     designated by characters spans
     """
 
-    __slots__ = (
-        "sourceDocId",
-        "sourceSpan",
-        "targetSpan",
-        "sourceFingerprintIds",
-        "targetFingerprintIds",
-    )
+    __slots__ = "sourceDocId", "sourceSpan", "targetSpan", "fingerprintIds"
 
-    def __init__(
-        self,
-        sourceDocId,
-        sourceSpan,
-        targetSpan,
-        sourceFingerprintIds,
-        targetFingerprintIds,
-    ):
+    def __init__(self, sourceDocId, sourceSpan, targetSpan, fingerprintIds):
         """
         Parameters
         ----------
@@ -42,31 +27,22 @@ class Duplicate:
             Duplicated character span in the source document
         targetSpan: Span
             Duplicated character span in the target document
-        sourceFingerprintIds: List[int]
-            Duplicated fingerprint ids in the source document
-        targetFingerprintIds: List[int]
-            Duplicated fingerprint ids in the source target document
+        fingerprintIds: List[int]
+            Common fingerprint ids in source and target parts
         """
 
         self.sourceDocId = sourceDocId
         self.sourceSpan = sourceSpan
         self.targetSpan = targetSpan
-        self.sourceFingerprintIds = sourceFingerprintIds
-        self.targetFingerprintIds = targetFingerprintIds
+        self.fingerprintIds = fingerprintIds
 
     def __hash__(self):
         return hash(
-            (
-                self.sourceDocId,
-                self.sourceSpan,
-                self.targetSpan,
-                self.sourceFingerprintIds,
-                self.targetFingerprintIds,
-            )
+            (self.sourceDocId, self.sourceSpan, self.targetSpan, self.fingerprintIds)
         )
 
     def __repr__(self):
-        return f"Duplicate(sourceDocId={self.sourceDocId}, sourceSpan={self.sourceSpan!r}, targetSpan={self.targetSpan!r}, sourceFingerprintIds={self.sourceFingerprintIds}, targetFingerprintIds={self.targetFingerprintIds})"
+        return f"Duplicate(sourceDocId={self.sourceDocId}, sourceSpan={self.sourceSpan!r}, targetSpan={self.targetSpan!r}, fingerprintIds={self.fingerprintIds})"
 
 
 class DuplicateFinder:
@@ -210,8 +186,7 @@ class DuplicateFinder:
                     sourceDocId=sourceDoc.id,
                     sourceSpan=sourceSpan,
                     targetSpan=targetSpan,
-                    sourceFingerprintIds=[commonFingerprintId],
-                    targetFingerprintIds=[commonFingerprintId],
+                    fingerprintIds=[commonFingerprintId],
                 )
                 comparisonTree[sourceSpan.start : sourceSpan.end] = duplicate
 
@@ -282,30 +257,17 @@ def _mergeDuplicates(prevDuplicate, nextDuplicate):
     if sourceSpan.length != targetSpan.length:
         return None
 
-    sourceFingerprintIds = (
-        prevDuplicate.sourceFingerprintIds + prevDuplicate.sourceFingerprintIds
+    fingerprintIds = list(
+        set(prevDuplicate.fingerprintIds + prevDuplicate.fingerprintIds)
     )
-    targetFingerprintIds = (
-        prevDuplicate.targetFingerprintIds + prevDuplicate.targetFingerprintIds
-    )
-    if not _compareCounter(sourceFingerprintIds, targetFingerprintIds):
-        return None
 
     mergedDuplicate = Duplicate(
         sourceDocId=prevDuplicate.sourceDocId,
         sourceSpan=sourceSpan,
         targetSpan=targetSpan,
-        # should this be list(set((sourceFingerprintIds))?
-        sourceFingerprintIds=list(set(targetFingerprintIds)),
-        targetFingerprintIds=list(set(targetFingerprintIds)),
+        fingerprintIds=fingerprintIds,
     )
     return mergedDuplicate
-
-
-# https://stackoverflow.com/questions/7828867/how-to-efficiently-compare-two-unordered-lists-not-sets-in-python
-# O(n): The Counter() method is best (if your objects are hashable):
-def _compareCounter(s, t):
-    return Counter(s) == Counter(t)
 
 
 def _mergeSpans(span1, span2):
