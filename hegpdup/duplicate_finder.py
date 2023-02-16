@@ -1,18 +1,8 @@
 from collections import Counter
-import logging
 
 from intervaltree import IntervalTree
 
 from .span import Span
-
-
-logger = logging.getLogger(__name__)
-logging.basicConfig(
-    format="""%(asctime)s -- %(name)s - %(levelname)s :
-                    %(message)s""",
-    datefmt="%m/%d/%Y %I:%M:%S %p",
-    level=logging.INFO,
-)
 
 
 class Document:
@@ -68,7 +58,6 @@ class DuplicateFinder:
 
     def buildComparisonTree(self, docFrom, docTo):
         interSct = docFrom.fingerprints.keys() & docTo.fingerprints.keys()
-        logger.debug(interSct)
         if len(interSct) < self.nbFinger:
             return None
 
@@ -76,9 +65,6 @@ class DuplicateFinder:
         # pour chaque fingerprint trouvé
         for thisFinger in interSct:
             # pour chaque localisation du figerprint en from
-            logger.debug("######################################")
-            logger.debug(thisFinger)
-            logger.debug(docFrom.fingerprints[thisFinger])
             self.fillComparisonTree(docFrom, docTo, thisFinger, comparisonTree)
 
         return comparisonTree
@@ -105,8 +91,6 @@ class DuplicateFinder:
         if len(candidateOverlap) <= 1:
             return
 
-        logger.debug("found a candidate")
-        logger.debug(candidateOverlap)
         toAspirant = [this.data for this in candidateOverlap]
         fromAspirant = [Span(el.begin, el.end) for el in candidateOverlap]
 
