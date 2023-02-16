@@ -60,56 +60,25 @@ class FingerprintBuilder:
             real text position.
         """
 
+        lineLength = len(line)
         # gere cadre de lecture[0 et +1]
         for fingerprintLength in self.fingerprintLengths:
             chunkStarts = range(0, len(line), self.orf)
             for chunkStart in chunkStarts:
-                self._buildFingerprintForChunk(
-                    chunkStart,
-                    line,
-                    lineOffset,
-                    fingerprintLength,
-                    spansByFingerprintId,
+                chunkEnd = chunkStart + fingerprintLength
+                chunk = line[chunkStart:chunkEnd]
+
+                if chunk in _CHUNKS_TO_IGNORE:
+                    return
+
+                fingerprintId = self._fingerprintIdByChunk.setdefault(
+                    chunk, len(self._fingerprintIdByChunk)
                 )
-                if chunkStart + fingerprintLength >= len(line):
+
+                start = lineOffset + chunkStart
+                # chunk might end up being shorter than fingerprintLength
+                end = start + len(chunk)
+                span = Span(start, end)
+                spansByFingerprintId.setdefault(fingerprintId, []).append(span)
+                if chunkEnd >= lineLength:
                     break
-
-    def _buildFingerprintForChunk(
-        self,
-        chunkStart,
-        line,
-        lineOffset,
-        fingerprintLength,
-        spansByFingerprintId,
-    ):
-        """generate fingerprints
-
-        Parameters
-        ----------
-        chunkStart : int
-            a round number which will split text size
-            by the lengght of the fingerprint.
-        line : str
-            current line we are working on.
-        lineOffset : int
-            real position to evaluate.
-        fingerprintLength : int
-            fingerprint length to generate.
-        """
-
-        chunk = line[chunkStart : chunkStart + fingerprintLength]
-        if chunk in _CHUNKS_TO_IGNORE:
-            return
-
-        if chunk not in self._fingerprintIdByChunk.keys():
-            fingerprintId = len(self._fingerprintIdByChunk) + 1
-            self._fingerprintIdByChunk[chunk] = fingerprintId
-
-        start = lineOffset + chunkStart
-        # NB chunk might be shorter than fingerprintLength
-        end = start + len(chunk)
-        otherCandidate = Span(start=start, end=end)
-
-        spansByFingerprintId.setdefault(self._fingerprintIdByChunk[chunk], []).append(
-            otherCandidate
-        )
