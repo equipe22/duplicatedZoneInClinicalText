@@ -48,8 +48,7 @@ for candicate in range(0, len(dataset)):
     thisDocTree.buildTree_comparisons(figerprintsId.figprintId)
     thisDocTree.mergeOverlap(figerprintsId.figprintId)
     print(candicate)
-    dictData = {"D0": len(dataset[candicate][0]), "D1": len(dataset[candicate][1])}
-    thisDocTree.expandOverlap(dictData)
+    thisDocTree.expandOverlap()
     link, thisScore = generateLink(thisDocTree.resultTree, 15)
     print("Data tree")
     print(thisDocTree.resultTree)

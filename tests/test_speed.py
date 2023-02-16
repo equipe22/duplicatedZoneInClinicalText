@@ -42,7 +42,7 @@ def test_speed():
         doctrees = DocTrees()
         doctrees.buildTree_comparisons(fingerprints.figprintId)
         doctrees.mergeOverlap(fingerprints.figprintId)
-        doctrees.expandOverlap({f"D{i}": len(text) for i, text in enumerate(texts)})
+        doctrees.expandOverlap()
 
     time = timeit.timeit(run, number=10)
     print(time)

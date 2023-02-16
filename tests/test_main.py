@@ -59,7 +59,7 @@ def test_cases(testCaseFile):
     doctrees = DocTrees()
     doctrees.buildTree_comparisons(fingerprints.figprintId)
     doctrees.mergeOverlap(fingerprints.figprintId)
-    doctrees.expandOverlap({f"D{i}": len(text) for i, text in enumerate(docTexts)})
+    doctrees.expandOverlap()
 
     docTextsById = {docData["id"]: docData["text"] for docData in testCase["docs"]}
     duplicatesData = _extractDuplicatesFromTrees(

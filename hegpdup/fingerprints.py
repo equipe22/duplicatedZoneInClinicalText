@@ -164,7 +164,8 @@ class Fingerprints:
             endF = beginF + fingerprintLenght
             fprint = thisLine[beginF:endF]
             start = thisrealposition + beginF
-            end = start + fingerprintLenght
+            # NB fprint might be shorter than fingerprintLenght
+            end = start + len(fprint)
             if fprint not in ["\n", "\r\n"]:
                 if fprint not in self.figprint.keys():
                     thisFingerCounter += 1
@@ -178,5 +179,6 @@ class Fingerprints:
                     end=end,
                 )
                 self.figprintId[self.figprint[fprint][0]].foundIn.append(otherCandidate)
-
+            if endF >= len(thisLine):
+                break
         return thisFingerCounter

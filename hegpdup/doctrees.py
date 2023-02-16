@@ -142,7 +142,7 @@ class DocTrees:
         else:
             return []
 
-    def expandOverlap(self, docInfo_R):
+    def expandOverlap(self):
         logger.debug(self.resultTree.keys())
         logger.debug(len(self.resultTree.keys()))
         for comparison in sorted(self.resultTree.keys()):
@@ -165,14 +165,9 @@ class DocTrees:
                         if (pos + 1 < len(toAspirant)) and (
                             pos + 1 < len(fromAspirant)
                         ):
-                            self.addLeaf(
-                                fromAspirant, toAspirant, comparison, pos, docInfo_R
-                            )
+                            self.addLeaf(fromAspirant, toAspirant, comparison, pos)
 
-    def addLeaf(self, fromAspirant, toAspirant, comparison, pos, docInfo_R):
-        dataKey = comparison.split("_")
-        sizeDoc1 = docInfo_R[dataKey[0]]
-        sizeDoc2 = docInfo_R[dataKey[1]]
+    def addLeaf(self, fromAspirant, toAspirant, comparison, pos):
         positionFrom = Span(
             min(fromAspirant[pos].start, fromAspirant[pos + 1].start),
             max(fromAspirant[pos].end, fromAspirant[pos + 1].end),
@@ -182,15 +177,12 @@ class DocTrees:
             max(toAspirant[pos].end, toAspirant[pos + 1].end),
         )
 
-        if (positionFrom.end <= sizeDoc1 and positionFrom.start <= sizeDoc1) and (
-            positionTo.end <= sizeDoc2 and positionTo.start <= sizeDoc2
+        if (positionFrom.end - positionFrom.start) == (
+            positionTo.end - positionTo.start
         ):
-            if (positionFrom.end - positionFrom.start) == (
-                positionTo.end - positionTo.start
-            ):
-                self.CheckCandidatesPositions(
-                    comparison, toAspirant, positionFrom, positionTo, pos
-                )
+            self.CheckCandidatesPositions(
+                comparison, toAspirant, positionFrom, positionTo, pos
+            )
 
     def CheckCandidatesPositions(
         self, comparison, toAspirant, positionFrom, positionTo, pos
