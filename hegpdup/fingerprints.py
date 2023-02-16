@@ -26,6 +26,9 @@ class FingerprintLocation:
         )
 
 
+_CHUNKS_TO_IGNORE = {"\n", "\r\n"}
+
+
 class Fingerprints:
     # thisFolder, fingerprintList, orf
 
@@ -145,14 +148,8 @@ class Fingerprints:
             fingerprint length to generate.
         """
 
-        beginF = thisChunk
-        endF = beginF + fingerprintLenght
-        fprint = thisLine[beginF:endF]
-        start = thisrealposition + thisChunk
-        # NB fprint might be shorter than fingerprintLenght
-        end = start + len(fprint)
-
-        if fprint in ["\n", "\r\n"]:
+        fprint = thisLine[thisChunk : thisChunk + fingerprintLenght]
+        if fprint in _CHUNKS_TO_IGNORE:
             return
 
         if fprint not in self.figprint.keys():
@@ -160,6 +157,9 @@ class Fingerprints:
             self.figprint[fprint] = nbFigprints
             self.figprintId[nbFigprints] = Fingerprint(fingerprint=fprint)
 
+        start = thisrealposition + thisChunk
+        # NB fprint might be shorter than fingerprintLenght
+        end = start + len(fprint)
         otherCandidate = FingerprintLocation(
             name=thisFileName.split("/")[-1],
             start=start,
