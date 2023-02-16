@@ -1,18 +1,15 @@
 class FingerprintLocation:
-    __slots__ = "name", "start", "end"
+    __slots__ = "start", "end"
 
-    def __init__(self, name, start, end):
-        self.name = name
+    def __init__(self, start, end):
         self.start = start
         self.end = end
 
     def __hash__(self):
-        return hash((self.name, self.start, self.end))
+        return hash((self.start, self.end))
 
     def __repr__(self):
-        return (
-            f"FingerprintLocation(name={self.name}, start={self.start}, end={self.end})"
-        )
+        return f"FingerprintLocation(start={self.start}, end={self.end})"
 
 
 _CHUNKS_TO_IGNORE = {"\n", "\r\n"}
@@ -45,7 +42,7 @@ class FingerprintBuilder:
         # contains list of fingerprint
         self.figprint = dict()
 
-    def generateFingerprints(self, name, data):
+    def generateFingerprints(self, data):
         figprintId = {}
         # lowercase so we aren't case sensitive
         data = data.lower()
@@ -57,13 +54,13 @@ class FingerprintBuilder:
             # split the text in n slice in chunck
             line = "".join(data[linePosition:])
             # gere cadre de lecture[0 et +1]
-            self.createChunks(line, realposition, name, figprintId)
+            self.createChunks(line, realposition, figprintId)
             # Update linePosition value
             realposition = realposition + len(data[linePosition])
 
         return figprintId
 
-    def createChunks(self, line, realposition, thisfile, figprintId):
+    def createChunks(self, line, realposition, figprintId):
         """For a given line, create the appropriate
         text chunks to generate fingerprint.
 
@@ -73,8 +70,6 @@ class FingerprintBuilder:
             a doc line.
         realposition : int
             real text position.
-        thisfile :tuple
-            contains path to the file to work on.
         """
 
         # gere cadre de lecture[0 et +1]
@@ -83,7 +78,6 @@ class FingerprintBuilder:
             for i in listCadreLecture:
                 self.treatChunk(
                     i,
-                    thisfile,
                     line,
                     realposition,
                     fingerprintLen,
@@ -95,7 +89,6 @@ class FingerprintBuilder:
     def treatChunk(
         self,
         thisChunk,
-        thisFileName,
         thisLine,
         thisrealposition,
         fingerprintLenght,
@@ -108,8 +101,6 @@ class FingerprintBuilder:
         thisChunk : int
             a round number which will split text size
             by the lengght of the fingerprint.
-        thisFileName : str
-            Real file name.
         thisLine : str
             current line we are working on.
         thisrealposition : int
@@ -130,7 +121,6 @@ class FingerprintBuilder:
         # NB fprint might be shorter than fingerprintLenght
         end = start + len(fprint)
         otherCandidate = FingerprintLocation(
-            name=thisFileName.split("/")[-1],
             start=start,
             end=end,
         )
