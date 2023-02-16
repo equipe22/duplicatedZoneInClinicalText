@@ -66,7 +66,7 @@ class Span:
         return f"Span(start={self.start}, end={self.end})"
 
 
-class DocTrees:
+class DuplicateFinder:
     def __init__(self):
         self.docTree = dict()
         # a new tree where results are store by comparison

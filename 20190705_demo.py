@@ -1,5 +1,5 @@
 from hegpdup.fingerprints import Fingerprints
-from hegpdup.doctrees import DocTrees
+from hegpdup.duplicate_finder import DuplicateFinder
 
 
 def generateLink(docIntervalTree, threshold):
@@ -35,7 +35,6 @@ def generateLink(docIntervalTree, threshold):
     return (link, scoreDup)
 
 
-
 dataset = [
     line.replace('"', "").rstrip().split("\t")
     for line in open("/tmp/demo.txt", "r").readlines()
@@ -45,14 +44,14 @@ fingerprintList = [10]
 
 for candicate in range(0, len(dataset)):
     figerprintsId = Fingerprints(fingerprintList, orf, dataset[candicate][0:2])
-    thisDocTree = DocTrees()
-    thisDocTree.buildTree_comparisons(figerprintsId.figprintId)
-    thisDocTree.mergeOverlap(figerprintsId.figprintId)
+    duplicateFinder = DuplicateFinder()
+    duplicateFinder.buildTree_comparisons(figerprintsId.figprintId)
+    duplicateFinder.mergeOverlap(figerprintsId.figprintId)
     print(candicate)
-    thisDocTree.expandOverlap()
-    link, thisScore = generateLink(thisDocTree.resultTree, 15)
+    duplicateFinder.expandOverlap()
+    link, thisScore = generateLink(duplicateFinder.resultTree, 15)
     print("Data tree")
-    print(thisDocTree.resultTree)
+    print(duplicateFinder.resultTree)
     print("finish a sentence")
     print(link)
     for el in link:

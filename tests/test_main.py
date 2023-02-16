@@ -5,7 +5,7 @@ from pprint import pprint
 import pytest
 
 from hegpdup.fingerprints import Fingerprints
-from hegpdup.doctrees import DocTrees
+from hegpdup.duplicate_finder import DuplicateFinder
 
 _TEST_CASES_DIR = Path(__file__).parent / "test_cases"
 _TEST_CASES_FILES = sorted(_TEST_CASES_DIR.glob("*.json"))
@@ -55,14 +55,14 @@ def test_cases(testCaseFile):
 
     fingerprints = Fingerprints([fingerprintLength], orf, docTexts)
 
-    doctrees = DocTrees()
-    doctrees.buildTree_comparisons(fingerprints.figprintId)
-    doctrees.mergeOverlap(fingerprints.figprintId)
-    doctrees.expandOverlap()
+    duplicateFinder = DuplicateFinder()
+    duplicateFinder.buildTree_comparisons(fingerprints.figprintId)
+    duplicateFinder.mergeOverlap(fingerprints.figprintId)
+    duplicateFinder.expandOverlap()
 
     docTextsById = {docData["id"]: docData["text"] for docData in testCase["docs"]}
     duplicatesData = _extractDuplicatesFromTrees(
-        doctrees.resultTree, minDuplicateLength, docTextsById
+        duplicateFinder.resultTree, minDuplicateLength, docTextsById
     )
 
     pprint(duplicatesData, sort_dicts=False)

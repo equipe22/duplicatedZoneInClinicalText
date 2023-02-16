@@ -2,7 +2,7 @@ from pathlib import Path
 import timeit
 
 from hegpdup.fingerprints import Fingerprints
-from hegpdup.doctrees import DocTrees
+from hegpdup.duplicate_finder import DuplicateFinder
 
 _TEXT_FILE = Path(__file__).parent / "sample_text.txt"
 _FINGERPRINT_LENGTH = 10
@@ -39,10 +39,10 @@ def test_speed():
 
     def run():
         fingerprints = Fingerprints([_FINGERPRINT_LENGTH], _ORF, texts)
-        doctrees = DocTrees()
-        doctrees.buildTree_comparisons(fingerprints.figprintId)
-        doctrees.mergeOverlap(fingerprints.figprintId)
-        doctrees.expandOverlap()
+        duplicateFinder = DuplicateFinder()
+        duplicateFinder.buildTree_comparisons(fingerprints.figprintId)
+        duplicateFinder.mergeOverlap(fingerprints.figprintId)
+        duplicateFinder.expandOverlap()
 
     time = timeit.timeit(run, number=10)
     print(time)
