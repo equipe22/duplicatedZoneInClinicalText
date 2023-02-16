@@ -1,5 +1,3 @@
-import logging
-
 from hegpdup.fingerprints import Fingerprints
 from hegpdup.doctrees import DocTrees
 
@@ -38,13 +36,7 @@ def generateLink(docIntervalTree, threshold):
     return (link, scoreDup)
 
 
-logger = logging.getLogger(__name__)
-logging.basicConfig(
-    format="""%(asctime)s -- %(name)s - %(levelname)s :
-                    %(messagepathToOutput)s""",
-    datefmt="%m/%d/%Y %I:%M:%S %p",
-    level=logging.INFO,
-)
+
 dataset = [
     line.replace('"', "").rstrip().split("\t")
     for line in open("/tmp/demo.txt", "r").readlines()
