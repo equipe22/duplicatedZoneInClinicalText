@@ -6,13 +6,13 @@ _CHUNKS_TO_IGNORE = {"\n", "\r\n"}
 class FingerprintBuilder:
     # thisFolder, fingerprintList, orf
 
-    def __init__(self, fingerprintList, orf):
+    def __init__(self, fingerprintLengths, orf):
         """Create object Fingerprints which contains all
         docs fingerprints for a patient fingerprint.
 
         Parameters
         ----------
-        fingerprintList : [ int]
+        fingerprintLengths : [ int]
             list of fingerprint length.
         orf : int
             define the open reading frame length. the size of the shift
@@ -25,30 +25,30 @@ class FingerprintBuilder:
 
         """
 
-        self.fingerprintList = fingerprintList
+        self.fingerprintLengths = fingerprintLengths
         self.orf = orf
-        # contains list of fingerprint
-        self.figprint = dict()
 
-    def generateFingerprints(self, data):
-        figprintId = {}
+        self._fingerprintIdByChunk = dict()
+
+    def buildFingerprints(self, text):
+        spansByFingerprintId = {}
         # lowercase so we aren't case sensitive
-        data = data.lower()
+        text = text.lower()
         # found the right position in text
-        realposition = 0
+        lineOffset = 0
         # Cadre de lecture
         # gere le multiline
-        for linePosition in range(0, min(self.orf, len(data))):
+        for linePosition in range(0, min(self.orf, len(text))):
             # split the text in n slice in chunck
-            line = "".join(data[linePosition:])
+            line = "".join(text[linePosition:])
             # gere cadre de lecture[0 et +1]
-            self.createChunks(line, realposition, figprintId)
+            self._buildFingerprintsForLine(line, lineOffset, spansByFingerprintId)
             # Update linePosition value
-            realposition = realposition + len(data[linePosition])
+            lineOffset = lineOffset + len(text[linePosition])
 
-        return figprintId
+        return spansByFingerprintId
 
-    def createChunks(self, line, realposition, figprintId):
+    def _buildFingerprintsForLine(self, line, lineOffset, spansByFingerprintId):
         """For a given line, create the appropriate
         text chunks to generate fingerprint.
 
@@ -56,58 +56,60 @@ class FingerprintBuilder:
         ----------
         line : str
             a doc line.
-        realposition : int
+        lineOffset : int
             real text position.
         """
 
         # gere cadre de lecture[0 et +1]
-        for fingerprintLen in self.fingerprintList:
-            listCadreLecture = range(0, len(line), self.orf)
-            for i in listCadreLecture:
-                self.treatChunk(
-                    i,
+        for fingerprintLength in self.fingerprintLengths:
+            chunkStarts = range(0, len(line), self.orf)
+            for chunkStart in chunkStarts:
+                self._buildFingerprintForChunk(
+                    chunkStart,
                     line,
-                    realposition,
-                    fingerprintLen,
-                    figprintId,
+                    lineOffset,
+                    fingerprintLength,
+                    spansByFingerprintId,
                 )
-                if i + fingerprintLen >= len(line):
+                if chunkStart + fingerprintLength >= len(line):
                     break
 
-    def treatChunk(
+    def _buildFingerprintForChunk(
         self,
-        thisChunk,
-        thisLine,
-        thisrealposition,
-        fingerprintLenght,
-        figprintId,
+        chunkStart,
+        line,
+        lineOffset,
+        fingerprintLength,
+        spansByFingerprintId,
     ):
         """generate fingerprints
 
         Parameters
         ----------
-        thisChunk : int
+        chunkStart : int
             a round number which will split text size
             by the lengght of the fingerprint.
-        thisLine : str
+        line : str
             current line we are working on.
-        thisrealposition : int
+        lineOffset : int
             real position to evaluate.
-        fingerprintLenght : int
+        fingerprintLength : int
             fingerprint length to generate.
         """
 
-        fprint = thisLine[thisChunk : thisChunk + fingerprintLenght]
-        if fprint in _CHUNKS_TO_IGNORE:
+        chunk = line[chunkStart : chunkStart + fingerprintLength]
+        if chunk in _CHUNKS_TO_IGNORE:
             return
 
-        if fprint not in self.figprint.keys():
-            nbFigprints = len(self.figprint) + 1
-            self.figprint[fprint] = nbFigprints
+        if chunk not in self._fingerprintIdByChunk.keys():
+            fingerprintId = len(self._fingerprintIdByChunk) + 1
+            self._fingerprintIdByChunk[chunk] = fingerprintId
 
-        start = thisrealposition + thisChunk
-        # NB fprint might be shorter than fingerprintLenght
-        end = start + len(fprint)
+        start = lineOffset + chunkStart
+        # NB chunk might be shorter than fingerprintLength
+        end = start + len(chunk)
         otherCandidate = Span(start=start, end=end)
 
-        figprintId.setdefault(self.figprint[fprint], []).append(otherCandidate)
+        spansByFingerprintId.setdefault(self._fingerprintIdByChunk[chunk], []).append(
+            otherCandidate
+        )

@@ -58,7 +58,7 @@ class DuplicateFinder:
         self.expandOverlap()
 
     def addDocTree(self, name, text):
-        fingerprintDict = self.fingerprintBuilder.generateFingerprints(text)
+        fingerprintDict = self.fingerprintBuilder.buildFingerprints(text)
         doc = Document(name, fingerprintDict)
         self.docTree[doc.name] = doc
 
