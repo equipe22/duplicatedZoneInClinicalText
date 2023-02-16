@@ -162,10 +162,9 @@ class DocTrees:
         logger.debug(candidateOverlap)
         toAspirant = [this.data for this in candidateOverlap]
         fromAspirant = [Span(el.begin, el.end) for el in candidateOverlap]
-        for pos in range(0, len(fromAspirant)):
-            # the iterator is for from and to
-            if (pos + 1 < len(toAspirant)) and (pos + 1 < len(fromAspirant)):
-                self.addLeaf(fromAspirant, toAspirant, comparison, pos)
+
+        for pos in range(0, len(candidateOverlap) - 1):
+            self.addLeaf(fromAspirant, toAspirant, comparison, pos)
 
     def addLeaf(self, fromAspirant, toAspirant, comparison, pos):
         positionFrom = Span(
