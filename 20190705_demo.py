@@ -9,9 +9,9 @@ def generateLink(docIntervalTree, threshold):
         alreadyseen = []
         for duplication in sorted(docIntervalTree[comparison]):
             # from,start,end
-            if (duplication.end - duplication.begin) <= threshold or (
-                duplication.end,
-                duplication.begin,
+            if (duplication.data.end - duplication.data.start) <= threshold or (
+                duplication.data.end,
+                duplication.data.start,
             ) in alreadyseen:
                 continue
             scoreDup = scoreDup + (duplication.data.end - duplication.data.start)

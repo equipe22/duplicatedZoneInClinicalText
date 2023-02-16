@@ -21,13 +21,14 @@ def _extractDuplicatesFromTrees(
     for docIdFrom, tree in trees.items():
         seen = set()
         for interval in sorted(tree):
-            if (interval.end - interval.begin) < minDuplicateLength:
-                continue
-            if (interval.begin, interval.end) in seen:
-                continue
-
             targetStart = interval.data.start
             targetEnd = interval.data.end
+
+            if (targetEnd - targetStart) < minDuplicateLength:
+                continue
+            if (targetStart, targetEnd) in seen:
+                continue
+
             text = docText[targetStart:targetEnd]
 
             duplicatesData.append(
