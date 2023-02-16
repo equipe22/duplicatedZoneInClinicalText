@@ -1,15 +1,6 @@
 from collections import Counter
 
 
-def flat2gen(alist):
-    for item in alist:
-        if isinstance(item, list):
-            for subitem in item:
-                yield subitem
-        else:
-            yield item
-
-
 def returnUniq(thisList):
     return list(set(thisList))
 
