@@ -15,9 +15,9 @@ class Duplicate:
     designated by characters spans
     """
 
-    __slots__ = "sourceDocId", "sourceSpan", "targetSpan", "fingerprintIds"
+    __slots__ = "sourceDocId", "sourceSpan", "targetSpan"
 
-    def __init__(self, sourceDocId, sourceSpan, targetSpan, fingerprintIds):
+    def __init__(self, sourceDocId, sourceSpan, targetSpan):
         """
         Parameters
         ----------
@@ -27,22 +27,17 @@ class Duplicate:
             Duplicated character span in the source document
         targetSpan: Span
             Duplicated character span in the target document
-        fingerprintIds: List[int]
-            Common fingerprint ids in source and target parts
         """
 
         self.sourceDocId = sourceDocId
         self.sourceSpan = sourceSpan
         self.targetSpan = targetSpan
-        self.fingerprintIds = fingerprintIds
 
     def __hash__(self):
-        return hash(
-            (self.sourceDocId, self.sourceSpan, self.targetSpan, self.fingerprintIds)
-        )
+        return hash((self.sourceDocId, self.sourceSpan, self.targetSpan))
 
     def __repr__(self):
-        return f"Duplicate(sourceDocId={self.sourceDocId}, sourceSpan={self.sourceSpan!r}, targetSpan={self.targetSpan!r}, fingerprintIds={self.fingerprintIds})"
+        return f"Duplicate(sourceDocId={self.sourceDocId}, sourceSpan={self.sourceSpan!r}, targetSpan={self.targetSpan!r})"
 
 
 class DuplicateFinder:
@@ -186,7 +181,6 @@ class DuplicateFinder:
                     sourceDocId=sourceDoc.id,
                     sourceSpan=sourceSpan,
                     targetSpan=targetSpan,
-                    fingerprintIds=[commonFingerprintId],
                 )
                 comparisonTree[sourceSpan.start : sourceSpan.end] = duplicate
 
@@ -257,15 +251,10 @@ def _mergeDuplicates(prevDuplicate, nextDuplicate):
     if sourceSpan.length != targetSpan.length:
         return None
 
-    fingerprintIds = list(
-        set(prevDuplicate.fingerprintIds + prevDuplicate.fingerprintIds)
-    )
-
     mergedDuplicate = Duplicate(
         sourceDocId=prevDuplicate.sourceDocId,
         sourceSpan=sourceSpan,
         targetSpan=targetSpan,
-        fingerprintIds=fingerprintIds,
     )
     return mergedDuplicate
 
