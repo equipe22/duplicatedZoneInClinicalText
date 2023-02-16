@@ -113,48 +113,41 @@ class DuplicateFinder:
         if len(candidateOverlap) <= 1:
             return
 
-        toAspirant = [this.data for this in candidateOverlap]
-        fromAspirant = [Span(el.begin, el.end) for el in candidateOverlap]
+        duplicates = [this.data for this in candidateOverlap]
 
         for pos in range(0, len(candidateOverlap) - 1):
-            prevFromAspirant = fromAspirant[pos]
-            prevToAspirant = toAspirant[pos]
-            nextFromAspirant = fromAspirant[pos + 1]
-            nextToAspirant = toAspirant[pos + 1]
+            prevDuplicate = duplicates[pos]
+            nextDuplicate = duplicates[pos + 1]
             self.addLeaf(
-                prevFromAspirant,
-                prevToAspirant,
-                nextFromAspirant,
-                nextToAspirant,
+                prevDuplicate,
+                nextDuplicate,
                 comparisonTree,
             )
 
     def addLeaf(
         self,
-        prevFromAspirant,
-        prevToAspirant,
-        nextFromAspirant,
-        nextToAspirant,
+        prevDuplicate,
+        nextDuplicate,
         comparisonTree,
     ):
-        if nextToAspirant.targetSpan.end < prevToAspirant.targetSpan.start:
+        if nextDuplicate.targetSpan.end < prevDuplicate.targetSpan.start:
             return
 
-        positionFrom = _mergeSpans(prevFromAspirant, nextFromAspirant)
-        positionTo = _mergeSpans(prevToAspirant.targetSpan, nextToAspirant.targetSpan)
+        positionFrom = _mergeSpans(prevDuplicate.sourceSpan, nextDuplicate.sourceSpan)
+        positionTo = _mergeSpans(prevDuplicate.targetSpan, nextDuplicate.targetSpan)
 
         # ignore duplication if from/to spans end up having different lengths
         # after merge
         if positionFrom.length != positionTo.length:
             return
 
-        fingers = prevToAspirant.fingerprint + nextToAspirant.fingerprint
-        fromfingers = prevToAspirant.fromFingerprint + nextToAspirant.fromFingerprint
+        fingers = prevDuplicate.fingerprint + prevDuplicate.fingerprint
+        fromfingers = prevDuplicate.fromFingerprint + prevDuplicate.fromFingerprint
         if not _compareCounter(fingers, fromfingers):
             return
 
         to_positions = Duplicate(
-            sourceDocName=prevToAspirant.sourceDocName,
+            sourceDocName=prevDuplicate.sourceDocName,
             sourceSpan=positionFrom,
             targetSpan=positionTo,
             fingerprint=list(set(fingers)),
