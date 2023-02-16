@@ -184,7 +184,6 @@ class DocTrees:
         fingers = list(
             flat2gen([toAspirant[pos].fingerprint, toAspirant[pos + 1].fingerprint])
         )
-        fingers.sort()
         fromfingers = list(
             flat2gen(
                 [
@@ -193,7 +192,6 @@ class DocTrees:
                 ]
             )
         )
-        fromfingers.sort()
         if not compareCounter(fingers, fromfingers):
             return
 
