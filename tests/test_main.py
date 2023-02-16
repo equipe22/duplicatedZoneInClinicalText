@@ -11,12 +11,10 @@ _TEST_CASES_DIR = Path(__file__).parent / "test_cases"
 _TEST_CASES_FILES = sorted(_TEST_CASES_DIR.glob("*.json"))
 
 
-def _getDuplicatesData(duplicates, docIdTo, docText, minDuplicateLength):
+def _getDuplicatesData(duplicates, docIdTo, docText):
     duplicatesData = []
     seen = set()
     for duplicate in duplicates:
-        if duplicate.targetSpan.length < minDuplicateLength:
-            continue
         if duplicate.targetSpan in seen:
             continue
 
@@ -47,7 +45,9 @@ def test_cases(testCaseFile):
     minDuplicateLength = testCase["settings"]["min_duplicate_length"]
 
     fingerprintBuilder = FingerprintBuilder([fingerprintLength], orf)
-    duplicateFinder = DuplicateFinder(fingerprintBuilder)
+    duplicateFinder = DuplicateFinder(
+        fingerprintBuilder, minDuplicateLength=minDuplicateLength
+    )
 
     duplicatesData = []
 
@@ -55,9 +55,7 @@ def test_cases(testCaseFile):
         docIdTo = doc_data["id"]
         docText = doc_data["text"]
         duplicates = duplicateFinder.findDuplicates(docIdTo, docText)
-        duplicatesData += _getDuplicatesData(
-            duplicates, docIdTo, docText, minDuplicateLength
-        )
+        duplicatesData += _getDuplicatesData(duplicates, docIdTo, docText)
 
     pprint(duplicatesData, sort_dicts=False)
 

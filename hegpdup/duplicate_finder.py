@@ -26,12 +26,17 @@ class Duplicate:
         sourceSpan: Span
             Duplicated character span in the source document
         targetSpan: Span
-            Duplicated character span in the target document
+            Duplicated character span in the target document. Must be same
+            length as `sourceSpan`
         """
 
         self.sourceDocId = sourceDocId
         self.sourceSpan = sourceSpan
         self.targetSpan = targetSpan
+
+    @property
+    def length(self):
+        return self.targetSpan.length
 
     def __hash__(self):
         return hash((self.sourceDocId, self.sourceSpan, self.targetSpan))
@@ -48,7 +53,7 @@ class DuplicateFinder:
     then identifies parts with common fingerprints between each document.
     """
 
-    def __init__(self, fingerprintBuilder, minNbFingerprints=2):
+    def __init__(self, fingerprintBuilder, minNbFingerprints=2, minDuplicateLength=2):
         """
         Parameters
         ----------
@@ -58,10 +63,13 @@ class DuplicateFinder:
         minNbFingerprints: int
             Minimum number of common fingerprints between 2 documents, under which
             the `DuplicateFinder` won't attempt to find any duplicates
+        minDuplicateLength: int
+            Minimum number of characters in duplicates
         """
 
-        self.minNbFingerprints = minNbFingerprints
         self.fingerprintBuilder = fingerprintBuilder
+        self.minNbFingerprints = minNbFingerprints
+        self.minDuplicateLength = minDuplicateLength
 
         # mapping of previously seen documents, by id
         self._docsById = dict()
@@ -112,6 +120,7 @@ class DuplicateFinder:
             interval.data
             for tree in comparisonTrees.values()
             for interval in sorted(tree)
+            if interval.data.length >= self.minDuplicateLength
         ]
 
         return duplicates

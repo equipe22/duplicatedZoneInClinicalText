@@ -2,13 +2,13 @@ from hegpdup.fingerprint_builder import FingerprintBuilder
 from hegpdup.duplicate_finder import DuplicateFinder
 
 
-def generateLink(duplicates, docNameTo, threshold):
+def generateLink(duplicates, docNameTo):
     link = []
     scoreDup = 0
     alreadyseen = []
     for duplication in duplicates:
         targetSpan = duplication.targetSpan
-        if targetSpan.length <= threshold or targetSpan in alreadyseen:
+        if targetSpan in alreadyseen:
             continue
         scoreDup = scoreDup + targetSpan.length
         alreadyseen.append(targetSpan)
@@ -32,12 +32,15 @@ dataset = [
 ]
 orf = 3
 fingerprintList = [10]
+minDuplicateLength = 16
 
 for texts in dataset:
     print(texts)
 
     fingerprintBuilder = FingerprintBuilder(fingerprintList, orf)
-    duplicateFinder = DuplicateFinder(fingerprintBuilder)
+    duplicateFinder = DuplicateFinder(
+        fingerprintBuilder, minDuplicateLength=minDuplicateLength
+    )
 
     for i, text in enumerate(texts):
         name = f"D{i}"
@@ -46,7 +49,7 @@ for texts in dataset:
             continue
         print("Duplicates")
         print(duplicates)
-        link, thisScore = generateLink(duplicates, name, 15)
+        link, thisScore = generateLink(duplicates, name)
 
         print("finish a sentence")
         print(link)

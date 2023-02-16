@@ -7,6 +7,7 @@ from hegpdup.duplicate_finder import DuplicateFinder
 _TEXT_FILE = Path(__file__).parent / "sample_text.txt"
 _FINGERPRINT_LENGTH = 10
 _ORF = 3
+_MIN_DUPLICATE_LENGTH = 10
 
 
 def _getSampleTexts():
@@ -39,7 +40,9 @@ def test_speed():
 
     def run():
         fingerprintBuilder = FingerprintBuilder([_FINGERPRINT_LENGTH], _ORF)
-        duplicateFinder = DuplicateFinder(fingerprintBuilder)
+        duplicateFinder = DuplicateFinder(
+            fingerprintBuilder, minDuplicateLength=_MIN_DUPLICATE_LENGTH
+        )
         for i, text in enumerate(texts):
             duplicateFinder.findDuplicates(f"D{i}", text)
 
