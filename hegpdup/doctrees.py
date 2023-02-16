@@ -3,7 +3,7 @@ import logging
 
 from intervaltree import IntervalTree
 
-from .lib import compareCounter, returnUniq, flat2gen
+from .lib import compareCounter, returnUniq
 
 
 logger = logging.getLogger(__name__)
@@ -181,16 +181,9 @@ class DocTrees:
         if toAspirant[pos + 1].end < toAspirant[pos].start:
             return
 
-        fingers = list(
-            flat2gen([toAspirant[pos].fingerprint, toAspirant[pos + 1].fingerprint])
-        )
-        fromfingers = list(
-            flat2gen(
-                [
-                    toAspirant[pos].fromFingerprint,
-                    toAspirant[pos + 1].fromFingerprint,
-                ]
-            )
+        fingers = toAspirant[pos].fingerprint + toAspirant[pos + 1].fingerprint
+        fromfingers = (
+            toAspirant[pos].fromFingerprint + toAspirant[pos + 1].fromFingerprint
         )
         if not compareCounter(fingers, fromfingers):
             return
