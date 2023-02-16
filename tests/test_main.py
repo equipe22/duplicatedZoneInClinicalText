@@ -11,17 +11,11 @@ _TEST_CASES_DIR = Path(__file__).parent / "test_cases"
 _TEST_CASES_FILES = sorted(_TEST_CASES_DIR.glob("*.json"))
 
 
-def _extractDuplicatesFromTrees(
-    trees,
-    docIdTo,
-    docText,
-    minDuplicateLength,
-):
+def _getDuplicatesData(duplicatesByDocIdFrom, docIdTo, docText, minDuplicateLength):
     duplicatesData = []
-    for docIdFrom, tree in trees.items():
+    for docIdFrom, duplicates in duplicatesByDocIdFrom.items():
         seen = set()
-        for interval in sorted(tree):
-            duplicate = interval.data
+        for duplicate in duplicates:
             if duplicate.targetSpan.length < minDuplicateLength:
                 continue
             if duplicate.targetSpan in seen:
@@ -57,12 +51,12 @@ def test_cases(testCaseFile):
 
     duplicatesData = []
 
-    for docData in testCase["docs"]:
-        docIdTo = docData["id"]
-        docText = docData["text"]
-        comparisonTrees = duplicateFinder.buildComparisonTrees(docIdTo, docText)
-        duplicatesData += _extractDuplicatesFromTrees(
-            comparisonTrees, docIdTo, docText, minDuplicateLength
+    for doc_data in testCase["docs"]:
+        docIdTo = doc_data["id"]
+        docText = doc_data["text"]
+        duplicatesByDocIdFrom = duplicateFinder.findDuplicates(docIdTo, docText)
+        duplicatesData += _getDuplicatesData(
+            duplicatesByDocIdFrom, docIdTo, docText, minDuplicateLength
         )
 
     pprint(duplicatesData, sort_dicts=False)

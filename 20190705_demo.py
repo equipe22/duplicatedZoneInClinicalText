@@ -2,13 +2,12 @@ from hegpdup.fingerprint_builder import FingerprintBuilder
 from hegpdup.duplicate_finder import DuplicateFinder
 
 
-def generateLink(docIntervalTree, threshold):
+def generateLink(duplicatesByDocNameFrom, docNameTo, threshold):
     link = []
     scoreDup = 0
-    for comparison in docIntervalTree.keys():
+    for docNameFrom, duplicates in duplicatesByDocNameFrom.items():
         alreadyseen = []
-        for interval in sorted(docIntervalTree[comparison]):
-            duplication = interval.data
+        for duplication in duplicates:
             targetSpan = duplication.targetSpan
             if targetSpan.length <= threshold or targetSpan in alreadyseen:
                 continue
@@ -16,12 +15,10 @@ def generateLink(docIntervalTree, threshold):
             alreadyseen.append(targetSpan)
             sourceSpan = duplication.sourceSpan
             fromData = (
-                comparison[0] + "," + str(sourceSpan.start) + "," + str(sourceSpan.end)
+                docNameFrom + "," + str(sourceSpan.start) + "," + str(sourceSpan.end)
             )
             # to,start,end
-            toData = (
-                comparison[1] + "," + str(targetSpan.start) + "," + str(targetSpan.end)
-            )
+            toData = docNameTo + "," + str(targetSpan.start) + "," + str(targetSpan.end)
             link.append(fromData + "," + toData)
     return (link, scoreDup)
 
@@ -41,12 +38,12 @@ for texts in dataset:
 
     for i, text in enumerate(texts):
         name = f"D{i}"
-        comparisonTrees = duplicateFinder.buildComparisonTrees(name, text)
+        duplicatesByDocNameFrom = duplicateFinder.findDuplicates(name, text)
         if i == 0:
             continue
-        print("Data tree")
-        print(comparisonTrees)
-        link, thisScore = generateLink(comparisonTrees, 15)
+        print("Duplicates")
+        print(duplicatesByDocNameFrom)
+        link, thisScore = generateLink(duplicatesByDocNameFrom, name, 15)
 
         print("finish a sentence")
         print(link)

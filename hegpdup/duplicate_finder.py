@@ -36,7 +36,7 @@ class DuplicateFinder:
         self.fingerprintBuilder = fingerprintBuilder
         self.docTree = dict()
 
-    def buildComparisonTrees(self, name, text):
+    def findDuplicates(self, name, text):
         if name in self.docTree:
             raise Exception(f"Already processed document with name {name}")
 
@@ -54,7 +54,12 @@ class DuplicateFinder:
 
         self.docTree[doc.name] = doc
 
-        return comparisonTrees
+        duplicatesByDocName = {
+            name: [interval.data for interval in sorted(tree)]
+            for name, tree in comparisonTrees.items()
+        }
+
+        return duplicatesByDocName
 
     def buildComparisonTree(self, docFrom, docTo):
         interSct = docFrom.fingerprints.keys() & docTo.fingerprints.keys()
