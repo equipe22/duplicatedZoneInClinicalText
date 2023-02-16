@@ -14,11 +14,6 @@ def returnUniq(thisList):
     return list(set(thisList))
 
 
-def sortBy(thisList, sortByPosition):
-    thisList.sort(key=lambda tup: tup[sortByPosition])
-    return thisList
-
-
 # Python program to illustrate the intersection
 # of two lists using set() method
 # https://www.geeksforgeeks.org/python-intersection-two-lists/
