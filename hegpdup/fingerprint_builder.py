@@ -1,16 +1,4 @@
-class FingerprintLocation:
-    __slots__ = "start", "end"
-
-    def __init__(self, start, end):
-        self.start = start
-        self.end = end
-
-    def __hash__(self):
-        return hash((self.start, self.end))
-
-    def __repr__(self):
-        return f"FingerprintLocation(start={self.start}, end={self.end})"
-
+from .span import Span
 
 _CHUNKS_TO_IGNORE = {"\n", "\r\n"}
 
@@ -120,9 +108,6 @@ class FingerprintBuilder:
         start = thisrealposition + thisChunk
         # NB fprint might be shorter than fingerprintLenght
         end = start + len(fprint)
-        otherCandidate = FingerprintLocation(
-            start=start,
-            end=end,
-        )
+        otherCandidate = Span(start=start, end=end)
 
         figprintId.setdefault(self.figprint[fprint], []).append(otherCandidate)
