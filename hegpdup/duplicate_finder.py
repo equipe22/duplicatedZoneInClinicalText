@@ -15,19 +15,9 @@ logging.basicConfig(
 
 
 class Document:
-    def __init__(self, name):
+    def __init__(self, name, fingerprints):
         self.name = name
-        self.fingerprints = dict()
-        # docID :{fingerprintlist}
-
-    def addFinger(self, thisFingerprint, location):
-        if thisFingerprint in self.fingerprints.keys():
-            self.fingerprints[thisFingerprint].append(location)
-            logger.debug("found duplicate site inside fingerprint")
-            logger.debug(self.name)
-            logger.debug(self.fingerprints[thisFingerprint])
-        else:
-            self.fingerprints[thisFingerprint] = [location]
+        self.fingerprints = fingerprints
 
 
 class Duplicate:
@@ -84,17 +74,8 @@ class DuplicateFinder:
         self.expandOverlap()
 
     def addDocTree(self, name, text):
-        # create a document
-        doc = Document(name)
-
         fingerprintDict = self.fingerprintBuilder.generateFingerprints(name, text)
-
-        for thisFingerprint in fingerprintDict.keys():
-            candidateList = fingerprintDict[thisFingerprint]
-            for thisCandidate in candidateList:
-                # add a fingerprint
-                doc.addFinger(thisFingerprint, thisCandidate)
-
+        doc = Document(name, fingerprintDict)
         self.docTree[doc.name] = doc
 
     def mergeOverlap(self):
