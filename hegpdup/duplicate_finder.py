@@ -1,5 +1,4 @@
 from collections import Counter
-import itertools
 import logging
 
 from intervaltree import IntervalTree
@@ -54,33 +53,20 @@ class DuplicateFinder:
             name = f"D{i}"
             self.addDocTree(name, text)
 
-        self.buildComparisonTrees()
-
     def addDocTree(self, name, text):
         fingerprintDict = self.fingerprintBuilder.buildFingerprints(text)
         doc = Document(name, fingerprintDict)
-        self.docTree[doc.name] = doc
 
-    def buildComparisonTrees(self):
-        # list of Docs name
-        # [Doc00,Doc01, Doc02,Doc03]
-        docNames = sorted(self.docTree.keys())
-        logger.debug(docNames)
-
-        for docNameFrom, docNameTo in itertools.combinations(docNames, 2):
-            logger.debug([docNameFrom, docNameTo])
-            docFrom = self.docTree[docNameFrom]
-            docTo = self.docTree[docNameTo]
-
-            comparisonTree = self.buildComparisonTree(docFrom, docTo)
+        for previousDoc in self.docTree.values():
+            comparisonTree = self.buildComparisonTree(docFrom=previousDoc, docTo=doc)
             if comparisonTree is None:
                 continue
             self.expandComparisonTree(comparisonTree)
 
-            comparekey = (docFrom.name, docTo.name)
+            comparekey = (previousDoc.name, doc.name)
             self.resultTree[comparekey] = comparisonTree
 
-        logger.debug("DONE FIRST PART")
+        self.docTree[doc.name] = doc
 
     def buildComparisonTree(self, docFrom, docTo):
         interSct = docFrom.fingerprints.keys() & docTo.fingerprints.keys()
