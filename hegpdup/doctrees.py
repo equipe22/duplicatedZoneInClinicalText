@@ -1,9 +1,8 @@
+from collections import Counter
 import itertools
 import logging
 
 from intervaltree import IntervalTree
-
-from .lib import compareCounter, returnUniq
 
 
 logger = logging.getLogger(__name__)
@@ -75,7 +74,7 @@ class DocTrees:
                 continue
 
             candidateList = sorted(
-                returnUniq(fingerprintDict[thisFingerprint].foundIn),
+                set(fingerprintDict[thisFingerprint].foundIn),
                 key=lambda l: l.name,
             )
             # return uniq and an ordered list
@@ -185,17 +184,23 @@ class DocTrees:
         fromfingers = (
             toAspirant[pos].fromFingerprint + toAspirant[pos + 1].fromFingerprint
         )
-        if not compareCounter(fingers, fromfingers):
+        if not _compareCounter(fingers, fromfingers):
             return
 
         to_positions = Duplicate(
             start=positionTo.start,
             end=positionTo.end,
-            fingerprint=returnUniq(fingers),
-            # should this be returnUniq(fromfingers)d?
-            fromFingerprint=returnUniq(fingers),
+            fingerprint=list(set(fingers)),
+            # should this be list(set((fromfingers))?
+            fromFingerprint=list(set(fingers)),
         )
         self.resultTree[comparison].remove_envelop(positionFrom.start, positionFrom.end)
         self.resultTree[comparison][
             positionFrom.start : positionFrom.end
         ] = to_positions
+
+
+# https://stackoverflow.com/questions/7828867/how-to-efficiently-compare-two-unordered-lists-not-sets-in-python
+# O(n): The Counter() method is best (if your objects are hashable):
+def _compareCounter(s, t):
+    return Counter(s) == Counter(t)
