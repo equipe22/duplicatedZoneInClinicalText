@@ -54,7 +54,7 @@ class DuplicateFinder:
             name = f"D{i}"
             self.addDocTree(name, text)
 
-        self.mergeOverlap()
+        self.buildComparisonTrees()
         self.expandOverlap()
 
     def addDocTree(self, name, text):
@@ -62,7 +62,7 @@ class DuplicateFinder:
         doc = Document(name, fingerprintDict)
         self.docTree[doc.name] = doc
 
-    def mergeOverlap(self):
+    def buildComparisonTrees(self):
         # list of Docs name
         # [Doc00,Doc01, Doc02,Doc03]
         docNames = sorted(self.docTree.keys())
@@ -73,10 +73,10 @@ class DuplicateFinder:
             docFrom = self.docTree[docNameFrom]
             docTo = self.docTree[docNameTo]
 
-            self.addComparisons(docFrom, docTo)
+            self.buildComparisonTree(docFrom, docTo)
         logger.debug("DONE FIRST PART")
 
-    def addComparisons(self, docFrom, docTo):
+    def buildComparisonTree(self, docFrom, docTo):
         interSct = docFrom.fingerprints.keys() & docTo.fingerprints.keys()
         logger.debug(interSct)
         if len(interSct) < self.nbFinger:
@@ -93,9 +93,9 @@ class DuplicateFinder:
             logger.debug("######################################")
             logger.debug(thisFinger)
             logger.debug(docFrom.fingerprints[thisFinger])
-            self.buildComparisons(docFrom, docTo, thisFinger, comparisonTree)
+            self.fillComparisonTree(docFrom, docTo, thisFinger, comparisonTree)
 
-    def buildComparisons(self, docFrom, docTo, thisFinger, comparisonTree):
+    def fillComparisonTree(self, docFrom, docTo, thisFinger, comparisonTree):
         for fromLocated in docFrom.fingerprints[thisFinger]:
             for toLocated in docTo.fingerprints[thisFinger]:
                 to_positions = Duplicate(
