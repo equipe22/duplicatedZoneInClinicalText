@@ -36,7 +36,7 @@ class Fingerprints(object):
         # self.figprint,self.figprintId = generateFingerprint
 
     def generateFingerprint(self, fileInformations):
-        """ Main script to generate Fingerprint.
+        """Main script to generate Fingerprint.
 
         Parameters
         ----------
@@ -56,31 +56,33 @@ class Fingerprints(object):
         figCounter = 0
         for thisfile in range(0, len(fileInformations)):
             data = fileInformations[thisfile]
-            #~ print(data)
-            #~ print(thisfile)
+            # ~ print(data)
+            # ~ print(thisfile)
             # found the right position in text
             realposition = 0
             # Cadre de lecture
             # for line in data:
             #     print(line)
             # gere le multiline
-            for linePosition in range(0, min( self.orf, len(data))):
+            for linePosition in range(0, min(self.orf, len(data))):
                 # split the text in n slice in chunck
                 # line = "".join(data[linePosition:linePosition+2])
-                line = "".join(data[linePosition:]) #for the demo break is needed because it generate noise need fix
+                line = "".join(
+                    data[linePosition:]
+                )  # for the demo break is needed because it generate noise need fix
                 # print("chunks "+str(chunks))
-                #~ print("line "+str(line))
+                # ~ print("line "+str(line))
                 # gere cadre de lecture[0 et +1]
-                figCounter = self.createChunks(line, realposition,
-                                               figCounter, "D"+str(thisfile))
+                figCounter = self.createChunks(
+                    line, realposition, figCounter, "D" + str(thisfile)
+                )
                 # Update linePosition value
                 realposition = realposition + len(data[linePosition])
                 #  for the demo break is needed because it generate noise need fix
-        return(1)
+        return 1
 
-    def createChunks(self, line, realposition,
-                     figCounter, thisfile):
-        """ For a given line, create the appropriate
+    def createChunks(self, line, realposition, figCounter, thisfile):
+        """For a given line, create the appropriate
         text chunks to generate fingerprint.
 
         Parameters
@@ -105,15 +107,26 @@ class Fingerprints(object):
         for fingerprintLen in self.fingerprintList:
             listCadreLecture = range(0, len(line), self.orf)
             # for cadreDeLecture in listCadreLecture:
-                # chunks = len(line[cadreDeLecture:]) / fingerprintLen
+            # chunks = len(line[cadreDeLecture:]) / fingerprintLen
             figCounter = self.treatChunks(
-                listCadreLecture, thisfile, line,
-                realposition, figCounter,
-                fingerprintLen)
-        return(figCounter)
+                listCadreLecture,
+                thisfile,
+                line,
+                realposition,
+                figCounter,
+                fingerprintLen,
+            )
+        return figCounter
 
-    def treatChunks(self, thisChunks, thisFileName, thisLine, thisrealposition,
-                    thisFingerCounter, fingerprintLenght):
+    def treatChunks(
+        self,
+        thisChunks,
+        thisFileName,
+        thisLine,
+        thisrealposition,
+        thisFingerCounter,
+        fingerprintLenght,
+    ):
         """generate fingerprints and update the figprint_counter.
 
         Parameters
@@ -145,8 +158,8 @@ class Fingerprints(object):
             # start = cadre + thisrealposition + beginF
             start = thisrealposition + beginF
             end = start + fingerprintLenght
-            #~ print(fprint) 
-            if fprint not in ['\n', '\r\n']:
+            # ~ print(fprint)
+            if fprint not in ["\n", "\r\n"]:
                 # if fprint not in ['\n', '\r\n']:
                 if not fprint.lower() in self.figprint.keys():
                     # figprint_str = [figprint_counter,frequence]
@@ -156,18 +169,20 @@ class Fingerprints(object):
                         "fingerprint": fprint.lower(),
                         "hashkey": fprint.lower(),
                         "frequence": 0,
-                        "foundIn": []
-                        }
+                        "foundIn": [],
+                    }
                     self.figprintId[thisFingerCounter] = tmpDict
                     ########
                 self.figprint[fprint.lower()][-1] += 1
-                self.figprintId[self.figprint[
-                    fprint.lower()][0]]["frequence"] = self.figprint[
-                        fprint.lower()][-1]
+                self.figprintId[self.figprint[fprint.lower()][0]][
+                    "frequence"
+                ] = self.figprint[fprint.lower()][-1]
                 otherCandidate = {
                     "name": thisFileName.split("/")[-1],
                     "start": start,
-                    "end": end}
-                self.figprintId[self.figprint[fprint.lower()][0]][
-                    "foundIn"].append(otherCandidate)
-        return(thisFingerCounter)
+                    "end": end,
+                }
+                self.figprintId[self.figprint[fprint.lower()][0]]["foundIn"].append(
+                    otherCandidate
+                )
+        return thisFingerCounter

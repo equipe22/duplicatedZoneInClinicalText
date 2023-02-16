@@ -4,49 +4,54 @@ import hashlib
 
 from collections import Counter
 
+
 def setOnDict(thisDict):
-    return([dict(a) for a in set([tuple(b.items()) for b in thisDict])])
+    return [dict(a) for a in set([tuple(b.items()) for b in thisDict])]
 
 
 def flat2gen(alist):
     for item in alist:
         if isinstance(item, list):
-            for subitem in item: yield subitem
+            for subitem in item:
+                yield subitem
         else:
             yield item
 
+
 def createHash(toHash):
-    hash_object = hashlib.md5(toHash.replace("|"," ").encode())
-    return(hash_object.hexdigest())
+    hash_object = hashlib.md5(toHash.replace("|", " ").encode())
+    return hash_object.hexdigest()
 
 
 def returnUniq(thisList):
-    return(list(set(thisList)))
+    return list(set(thisList))
 
 
 def deleteInList(thisList, toDelete):
     if toDelete in thisList:
         indice = thisList.index(toDelete)
         del thisList[indice]
-    return(thisList)
+    return thisList
 
 
 def sortBy(thisList, sortByPosition):
     thisList.sort(key=lambda tup: tup[sortByPosition])
-    return(thisList)
+    return thisList
 
 
 def saveObject(thisObject, fileName):
-    outfile = open(fileName, 'wb')
+    outfile = open(fileName, "wb")
     pickle.dump(thisObject, outfile)
     outfile.close()
 
 
 def loadObject(fileName):
-    inputfile = open(fileName, 'rb')
+    inputfile = open(fileName, "rb")
     thisObject = pickle.load(inputfile)
     inputfile.close()
-    return(thisObject)
+    return thisObject
+
+
 # Python program to illustrate the intersection
 # of two lists using set() method
 # https://www.geeksforgeeks.org/python-intersection-two-lists/
@@ -54,6 +59,7 @@ def loadObject(fileName):
 
 def intersection(lst1, lst2):
     return list(set(lst1) & set(lst2))
+
 
 # https://stackoverflow.com/questions/7828867/how-to-efficiently-compare-two-unordered-lists-not-sets-in-python
 # O(n): The Counter() method is best (if your objects are hashable):
@@ -67,9 +73,8 @@ def compareSorted(s, t):
 
 
 def returnPattern(filePath, start, end):
-        thispattern = "".join(open(os.path.normpath(filePath), 'r').readlines()
-                              )[start:end]
-        return(thispattern)
+    thispattern = "".join(open(os.path.normpath(filePath), "r").readlines())[start:end]
+    return thispattern
 
 
 def mean(numbers):
@@ -88,4 +93,4 @@ def mean(numbers):
     :returns: mean
     :rtype: float
     """
-    return(float(sum(numbers)) / max(len(numbers), 1))
+    return float(sum(numbers)) / max(len(numbers), 1)
