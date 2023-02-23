@@ -130,48 +130,53 @@ class DuplicateFinder:
         for i in range(0, len(overlappingIntervals) - 1):
             prevDuplicate = duplicates[i]
             nextDuplicate = duplicates[i + 1]
-            self._mergeDuplicates(
-                prevDuplicate,
-                nextDuplicate,
-                comparisonTree,
-            )
+            mergedDuplicate = _mergeDuplicates(prevDuplicate, nextDuplicate)
+            if mergedDuplicate is None:
+                continue
 
-    def _mergeDuplicates(
-        self,
-        prevDuplicate,
-        nextDuplicate,
-        comparisonTree,
-    ):
-        if nextDuplicate.targetSpan.end < prevDuplicate.targetSpan.start:
-            return
+            # remove all intervals and their associated Duplicate objects
+            # (will include the 2 we merged but maybe also others!)
+            # note that we are mutating the interval tree but we already extracted some intervals
+            # from it which may not be valid anymore
+            mergedSourceSpan = mergedDuplicate.sourceSpan
+            comparisonTree.remove_envelop(mergedSourceSpan.start, mergedSourceSpan.end)
+            comparisonTree[
+                mergedSourceSpan.start : mergedSourceSpan.end
+            ] = mergedDuplicate
 
-        sourceSpan = _mergeSpans(prevDuplicate.sourceSpan, nextDuplicate.sourceSpan)
-        targetSpan = _mergeSpans(prevDuplicate.targetSpan, nextDuplicate.targetSpan)
 
-        # ignore duplication if from/to spans end up having different lengths
-        # after merge
-        if sourceSpan.length != targetSpan.length:
-            return
+def _mergeDuplicates(prevDuplicate, nextDuplicate):
+    """Merge 2 duplicates into a new `Duplicate` object covering their source and target spans"""
 
-        targetFingerprintIds = (
-            prevDuplicate.targetFingerprintIds + prevDuplicate.targetFingerprintIds
-        )
-        sourceFingerprintIds = (
-            prevDuplicate.sourceFingerprintIds + prevDuplicate.sourceFingerprintIds
-        )
-        if not _compareCounter(targetFingerprintIds, sourceFingerprintIds):
-            return
+    if nextDuplicate.targetSpan.end < prevDuplicate.targetSpan.start:
+        return None
 
-        mergedDuplicate = Duplicate(
-            sourceDocId=prevDuplicate.sourceDocId,
-            sourceSpan=sourceSpan,
-            targetSpan=targetSpan,
-            # should this be list(set((sourceFingerprintIds))?
-            sourceFingerprintIds=list(set(targetFingerprintIds)),
-            targetFingerprintIds=list(set(targetFingerprintIds)),
-        )
-        comparisonTree.remove_envelop(sourceSpan.start, sourceSpan.end)
-        comparisonTree[sourceSpan.start : sourceSpan.end] = mergedDuplicate
+    sourceSpan = _mergeSpans(prevDuplicate.sourceSpan, nextDuplicate.sourceSpan)
+    targetSpan = _mergeSpans(prevDuplicate.targetSpan, nextDuplicate.targetSpan)
+
+    # ignore duplication if from/to spans end up having different lengths
+    # after merge
+    if sourceSpan.length != targetSpan.length:
+        return None
+
+    sourceFingerprintIds = (
+        prevDuplicate.sourceFingerprintIds + prevDuplicate.sourceFingerprintIds
+    )
+    targetFingerprintIds = (
+        prevDuplicate.targetFingerprintIds + prevDuplicate.targetFingerprintIds
+    )
+    if not _compareCounter(sourceFingerprintIds, targetFingerprintIds):
+        return None
+
+    mergedDuplicate = Duplicate(
+        sourceDocId=prevDuplicate.sourceDocId,
+        sourceSpan=sourceSpan,
+        targetSpan=targetSpan,
+        # should this be list(set((sourceFingerprintIds))?
+        sourceFingerprintIds=list(set(targetFingerprintIds)),
+        targetFingerprintIds=list(set(targetFingerprintIds)),
+    )
+    return mergedDuplicate
 
 
 # https://stackoverflow.com/questions/7828867/how-to-efficiently-compare-two-unordered-lists-not-sets-in-python
