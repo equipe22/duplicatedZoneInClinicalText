@@ -12,6 +12,11 @@ class _Document:
 
 
 class Duplicate:
+    """
+    Represents a duplicated part between 2 documents,
+    designated by characters spans
+    """
+
     __slots__ = (
         "sourceDocId",
         "sourceSpan",
@@ -28,6 +33,21 @@ class Duplicate:
         sourceFingerprintIds,
         targetFingerprintIds,
     ):
+        """
+        Parameters
+        ----------
+        sourceDocId: str
+            Identifier of the source document
+        sourceSpan: Span
+            Duplicated character span in the source document
+        targetSpan: Span
+            Duplicated character span in the target document
+        sourceFingerprintIds: List[int]
+            Duplicated fingerprint ids in the source document
+        targetFingerprintIds: List[int]
+            Duplicated fingerprint ids in the source target document
+        """
+
         self.sourceDocId = sourceDocId
         self.sourceSpan = sourceSpan
         self.targetSpan = targetSpan
@@ -50,13 +70,54 @@ class Duplicate:
 
 
 class DuplicateFinder:
-    def __init__(self, fingerprintBuilder, minNbFingerprints=2):
-        self.minNbFingerprints = minNbFingerprints
+    """
+    Finds duplicated parts in a set of documents.
 
+    Relies on a `FingerprintBuilder` to generate fingerprints for documents,
+    then identifies parts with common fingerprints between each document.
+    """
+
+    def __init__(self, fingerprintBuilder, minNbFingerprints=2):
+        """
+        Parameters
+        ----------
+        fingerprintBuilder: FingerprintBuilder
+            `FingerprintBuilder` instance to use to generate fingerprints for
+            each document
+        minNbFingerprints: int
+            Minimum number of common fingerprints between 2 documents, under which
+            the `DuplicateFinder` won't attempt to find any duplicates
+        """
+
+        self.minNbFingerprints = minNbFingerprints
         self.fingerprintBuilder = fingerprintBuilder
+
+        # mapping of previously seen documents, by id
         self._docsById = dict()
 
     def findDuplicates(self, docId, docText):
+        """
+        Look for parts in `docText` in common with previously seen documents,
+        and return then as `Duplicate` objects.
+
+        To compare "newer" documents with "older" ones, make sure to call this
+        by increasing date/time.
+
+        Parameters
+        ----------
+        docId: str
+            Unique identifier of the document
+        docText: str
+            Text of the document
+
+        Returns
+        -------
+        Dict[str, List[Duplicate]]
+            For each previously seen document that has parts in common with
+            `docText`, a list of Duplicate` objects designated corresponding
+            character spans. The key of the mapping is the source document id
+        """
+
         if docId in self._docsById:
             raise Exception(f"Already processed document with id {docId}")
 
@@ -85,6 +146,27 @@ class DuplicateFinder:
         return duplicates
 
     def _buildComparisonTree(self, sourceDoc, targetDoc):
+        """
+        Build a interval tree comparing potential source and target documents,
+        using source spans as interval boundaries and `Duplicate` objects as
+        interval values.
+
+        One `Duplicate` object will be created the combination of all
+        appearances of common fingerprints in the source and target documents.
+
+        Parameters
+        ----------
+        sourceDoc: Document
+            Document to be used as source
+        targetDoc: Document
+            Document to be used as target
+
+        Returns
+        -------
+        IntervalTree:
+            Comparison interval tree
+        """
+
         commonFingerprintIds = (
             sourceDoc.spansByFingerprintId.keys()
             & targetDoc.spansByFingerprintId.keys()
@@ -93,32 +175,73 @@ class DuplicateFinder:
             return None
 
         comparisonTree = IntervalTree()
-        # pour chaque fingerprint trouvé
         for fingerprintId in commonFingerprintIds:
-            # pour chaque localisation du figerprint en from
+            # add duplicates for each common fingerprints
             self._fillComparisonTree(
                 sourceDoc, targetDoc, fingerprintId, comparisonTree
             )
 
         return comparisonTree
 
-    def _fillComparisonTree(self, sourceDoc, targetDoc, fingerprintId, comparisonTree):
-        for sourceSpan in sourceDoc.spansByFingerprintId[fingerprintId]:
-            for targetSpan in targetDoc.spansByFingerprintId[fingerprintId]:
+    def _fillComparisonTree(
+        self, sourceDoc, targetDoc, commonFingerprintId, comparisonTree
+    ):
+        """
+        Populate a comparison interval tree with `Duplicate` objects for the
+        combination of all appearances of a given fingerprint in the source and
+        target documents.
+
+        Parameters
+        ----------
+        sourceDoc: Document
+            Document to be used as source
+        targetDoc: Document
+            Document to be used as target
+        commonFingerprintId: int
+            A fingerprint appearing in both documents
+        comparisonTree: IntervalTree
+            The comparison tree to update
+        """
+
+        # create duplicate for all combinations of source and target spans for a given common fingerprint
+        for sourceSpan in sourceDoc.spansByFingerprintId[commonFingerprintId]:
+            for targetSpan in targetDoc.spansByFingerprintId[commonFingerprintId]:
                 duplicate = Duplicate(
                     sourceDocId=sourceDoc.id,
                     sourceSpan=sourceSpan,
                     targetSpan=targetSpan,
-                    sourceFingerprintIds=[fingerprintId],
-                    targetFingerprintIds=[fingerprintId],
+                    sourceFingerprintIds=[commonFingerprintId],
+                    targetFingerprintIds=[commonFingerprintId],
                 )
                 comparisonTree[sourceSpan.start : sourceSpan.end] = duplicate
 
     def _mergeOverlappingDuplicates(self, comparisonTree):
+        """
+        Merge overlapping or consecutive intervals and their corresponding
+        `Duplicate` objects in an comparison interval tree.
+
+        Parameters
+        ----------
+        comparisonTree: IntervalTree
+            The comparison tree to update
+        """
+
         for interval in sorted(comparisonTree):
             self._mergeOverlappingDuplicatesAtInterval(interval, comparisonTree)
 
     def _mergeOverlappingDuplicatesAtInterval(self, interval, comparisonTree):
+        """
+        Merge overlapping or consecutive intervals and their corresponding
+        `Duplicate` objects in an comparison interval tree at a specific interval
+
+        Parameters
+        ----------
+        interval: Interval
+            The interval of the comparison tree to consider
+        comparisonTree: IntervalTree
+            The comparison tree to update
+        """
+
         overlappingIntervals = sorted(
             comparisonTree.overlap(interval.end - 1, interval.end + 1)
         )
