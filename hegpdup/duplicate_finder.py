@@ -148,10 +148,20 @@ class DuplicateFinder:
             )
             duplicates += docDuplicates
 
+        # pre-compute spans that are part of duplicates
+        indicesOfDuplicatesSpans = _findSpansBelongingToDuplicates(
+            [s for s, _ in spansAndFingerprintIds], duplicates, self.treeBackend
+        )
         # transform list of spans and fingerprint ids to mapping of fingerprint
         # id to spans
         spansByFingerprintId = {}
-        for span, fingerprintId in spansAndFingerprintIds:
+        for i, (span, fingerprintId) in enumerate(spansAndFingerprintIds):
+            # if the span belong to a duplicate we ignore it,
+            # because we are only interested in recreating the duplication link
+            # to the "source-most" initial document
+            if i in indicesOfDuplicatesSpans:
+                continue
+
             spansByFingerprintId.setdefault(fingerprintId, []).append(span)
 
         doc = _Document(docId, spansByFingerprintId)
@@ -693,3 +703,93 @@ def _trimOrDropDuplicate(duplicate, targetSpanToTrim, minDuplicateLength):
 
     # duplicate does not overlap, return as-is
     return duplicate
+
+
+def _findSpansBelongingToDuplicates(spans, duplicates, treeBackend):
+    """
+    Identify which spans are part of duplicated areas.
+
+    This is useful to "blacklist" the spans and corresponding fingerprints of a
+    document that has just been processed, and that is going to serve as a
+    potential "source" document of upcoming new documents. This is a to always
+    identify duplicates to the "source-most" original document when some parts
+    are copy/pasted from document to document consecutively.
+
+    This might also speed up the processing of next documents by reducing the
+    number of potential source spans.
+
+    Parameters
+    ----------
+    spans: List[Span]
+        List of spans of a document, as returned by a `FingerprintBuilder`
+    duplicates: List[Duplicate]
+        List of duplicates of the same document
+    treeBackend: TreeBackend
+        Backend to use for overlap trees.
+
+    Returns
+    -------
+    Set[int]
+        Indices of spans that overlap (even partly) with a duplicate
+    """
+
+    if treeBackend is TreeBackend.NCLS:
+        if not _HAS_NCLS:
+            raise Exception(
+                "NCLS tree backend requested but ncls package does not seem to be installed"
+            )
+        return _findSpansBelongingToDuplicates_NCLS(spans, duplicates)
+    elif treeBackend is TreeBackend.INTERVAL_TREE:
+        if not _HAS_INTERVAL_TREE:
+            raise Exception(
+                "Interval tree backend requested but intervaltree package does not seem to be installed"
+            )
+        return _findSpansBelongingToDuplicates_IntervalTree(spans, duplicates)
+    else:
+        assert treeBackend is TreeBackend.NONE
+        return _findSpansBelongingToDuplicates_NoTree(spans, duplicates)
+
+
+def _findSpansBelongingToDuplicates_NoTree(spans, duplicates):
+    """Loop-based implementation of `_findSpansBelongingToDuplicates()`"""
+
+    return {
+        i
+        for i, span in enumerate(spans)
+        for duplicate in duplicates
+        if (
+            span.start < duplicate.targetSpan.end
+            and duplicate.targetSpan.start < span.end
+        )
+    }
+
+
+def _findSpansBelongingToDuplicates_IntervalTree(spans, duplicates):
+    """IntervalTree implementation of `_findSpansBelongingToDuplicates()`"""
+
+    tree = it.IntervalTree(
+        it.Interval(d.targetSpan.start, d.targetSpan.end) for d in duplicates
+    )
+    indicesOfDuplicatesSpans = {
+        i for i, s in enumerate(spans) if tree.overlaps(s.start, s.end)
+    }
+    return indicesOfDuplicatesSpans
+
+
+def _findSpansBelongingToDuplicates_NCLS(spans, duplicates):
+    """NCLS implementation of `_findSpansBelongingToDuplicates()`"""
+
+    # we get the answer for all spans in one shot, in one big request
+
+    duplicateStarts = np.array([d.targetSpan.start for d in duplicates], dtype=np.int64)
+    duplicateEnds = np.array([d.targetSpan.end for d in duplicates], dtype=np.int64)
+    duplicateIndices = np.arange(0, len(duplicates), dtype=np.int64)
+    tree = NCLS(duplicateStarts, duplicateEnds, duplicateIndices)
+
+    spanStarts = np.array([s.start for s in spans], dtype=np.int64)
+    spanEnds = np.array([s.end for s in spans], dtype=np.int64)
+    spanIndices = np.arange(0, len(spans), dtype=np.int64)
+
+    indicesOfDuplicatesSpans = tree.has_overlaps(spanStarts, spanEnds, spanIndices)
+    indicesOfDuplicatesSpans = set(indicesOfDuplicatesSpans)
+    return indicesOfDuplicatesSpans
