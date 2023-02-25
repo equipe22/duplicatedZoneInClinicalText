@@ -5,13 +5,9 @@ from hegpdup.duplicate_finder import DuplicateFinder
 def generateLink(duplicates, docNameTo):
     link = []
     scoreDup = 0
-    alreadyseen = []
     for duplication in duplicates:
         targetSpan = duplication.targetSpan
-        if targetSpan in alreadyseen:
-            continue
         scoreDup = scoreDup + targetSpan.length
-        alreadyseen.append(targetSpan)
         sourceSpan = duplication.sourceSpan
         fromData = (
             duplication.sourceDocId

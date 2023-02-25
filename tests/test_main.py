@@ -13,11 +13,7 @@ _TEST_CASES_FILES = sorted(_TEST_CASES_DIR.glob("*.json"))
 
 def _getDuplicatesData(duplicates, docIdTo, docText):
     duplicatesData = []
-    seen = set()
     for duplicate in duplicates:
-        if duplicate.targetSpan in seen:
-            continue
-
         text = docText[duplicate.targetSpan.start : duplicate.targetSpan.end]
         duplicate_data = {
             "source_doc_id": duplicate.sourceDocId,
@@ -29,7 +25,6 @@ def _getDuplicatesData(duplicates, docIdTo, docText):
             "text": text,
         }
         duplicatesData.append(duplicate_data)
-        seen.add(duplicate.targetSpan)
     return duplicatesData
 
 
