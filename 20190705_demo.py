@@ -1,5 +1,4 @@
-from hegpdup.fingerprint_builder import FingerprintBuilder
-from hegpdup.duplicate_finder import DuplicateFinder
+from hegpdup import FingerprintBuilder, DuplicateFinder
 
 
 def generateLink(duplicates, docNameTo):

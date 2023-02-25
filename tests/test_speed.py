@@ -3,8 +3,7 @@ import timeit
 
 import pytest
 
-from hegpdup.fingerprint_builder import FingerprintBuilder
-from hegpdup.duplicate_finder import DuplicateFinder, TreeBackend
+from hegpdup import FingerprintBuilder, DuplicateFinder, TreeBackend
 
 _TEXT_FILE = Path(__file__).parent / "sample_text.txt"
 _FINGERPRINT_LENGTH = 10

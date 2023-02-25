@@ -4,8 +4,7 @@ from pprint import pprint
 
 import pytest
 
-from hegpdup.fingerprint_builder import FingerprintBuilder
-from hegpdup.duplicate_finder import DuplicateFinder, TreeBackend
+from hegpdup import FingerprintBuilder, DuplicateFinder, TreeBackend
 
 _TEST_CASES_DIR = Path(__file__).parent / "test_cases"
 _TEST_CASES_FILES = sorted(_TEST_CASES_DIR.glob("*.json"))
