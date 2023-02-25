@@ -133,14 +133,14 @@ class DuplicateFinder:
         if docId in self._docsById:
             raise Exception(f"Already processed document with id {docId}")
 
-        spansByFingerprintId = self.fingerprintBuilder.buildFingerprints(docText)
-        doc = _Document(docId, spansByFingerprintId)
+        # retrieve fingerprint ids with spans, sorted by spans
+        spansAndFingerprintIds = self.fingerprintBuilder.buildFingerprints(docText)
 
         duplicates = []
         for previousDoc in self._docsById.values():
             docDuplicates = _buildDuplicates(
+                spansAndFingerprintIds,
                 sourceDoc=previousDoc,
-                targetDoc=doc,
                 minDuplicateLength=self.minDuplicateLength,
             )
             docDuplicates = _removeOverlappingDuplicates(
@@ -148,11 +148,18 @@ class DuplicateFinder:
             )
             duplicates += docDuplicates
 
+        # transform list of spans and fingerprint ids to mapping of fingerprint
+        # id to spans
+        spansByFingerprintId = {}
+        for span, fingerprintId in spansAndFingerprintIds:
+            spansByFingerprintId.setdefault(fingerprintId, []).append(span)
+
+        doc = _Document(docId, spansByFingerprintId)
         self._docsById[doc.id] = doc
         return duplicates
 
 
-def _buildDuplicates(sourceDoc, targetDoc, minDuplicateLength):
+def _buildDuplicates(targetSpansAndFingerprintIds, sourceDoc, minDuplicateLength):
     """
     Create a list of `Duplicate` objects, by finding and merging all consecutive
     pairs of spans with common fingerprint ids in source and target docs. This
@@ -190,10 +197,11 @@ def _buildDuplicates(sourceDoc, targetDoc, minDuplicateLength):
 
     Parameters
     ----------
+    targetSpansAndFingerprintIds: List[Tuple[Span, int]]
+        List of fingerprint ids and corresponding spans in target document.
+        Must be sorted by ascending spans
     sourceDoc: Document
         Document to be used as source
-    targetDoc: Document
-        Document to be used as target
     minDuplicateLength: int
         Minimum number of characters in duplicates
 
@@ -203,17 +211,6 @@ def _buildDuplicates(sourceDoc, targetDoc, minDuplicateLength):
         List of duplicates representing spans with common text in source and
         target docs
     """
-
-    # take the spansByFingerprintId of the target document and restructure
-    # it in a sorted list of (span, fingerprintId) tuples
-    targetSpansAndFingerprintIds = sorted(
-        (
-            (span, fingerprintId)
-            for fingerprintId, spans in targetDoc.spansByFingerprintId.items()
-            for span in spans
-        ),
-        key=lambda s: (s[0].start, s[0].end),
-    )
 
     # duplicates being built, maybe be extended by upcoming spans.
     # there will be several duplicates being built simultaneously if we

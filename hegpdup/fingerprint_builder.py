@@ -32,8 +32,8 @@ class FingerprintBuilder:
 
     def buildFingerprints(self, text):
         """
-        Return a mapping of fingerprint ids and the character spans in which
-        they are found in `text`
+        Return a list of fingerprint ids and the character spans in which
+        they are found in `text`.
 
         Parameters
         ----------
@@ -42,13 +42,13 @@ class FingerprintBuilder:
 
         Returns
         -------
-        Dict[int, List[Span]]
-            Ids of fingerprints contained in `text` and their corresponding
-            characters spans
+        List[Tuple[Span, int]
+            List of ids of fingerprints contained in `text` and their
+            corresponding characters spans, sorted by ascending span
         """
 
-        # mapping that will be filled and returned
-        spansByFingerprintId = {}
+        # list that will be filled and returned
+        spansAndFingerprintIds = []
 
         # lowercase so we aren't case sensitive
         text = text.lower()
@@ -59,15 +59,20 @@ class FingerprintBuilder:
             # not sure what that does, something to do with multiline?
             line = "".join(text[linePosition:])
             # build fingerprints for current line and add them to spansByFingerprintId
-            self._buildFingerprintsForLine(line, lineOffset, spansByFingerprintId)
+            self._buildFingerprintsForLine(line, lineOffset, spansAndFingerprintIds)
 
             lineOffset = lineOffset + len(text[linePosition])
 
-        return spansByFingerprintId
+        # sort by span
+        spansAndFingerprintIds = sorted(
+            spansAndFingerprintIds, key=lambda t: (t[0].start, t[0].end)
+        )
 
-    def _buildFingerprintsForLine(self, line, lineOffset, spansByFingerprintId):
+        return spansAndFingerprintIds
+
+    def _buildFingerprintsForLine(self, line, lineOffset, spansAndFingerprintIds):
         """
-        Build the fingerprints of a line and add them to `spansByFingerprintId`
+        Build the fingerprints of a line and add them to `spansAndFingerprintIds`
 
         Parameters
         ----------
@@ -75,8 +80,8 @@ class FingerprintBuilder:
             Line for which to build the fingerprints
         lineOffset: int
             Position of the line in the full document text
-        spansByFingerprintId: Dict[int, List[Span]]
-            Mapping to which the fingerprint ids and corresponding spans will
+        spansAndFingerprintIds: List[Tuple[Span, int]
+            List to which the fingerprint ids and corresponding spans will
             be added
         """
 
@@ -88,9 +93,8 @@ class FingerprintBuilder:
             for chunkStart in chunkStarts:
                 chunkEnd = chunkStart + fingerprintLength
                 chunk = line[chunkStart:chunkEnd]
-
                 if chunk in _CHUNKS_TO_IGNORE:
-                    return
+                    continue
 
                 # find existing fingerprint id for chunk or create new id
                 # if chunk is unseen
@@ -103,6 +107,7 @@ class FingerprintBuilder:
                 # chunk might end up being shorter than fingerprintLength
                 end = start + len(chunk)
                 span = Span(start, end)
-                spansByFingerprintId.setdefault(fingerprintId, []).append(span)
+                spansAndFingerprintIds.append((span, fingerprintId))
+
                 if chunkEnd >= lineLength:
                     break
