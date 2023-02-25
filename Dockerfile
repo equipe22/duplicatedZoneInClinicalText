@@ -27,7 +27,6 @@ ENV DOCKYARD_SRVPROJ=/srv/hegpdup
 # Create application subdirectories
 # RUN mkdir $DOCKYARD_SRVHOME
 ADD . /srv/hegpdup
-COPY data/demo.txt /tmp
 # Install Python Source
 WORKDIR $DOCKYARD_SRVPROJ
 RUN pip3 install .
