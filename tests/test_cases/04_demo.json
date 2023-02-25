@@ -28,11 +28,11 @@
         {
             "source_doc_id": "D0",
             "target_doc_id": "D1",
-            "source_start": 68,
+            "source_start": 70,
             "source_end": 88,
-            "target_start": 52,
+            "target_start": 54,
             "target_end": 72,
-            "text": "s due to clinicians’"
+            "text": "due to clinicians’"
         },
         {
             "source_doc_id": "D0",

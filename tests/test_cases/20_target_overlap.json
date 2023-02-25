@@ -1,5 +1,5 @@
 {
-    "_description": "Basic test with a couple of duplicates in 2 docs",
+    "_description": "Copy/pastes that overlap in target, shortest is trimmed",
     "settings": {
         "orf": 1,
         "fingerprint_length": 2,
@@ -8,11 +8,11 @@
     "docs": [
         {
             "id": "D0",
-            "text": "Hello Rick. How are you? See you soon"
+            "text": "Hello Alice, Alice how are you my dear?"
         },
         {
             "id": "D1",
-            "text": "Hello Alice. How are you? Bye"
+            "text": "Hello Alice how are you my dear?"
         }
     ],
     "duplicates": [
@@ -20,19 +20,19 @@
             "source_doc_id": "D0",
             "target_doc_id": "D1",
             "source_start": 0,
-            "source_end": 6,
+            "source_end": 5,
             "target_start": 0,
-            "target_end": 6,
-            "text": "Hello "
+            "target_end": 5,
+            "text": "Hello"
         },
         {
             "source_doc_id": "D0",
             "target_doc_id": "D1",
-            "source_start": 10,
-            "source_end": 25,
-            "target_start": 11,
-            "target_end": 26,
-            "text": ". How are you? "
+            "source_start": 12,
+            "source_end": 39,
+            "target_start": 5,
+            "target_end": 32,
+            "text": " Alice how are you my dear?"
         }
     ]
 }
