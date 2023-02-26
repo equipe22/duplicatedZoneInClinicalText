@@ -41,7 +41,7 @@ def test_main(treeBackend, testCaseFile):
     orf = testCase["settings"]["orf"]
     minDuplicateLength = testCase["settings"]["min_duplicate_length"]
 
-    fingerprintBuilder = FingerprintBuilder([fingerprintLength], orf)
+    fingerprintBuilder = FingerprintBuilder(fingerprintLength, orf)
     duplicateFinder = DuplicateFinder(
         fingerprintBuilder,
         minDuplicateLength=minDuplicateLength,

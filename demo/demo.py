@@ -15,7 +15,7 @@ for texts in examples:
     print("************")
 
     # init FingerprintBuilder and DuplicateFinder that will process a batch of documents
-    fingerprintBuilder = FingerprintBuilder([fingerprintLength], orf)
+    fingerprintBuilder = FingerprintBuilder(fingerprintLength, orf)
     duplicateFinder = DuplicateFinder(fingerprintBuilder, minDuplicateLength)
 
     for i, text in enumerate(texts):

@@ -12,18 +12,18 @@ class FingerprintBuilder:
     fingerprint ids for identical text chunks.
     """
 
-    def __init__(self, fingerprintLengths, orf):
+    def __init__(self, fingerprintLength, orf):
         """
         Parameters
         ----------
-        fingerprintLengths: List[int]
-            Lengths to use for generated fingerprints (provide at least one)
+        fingerprintLength: int
+            Length to use for generated fingerprints
         orf: int
             Open Reading Frame length. Shift size used when moving the
             fingerprint window over the text (the window having a size)
         """
 
-        self.fingerprintLengths = fingerprintLengths
+        self.fingerprintLength = fingerprintLength
         self.orf = orf
 
         # mapping giving the unique fingerprint id corresponding to a previously
@@ -86,29 +86,29 @@ class FingerprintBuilder:
         """
 
         lineLength = len(line)
-        for fingerprintLength in self.fingerprintLengths:
-            # construct all chunk offsets in line
-            # (fingerprints will overlap)
-            chunkStarts = range(0, len(line), self.orf)
-            for chunkStart in chunkStarts:
-                chunkEnd = chunkStart + fingerprintLength
-                chunk = line[chunkStart:chunkEnd]
-                if chunk in _CHUNKS_TO_IGNORE:
-                    continue
 
-                # find existing fingerprint id for chunk or create new id
-                # if chunk is unseen
-                fingerprintId = self._fingerprintIdByChunk.setdefault(
-                    chunk, len(self._fingerprintIdByChunk)
-                )
+        # construct all chunk offsets in line
+        # (fingerprints will overlap)
+        chunkStarts = range(0, lineLength, self.orf)
+        for chunkStart in chunkStarts:
+            chunkEnd = chunkStart + self.fingerprintLength
+            chunk = line[chunkStart:chunkEnd]
+            if chunk in _CHUNKS_TO_IGNORE:
+                continue
 
-                # create and store span
-                start = lineOffset + chunkStart
-                # chunk might end up being shorter than fingerprintLength
-                chunkLength = len(chunk)
-                end = start + chunkLength
-                span = Span(start, end, length=chunkLength)
-                spansAndFingerprintIds.append((span, fingerprintId))
+            # find existing fingerprint id for chunk or create new id
+            # if chunk is unseen
+            fingerprintId = self._fingerprintIdByChunk.setdefault(
+                chunk, len(self._fingerprintIdByChunk)
+            )
 
-                if chunkEnd >= lineLength:
-                    break
+            # create and store span
+            start = lineOffset + chunkStart
+            # chunk might end up being shorter than fingerprintLength
+            chunkLength = len(chunk)
+            end = start + chunkLength
+            span = Span(start, end, length=chunkLength)
+            spansAndFingerprintIds.append((span, fingerprintId))
+
+            if chunkEnd >= lineLength:
+                break

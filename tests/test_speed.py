@@ -62,7 +62,7 @@ def test_speed(treeBackend, difflibTime):
     texts = _getSampleTexts()
 
     def run():
-        fingerprintBuilder = FingerprintBuilder([_FINGERPRINT_LENGTH], _ORF)
+        fingerprintBuilder = FingerprintBuilder(_FINGERPRINT_LENGTH, _ORF)
         duplicateFinder = DuplicateFinder(
             fingerprintBuilder,
             minDuplicateLength=_MIN_DUPLICATE_LENGTH,
