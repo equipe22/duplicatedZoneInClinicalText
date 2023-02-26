@@ -1,13 +1,10 @@
 class Span:
-    __slots__ = "start", "end"
+    __slots__ = "start", "end", "length"
 
     def __init__(self, start, end):
         self.start = start
         self.end = end
-
-    @property
-    def length(self):
-        return self.end - self.start
+        self.length = end - start
 
     def __hash__(self):
         return hash((self.start, self.end))
