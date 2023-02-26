@@ -5,7 +5,7 @@ from pprint import pprint
 import pytest
 
 from hegpdup.fingerprint_builder import FingerprintBuilder
-from hegpdup.duplicate_finder import DuplicateFinder
+from hegpdup.duplicate_finder import DuplicateFinder, TreeBackend
 
 _TEST_CASES_DIR = Path(__file__).parent / "test_cases"
 _TEST_CASES_FILES = sorted(_TEST_CASES_DIR.glob("*.json"))
@@ -28,10 +28,13 @@ def _getDuplicatesData(duplicates, docIdTo, docText):
     return duplicatesData
 
 
+@pytest.mark.parametrize("treeBackend", TreeBackend)
 @pytest.mark.parametrize(
-    "testCaseFile", _TEST_CASES_FILES, ids=[f.name for f in _TEST_CASES_FILES]
+    "testCaseFile",
+    _TEST_CASES_FILES,
+    ids=[f.name for f in _TEST_CASES_FILES],
 )
-def test_cases(testCaseFile):
+def test_main(treeBackend, testCaseFile):
     with open(testCaseFile) as fp:
         testCase = json.load(fp)
 
@@ -41,7 +44,9 @@ def test_cases(testCaseFile):
 
     fingerprintBuilder = FingerprintBuilder([fingerprintLength], orf)
     duplicateFinder = DuplicateFinder(
-        fingerprintBuilder, minDuplicateLength=minDuplicateLength
+        fingerprintBuilder,
+        minDuplicateLength=minDuplicateLength,
+        treeBackend=treeBackend,
     )
 
     duplicatesData = []

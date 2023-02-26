@@ -5,6 +5,9 @@ setup(
     description="Duplicate Zone In Clinical Text",
     license="GPLv3",
     packages=["hegpdup"],
-    install_requires=["intervaltree>=3.0.0"],
-    extras_require={"tests": ["pytest"]},
+    extras_require = {
+        "tests": ["pytest"],
+        "ncls":  ["ncls>=0.0.66", "numpy"],
+        "intervaltree":  ["intervaltree>=3.0.0"],
+    },
 )

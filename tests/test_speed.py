@@ -1,8 +1,10 @@
 from pathlib import Path
 import timeit
 
+import pytest
+
 from hegpdup.fingerprint_builder import FingerprintBuilder
-from hegpdup.duplicate_finder import DuplicateFinder
+from hegpdup.duplicate_finder import DuplicateFinder, TreeBackend
 
 _TEXT_FILE = Path(__file__).parent / "sample_text.txt"
 _FINGERPRINT_LENGTH = 10
@@ -35,21 +37,25 @@ def _getSampleTexts():
     return texts
 
 
-def test_speed():
+@pytest.mark.parametrize("treeBackend", TreeBackend)
+def test_speed(treeBackend):
     texts = _getSampleTexts()
 
     def run():
         fingerprintBuilder = FingerprintBuilder([_FINGERPRINT_LENGTH], _ORF)
         duplicateFinder = DuplicateFinder(
-            fingerprintBuilder, minDuplicateLength=_MIN_DUPLICATE_LENGTH
+            fingerprintBuilder,
+            minDuplicateLength=_MIN_DUPLICATE_LENGTH,
+            treeBackend=treeBackend,
         )
         for i, text in enumerate(texts):
             duplicateFinder.findDuplicates(f"D{i}", text)
 
     time = timeit.timeit(run, number=10)
-    print(time)
+    print(treeBackend.value, time)
 
 
 if __name__ == "__main__":
     # launch with python3 -O tests/test_speed.py for best results
-    test_speed()
+    for treeBackend in TreeBackend:
+        test_speed(treeBackend)
