@@ -109,7 +109,7 @@ class Fingerprints(object):
         # print("chunks "+str(chunks))
         # gere cadre de lecture[0 et +1]
         for fingerprintLen in self.fingerprintList:
-            listCadreLecture = [*range(0, len(line), self.orf)]
+            listCadreLecture = [range(0, len(line), self.orf)]
             whitespace_indices = [x-realposition+1 for x in whitespace_indices]
             whitespace_indices.append(0)
             listCadreLecture = [x for x in listCadreLecture if x in whitespace_indices]
