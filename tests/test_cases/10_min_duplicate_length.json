@@ -1,0 +1,19 @@
+{
+    "_description": "Text with duplicates but too short",
+    "settings": {
+        "orf": 1,
+        "fingerprint_length": 2,
+        "min_duplicate_length": 7
+    },
+    "docs": [
+        {
+            "id": "D0",
+            "text": "Hello Alice"
+        },
+        {
+            "id": "D1",
+            "text": "Hi Alice"
+        }
+    ],
+    "duplicates": []
+}

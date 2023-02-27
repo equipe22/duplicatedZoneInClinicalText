@@ -1,0 +1,38 @@
+{
+    "_description": "Basic test with a couple of duplicates in 2 docs",
+    "settings": {
+        "orf": 1,
+        "fingerprint_length": 2,
+        "min_duplicate_length": 4
+    },
+    "docs": [
+        {
+            "id": "D0",
+            "text": "Hello Rick. How are you? See you soon"
+        },
+        {
+            "id": "D1",
+            "text": "Hello Alice. How are you? Bye"
+        }
+    ],
+    "duplicates": [
+        {
+            "source_doc_id": "D0",
+            "target_doc_id": "D1",
+            "source_start": 0,
+            "source_end": 6,
+            "target_start": 0,
+            "target_end": 6,
+            "text": "Hello "
+        },
+        {
+            "source_doc_id": "D0",
+            "target_doc_id": "D1",
+            "source_start": 10,
+            "source_end": 25,
+            "target_start": 11,
+            "target_end": 26,
+            "text": ". How are you? "
+        }
+    ]
+}

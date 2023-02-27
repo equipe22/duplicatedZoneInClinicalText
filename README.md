@@ -14,3 +14,15 @@ run the script build.sh in order to construct an image which will contain the du
 
 run the script run.sh, it will output our sample text 
 the offset is set to 3 and the fingerpint to 15
+
+# How to run tests
+
+1. Install package in editable mode with test and extra dependencies by running `pip install -e ".[tests, ncls, intervaltree]"` in the repo directory
+2. Launch `pytest tests/`
+
+# About ncls and intervaltree
+
+This tool can be used without any additional dependencies, but performance can
+be improved when using interval trees. To benefit from this you well need to
+install either the [ncls](https://github.com/biocore-ntnu/ncls) package or the
+[intervaltree](https://github.com/chaimleib/intervaltree) package.

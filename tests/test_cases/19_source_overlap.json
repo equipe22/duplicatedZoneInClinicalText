@@ -1,0 +1,38 @@
+{
+    "_description": "Copy/pastes that overlap in source but not in target",
+    "settings": {
+        "orf": 1,
+        "fingerprint_length": 2,
+        "min_duplicate_length": 4
+    },
+    "docs": [
+        {
+            "id": "D0",
+            "text": "Hello Alice how are you my dear?"
+        },
+        {
+            "id": "D1",
+            "text": "Hello Alice, Alice how are you my dear?"
+        }
+    ],
+    "duplicates": [
+        {
+            "source_doc_id": "D0",
+            "target_doc_id": "D1",
+            "source_start": 0,
+            "source_end": 11,
+            "target_start": 0,
+            "target_end": 11,
+            "text": "Hello Alice"
+        },
+        {
+            "source_doc_id": "D0",
+            "target_doc_id": "D1",
+            "source_start": 5,
+            "source_end": 32,
+            "target_start": 12,
+            "target_end": 39,
+            "text": " Alice how are you my dear?"
+        }
+    ]
+}

@@ -1,3 +1,0 @@
-"A significant part of medical knowledge is stored as unstructured free text."	"A significant part of medical knowledge is present in structured data and you need to work with text."
-"However, clinical narratives are known to contain duplicated sections due to clinicians’copy/paste parts of a former report into a new one."	"noisy informations are present in clinical narratives due to clinicians’ copy/paste parts of a former report into a new one."
-"In this study, even if we work to evaluated our algorithms in this example, we aim at evaluating the duplications found within patient records in more than 650,000 text."	"In this study, we aim at evaluating the duplications found within patient records in more than 650,000 text."
