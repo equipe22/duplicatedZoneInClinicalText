@@ -1,7 +1,5 @@
 import codecs
 from os import path
-import string
-
 
 
 class Fingerprints(object):
@@ -66,7 +64,6 @@ class Fingerprints(object):
             # for line in data:
             #     print(line)
             # gere le multiline
-            whitespace_indices = list(self.find_whitespace(data))
             for linePosition in range(0, min( self.orf, len(data))):
                 # split the text in n slice in chunck
                 # line = "".join(data[linePosition:linePosition+2])
@@ -75,17 +72,14 @@ class Fingerprints(object):
                 #~ print("line "+str(line))
                 # gere cadre de lecture[0 et +1]
                 figCounter = self.createChunks(line, realposition,
-                                               figCounter, "D"+str(thisfile),whitespace_indices)
+                                               figCounter, "D"+str(thisfile))
                 # Update linePosition value
                 realposition = realposition + len(data[linePosition])
                 #  for the demo break is needed because it generate noise need fix
         return(1)
-    def find_whitespace(self,st):
-        for index, character in enumerate(st):
-            if character in string.whitespace:
-                yield index
+
     def createChunks(self, line, realposition,
-                     figCounter, thisfile,whitespace_indices):
+                     figCounter, thisfile):
         """ For a given line, create the appropriate
         text chunks to generate fingerprint.
 
@@ -109,13 +103,9 @@ class Fingerprints(object):
         # print("chunks "+str(chunks))
         # gere cadre de lecture[0 et +1]
         for fingerprintLen in self.fingerprintList:
-            listCadreLecture = [*range(0, len(line), self.orf)]
-            whitespace_indices = [x-realposition+1 for x in whitespace_indices]
-            whitespace_indices.append(0)
-            listCadreLecture = [x for x in listCadreLecture if x in whitespace_indices]
+            listCadreLecture = range(0, len(line), self.orf)
             # for cadreDeLecture in listCadreLecture:
                 # chunks = len(line[cadreDeLecture:]) / fingerprintLen
-                
             figCounter = self.treatChunks(
                 listCadreLecture, thisfile, line,
                 realposition, figCounter,
