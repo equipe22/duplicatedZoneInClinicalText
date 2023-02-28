@@ -20,7 +20,8 @@ class FingerprintBuilder:
             Length to use for generated fingerprints
         orf: int
             Open Reading Frame length. Shift size used when moving the
-            fingerprint window over the text (the window having a size)
+            fingerprint window over the text (the window having a size of
+            `fingerprintLength` chars)
         """
 
         self.fingerprintLength = fingerprintLength
