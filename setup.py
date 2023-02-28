@@ -6,7 +6,7 @@ setup(
     license="GPLv3",
     packages=["hegpdup"],
     extras_require = {
-        "tests": ["pytest"],
+        "tests": ["pytest", "pytest-mock"],
         "ncls":  ["ncls>=0.0.66", "numpy"],
         "intervaltree":  ["intervaltree>=3.0.0"],
     },
