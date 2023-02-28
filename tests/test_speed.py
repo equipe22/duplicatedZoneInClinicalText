@@ -7,35 +7,32 @@ import pytest
 
 from hegpdup import FingerprintBuilder, DuplicateFinder, TreeBackend
 
-_TEXT_FILE = Path(__file__).parent / "sample_text.txt"
-_FINGERPRINT_LENGTH = 10
-_ORF = 3
-_MIN_DUPLICATE_LENGTH = 10
+_SAMPLE_TEXTS_DIR = Path(__file__).parent / "samples"
+_FINGERPRINT_LENGTH = 30
+_ORF = 15
+_MIN_DUPLICATE_LENGTH = 30
 _NB_REPEATS = 10
 
 
 def _getSampleTexts():
-    fullText = _TEXT_FILE.read_text()
+    texts = [f.read_text() for f in sorted(_SAMPLE_TEXTS_DIR.glob("*.txt"))]
+    # copy/pastes lines across docs
+    texts = [t.split("\n") for t in texts]
+    # doc 0 is the oldest doc, has no copy/pastes
+    # doc 1 has copy/pastes from doc 0
+    texts[1][0:5] = texts[0][0:5]
+    texts[1][100:110] = texts[0][50:60]
+    texts[1][120:125] = texts[0][80:85]
+    texts[1][150:155] = texts[0][60:65]
+    texts[1][180:185] = texts[0][50:55]
+    # doc 2 has copy/pastes from doc 0, and doc 1,
+    # including parts of doc 1 that were copy/pasted from doc 0
+    texts[2][5:10] = texts[0][20:25]
+    texts[2][20:30] = texts[1][115:125]
+    texts[2][40:45] = texts[1][20:25]
+    texts[2][90:95] = texts[1][30:35]
 
-    text1 = fullText[0:500] + fullText[1500:3000] + fullText[4000:4500]
-    text2 = (
-        text1[0:500]
-        + fullText[5000:6000]
-        + text1[500:600]
-        + fullText[6000:7000]
-        + text1[900:1600]
-    )
-    text3 = (
-        text1[3000:3500]
-        + fullText[6000:7000]
-        + text2[250:350]
-        + fullText[5000:7000]
-        + text1[900:1600]
-        + text1[600:800]
-    )
-    text4 = fullText[7000:9000]
-
-    texts = [text1, text2, text3, text4]
+    texts = ["\n".join(t) for t in texts]
     return texts
 
 
