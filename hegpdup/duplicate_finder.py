@@ -234,13 +234,13 @@ def _buildDuplicates(targetSpansAndFingerprintIds, sourceDoc, minDuplicateLength
             continue
 
         extendedDuplicates = []
-        mergedSourceSpans = []  # NB: using a list is faster than a set here
+        indicesOfMergedSourceSpans = set()
 
         # for each "in-progress" duplicate, try to extend it with the target
         # span and each source span
         for duplicate in inProgressDuplicates:
             extended = False
-            for sourceSpan in sourceSpans:
+            for i, sourceSpan in enumerate(sourceSpans):
                 # source and target spans should have the same length since they
                 # refer to the same fingerprint
                 assert sourceSpan.length == targetSpan.length
@@ -293,7 +293,7 @@ def _buildDuplicates(targetSpansAndFingerprintIds, sourceDoc, minDuplicateLength
                 # remember this source span has been used to extend a
                 # pre-existing duplicate (we don't need to create a new
                 # duplicate for it later)
-                mergedSourceSpans.append(sourceSpan)
+                indicesOfMergedSourceSpans.add(i)
 
             # "in-progress" duplicate has not been extended. Since target spans
             # are sorted, we know it won't be extended by upcoming spans so we
@@ -309,8 +309,8 @@ def _buildDuplicates(targetSpansAndFingerprintIds, sourceDoc, minDuplicateLength
 
         # for source spans that have not been used to extend previously
         # existing duplicates, new duplicates must be created
-        for sourceSpan in sourceSpans:
-            if sourceSpan not in mergedSourceSpans:
+        for i, sourceSpan in enumerate(sourceSpans):
+            if i not in indicesOfMergedSourceSpans:
                 duplicate = Duplicate(sourceDoc.id, sourceSpan, targetSpan)
                 inProgressDuplicates.append(duplicate)
 
