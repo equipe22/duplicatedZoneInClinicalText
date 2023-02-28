@@ -53,9 +53,6 @@ class Duplicate:
     def length(self):
         return self.targetSpan.length
 
-    def __hash__(self):
-        return hash((self.sourceDocId, self.sourceSpan, self.targetSpan))
-
     def __repr__(self):
         return f"Duplicate(sourceDocId={self.sourceDocId}, sourceSpan={self.sourceSpan!r}, targetSpan={self.targetSpan!r})"
 
