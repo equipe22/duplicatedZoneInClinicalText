@@ -36,26 +36,26 @@ def _getSampleTexts():
     return texts
 
 
-@pytest.mark.parametrize("treeBackend", TreeBackend)
-def test_speed(treeBackend):
+@pytest.fixture(scope="module")
+def difflibTime():
+    print("Computing difflib time, this might take a while...")
     texts = _getSampleTexts()
 
     def run():
-        fingerprintBuilder = FingerprintBuilder([_FINGERPRINT_LENGTH], _ORF)
-        duplicateFinder = DuplicateFinder(
-            fingerprintBuilder,
-            minDuplicateLength=_MIN_DUPLICATE_LENGTH,
-            treeBackend=treeBackend,
-        )
-        for i, text in enumerate(texts):
-            duplicateFinder.findDuplicates(f"D{i}", text)
+        for source_text, target_text in itertools.combinations(texts, 2):
+            matcher = difflib.SequenceMatcher(
+                a=source_text, b=target_text, autojunk=False
+            )
+            matcher.get_matching_blocks()
 
-    time = timeit.timeit(run, number=_NB_REPEATS)
-    print(treeBackend.value, time)
+    time = timeit.timeit(run, number=1)
+    print("DIFFLIB", time)
+
+    return time
 
 
 @pytest.mark.parametrize("treeBackend", TreeBackend)
-def test_faster_than_difflib(treeBackend):
+def test_speed(treeBackend, difflibTime):
     """
     Make sure we are at least 10 times faster than difflib
     """
@@ -71,22 +71,14 @@ def test_faster_than_difflib(treeBackend):
         for i, text in enumerate(texts):
             duplicateFinder.findDuplicates(f"D{i}", text)
 
-    def run_difflib():
-        for source_text, target_text in itertools.combinations(texts, 2):
-            matcher = difflib.SequenceMatcher(
-                a=source_text, b=target_text, autojunk=False
-            )
-            matcher.get_matching_blocks()
+    averageTime = timeit.timeit(run, number=_NB_REPEATS) / _NB_REPEATS
+    print(treeBackend.value, averageTime)
 
-    time = timeit.timeit(run, number=_NB_REPEATS)
-    time_difflib = timeit.timeit(run_difflib, number=_NB_REPEATS)
-    print(time, time_difflib)
-
-    assert time < (time_difflib / 10)
+    if difflibTime is not None:
+        assert averageTime < (difflibTime / 10)
 
 
 if __name__ == "__main__":
     # launch with python3 -O tests/test_speed.py for best results
     for treeBackend in TreeBackend:
-        test_speed(treeBackend)
-        test_faster_than_difflib(treeBackend)
+        test_speed(treeBackend, difflibTime=None)
