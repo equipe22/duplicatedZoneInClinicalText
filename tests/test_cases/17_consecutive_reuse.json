@@ -1,6 +1,7 @@
 {
     "_description": "Two consecutive copy/paste in target with the 2d one reusing part of the same source (must be careful during merging/extension when checking bounds of source spans, we will encounter as source span that overlaps with previous source spans but that is not after)",
     "settings": {
+        "fingerprint_type": "char",
         "fingerprint_length": 2,
         "min_duplicate_length": 2
     },

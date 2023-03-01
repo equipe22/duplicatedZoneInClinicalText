@@ -1,6 +1,7 @@
 {
     "_description": "Texts with newlines",
     "settings": {
+        "fingerprint_type": "char",
         "fingerprint_length": 10,
         "min_duplicate_length": 16
     },

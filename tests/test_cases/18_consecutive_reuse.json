@@ -1,6 +1,7 @@
 {
     "_description": "Two consecutive copy/paste in target with the 2d one reusing part of the same source, that has the same length as the fingerprint length. This will create a new source span that is exactly the same as the previous one and must not be merged.",
     "settings": {
+        "fingerprint_type": "char",
         "fingerprint_length": 7,
         "min_duplicate_length": 2
     },

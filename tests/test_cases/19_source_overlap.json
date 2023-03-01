@@ -1,6 +1,7 @@
 {
     "_description": "Copy/pastes that overlap in source but not in target",
     "settings": {
+        "fingerprint_type": "char",
         "fingerprint_length": 2,
         "min_duplicate_length": 4
     },

@@ -1,8 +1,8 @@
 {
-    "_description": "1st test from demo",
+    "_description": "1st test from demo but with word fingerprints",
     "settings": {
-        "fingerprint_type": "char",
-        "fingerprint_length": 10,
+        "fingerprint_type": "word",
+        "fingerprint_length": 2,
         "min_duplicate_length": 16
     },
     "docs": [
@@ -20,10 +20,10 @@
             "source_doc_id": "D0",
             "target_doc_id": "D1",
             "source_start": 0,
-            "source_end": 43,
+            "source_end": 42,
             "target_start": 0,
-            "target_end": 43,
-            "text": "A significant part of medical knowledge is "
+            "target_end": 42,
+            "text": "A significant part of medical knowledge is"
         }
     ]
 }

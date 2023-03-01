@@ -1,6 +1,7 @@
 {
     "_description": "Duplicate pasted from 1st doc to 2d ,them from 2d to 3rd but with additional consecutive text",
     "settings": {
+        "fingerprint_type": "char",
         "fingerprint_length": 2,
         "min_duplicate_length": 7,
         "allow_overlaps": true

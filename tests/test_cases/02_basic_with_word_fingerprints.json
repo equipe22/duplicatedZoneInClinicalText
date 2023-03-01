@@ -1,0 +1,29 @@
+{
+    "_description": "Basic test with a couple of duplicates in 2 docs, with word fingerprints. 1st duplicate is not detected because it has only one word, and word fingerprints will allow only patterns of at least 2 words to be detected",
+    "settings": {
+        "fingerprint_type": "word",
+        "fingerprint_length": 2,
+        "min_duplicate_length": 4
+    },
+    "docs": [
+        {
+            "id": "D0",
+            "text": "Hello Rick. How are you? See you soon"
+        },
+        {
+            "id": "D1",
+            "text": "Hello Alice. How are you? Bye"
+        }
+    ],
+    "duplicates": [
+        {
+            "source_doc_id": "D0",
+            "target_doc_id": "D1",
+            "source_start": 12,
+            "source_end": 23,
+            "target_start": 13,
+            "target_end": 24,
+            "text": "How are you"
+        }
+    ]
+}
