@@ -58,5 +58,4 @@ def test_main(treeBackend, testCaseFile):
 
     pprint(duplicatesData, sort_dicts=False)
 
-    if not testCase.get("failing", False):
-        assert duplicatesData == testCase["duplicates"]
+    assert duplicatesData == testCase["duplicates"]
