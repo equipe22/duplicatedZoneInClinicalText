@@ -1,4 +1,5 @@
 import re
+import warnings
 
 from .span import Span
 
@@ -47,6 +48,12 @@ class WordFingerprintBuilder:
 
         if fingerprintLength < 2:
             raise ValueError("Fingerprint length must be at least 2")
+        if orf < 1:
+            raise ValueError("ORF must be at least 1")
+        elif orf > 1:
+            warnings.warn(
+                "Using and ORF bigger than 1 will probably lead to many duplicates being missed"
+            )
 
         self.fingerprintLength = fingerprintLength
         self.orf = orf

@@ -1,4 +1,5 @@
 import re
+import warnings
 
 from .span import Span
 
@@ -33,6 +34,21 @@ class CharFingerprintBuilder:
             Whether fingerprints can span over multiple lines. Set to False
             to prevent multiline duplicates
         """
+
+        if fingerprintLength < 1:
+            raise ValueError("Fingerprint length must be at least 1")
+        elif fingerprintLength < 2:
+            warnings.warn(
+                "Using a fingerprint of smaller than 2 defeats the purpose of fingerprinting "
+                "since there will be one fingerprint per character. Duplicate finding is going "
+                "to be very slow."
+            )
+        if orf < 1:
+            raise ValueError("ORF must be at least 1")
+        elif orf > 1:
+            warnings.warn(
+                "Using and ORF bigger than 1 will probably lead to many duplicates being missed"
+            )
 
         self.fingerprintLength = fingerprintLength
         self.orf = orf
