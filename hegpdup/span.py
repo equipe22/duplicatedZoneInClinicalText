@@ -2,6 +2,7 @@ class Span:
     __slots__ = "start", "end", "length"
 
     def __init__(self, start, end, length=None):
+        assert end > start
         assert length is None or length == end - start
 
         self.start = start

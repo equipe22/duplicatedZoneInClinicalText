@@ -45,6 +45,8 @@ class Duplicate:
             length as `sourceSpan`
         """
 
+        assert sourceSpan.length == targetSpan.length
+
         self.sourceDocId = sourceDocId
         self.sourceSpan = sourceSpan
         self.targetSpan = targetSpan
