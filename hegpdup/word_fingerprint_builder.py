@@ -9,11 +9,62 @@ _NEWLINE_REGEXP = re.compile(r"[^\r\n]+")
 
 class WordFingerprintBuilder:
     """
-    Builds fingerprints for a set of text documents, for identification of
-    duplicates.
+    Builds fingerprints for a set of text documents by grouping together
+    characters. To be used within a `DuplicateFinder`.
 
-    The fingerprint builder remembers previously seen documents and will reuse
-    fingerprint ids for identical text chunks.
+    Each text passed to `buildFingerprints()` is split into a sequence of words.
+    Then this sequence scanned by a window (a bit like a convolution) of length
+    `fingerprintLength` (in number of words) and a shift size of `orf` (also in
+    number of words).
+
+    At each step, a chunk of text is recreated by concatenating the words in the
+    window as well as their intermediate non-words characters. Then a
+    fingerprint id is generated for the chunk of text. Either an identical chunk
+    of text has already been encountered, then the unique fingerprint id
+    associated to that chunk is used, or the chunk of text has never been seen
+    and a new fingerprint id is generated (and stored).
+
+    For instance, the text "How are you? How are things?", fingerprinted with a
+    fingerprint length of 2 and an orf of 1, would yield the following chunks
+    and fingerprint ids:
+        - "How are", id=0
+        - "are you", id=1
+        - "you? How", id=2
+        - "How are", id=1  # chunk already seen, same fingerprint id
+        - "are things", id=3
+
+    Notice how the trailing question mark was not included in any fingerprinted
+    chunk, as it is not located between any words. Indeed, compared to
+    `CharFingerprintBuilder`, `WordFingerprintBuilder` assumes we are only
+    interested in detecting the duplication of words.
+
+    The main advantage of this assumption is that it allows a performance gain
+    because we will have less fingerprinted chunks, not because the
+    fingerprinted chunks are bigger (they are not necessarily, compared to using
+    a `CharFingerprintBuilder` with a fingerprint length close to the average
+    word length), but because with an orf of 1 we are stepping over 1 word, ie
+    several chars, instead of 1 char.
+
+    To illustrate this, let's take a text composed of only 3-chars words:
+        "Yes she can"
+    and fingerprint it with a `CharFingerprintBuilder` with a fingerprint length
+    of 6 and an orf of 1, which would yield the following chunks:
+        "Yes sh", "es she", "s she ", " she c", "she ca", "he can"
+    while a `WordFingerprintBuilder` with fingerprint length of 2 and orf of 1
+    will yield:
+        "Yes she", "she can"
+    We have the same text coverage with identical chunk lengths, but less
+    chunks, which will speed up the comparison (cf docstring of
+    `CharFingerprintBuilder` for an explanation of why is it better to have less
+    chunks).
+
+    The only thing we lose is the ability to detect "sub-word" duplications,
+    which might actually be a good thing. Another limit compared to
+    `CharFingerprintBuilder` is that is is not possible to have a fingerprint
+    length of 1 (it must be at least 2), because otherwise the characters
+    between words wouldn't be fingerprinted at all. The fingerprinted chunks
+    wouldn't be adjacent, there would be gaps and because of the gaps we
+    wouldn't be able to find duplicates going across several words.
     """
 
     def __init__(
@@ -28,14 +79,26 @@ class WordFingerprintBuilder:
         Parameters
         ----------
         fingerprintLength: int
-            Number of words to include in each fingerprinted chunk. The
-            non-words characters between the words of a chunk will also be
-            included in the chunk. Must be at least 2 otherwise it is
-            impossible to take into account non-word chars between words.
+            Number of words in fingerprinted chunks of text. The non-words
+            characters between the words of a chunk will also be included in the
+            chunk. Must be at least 2 otherwise there will be gaps between all
+            fingerprints.
+
+            The longer, the faster will `DuplicateFinder` be, cf docstring of
+            `CharFingerprintBuilder` for an explanation.
+
+            `fingerprintLength` should be right above the length (in words) of
+            duplicates that we don't mind missing. The `minDuplicateLength` of
+            `DuplicateFinder` should be set in consistency of the fingerprint
+            length, for instance to the `fingerprintLength` multiplied by the
+            average number of chars in a word.
         orf: int
-            Open Reading Frame length. Shift size used when moving the
-            fingerprint window over the text (the window having a size of
-            `fingerprintLength` words)
+            Open Reading Frame, ie the shift size (in number of words) used when
+            moving the fingerprint window over the text. If not missing any
+            duplicates is important, then this should be set to 1, because
+            otherwise potential duplicates (even very long) can be missed if
+            they were fingerprinted with a different offset, cf docstring
+            `CharFingerprintBuilder` for an explanation.
         wordRegexp: re.Pattern
             Regexp object to use to identify word boundaries in texts
         caseSensitive: bool

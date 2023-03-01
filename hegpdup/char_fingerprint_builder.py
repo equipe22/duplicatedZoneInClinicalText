@@ -9,10 +9,36 @@ _NEWLINE_REGEXP = re.compile(r"[^\r\n]+")
 class CharFingerprintBuilder:
     """
     Builds fingerprints for a set of text documents by grouping together
-    characters.
+    characters. To be used within a `DuplicateFinder`.
 
-    The fingerprint builder remembers previously seen documents and will reuse
-    fingerprint ids for identical text chunks.
+    Each text passed to `buildFingerprints()` is scanned by a window (a bit like
+    a convolution) of length `fingerprintLength` (in number of chars) and a
+    shift size of `orf` (also in number of chars).
+
+    At each step, a fingerprint id is generated for the chunk of text in the
+    window. Either an identical chunk of text has already been encountered, then
+    the unique fingerprint id associated to that chunk is used, or the chunk of
+    text has never been seen and a new fingerprint id is generated (and stored).
+
+    For instance, the text "Alice is nice", fingerprinted with a fingerprint
+    length of 3 and an orf of 1, would yield the following chunks and
+    fingerprint ids:
+        - "Ali", id=0
+        - "lic", id=1
+        - "ice", id=2
+        - "ce ", id=3
+        - "e i", id=4
+        - " is", id=5
+        - "s n", id=6
+        - " ni", id=7
+        - "nic", id=8
+        - "ice", id=2  # chunk already seen, same fingerprint id
+
+    `CharFingerprintBuilder` remembers previously seen chunks, and will reuse
+    fingerprint ids for identical chunks in upcoming calls to
+    `buildFingerprints()`. The whole purpose of using fingerprints is that it
+    allows us to be faster than a classical char-by-char diff algorithm, because
+    we are comparing documents on bigger pieces (chunks) than characters.
     """
 
     def __init__(
@@ -22,11 +48,61 @@ class CharFingerprintBuilder:
         Parameters
         ----------
         fingerprintLength: int
-            Length to use for generated fingerprints
+            Number of characters in fingerprinted chunks of text. The longer,
+            the faster will `DuplicateFinder` be. But the longer, the more
+            duplicate will be missed.
+
+            In a nutshell, `fingerprintLength` should be right above the
+            length of duplicates that we don't mind missing, and the
+            `minDuplicateLength` of `DuplicateFinder` should be set to the same
+            value.
+
+            When building duplicates between 2 documents, `DuplicateFinder` will
+            iterate over all the fingerprinted chunks of the 1st document, and
+            for each of them, all the fingerprinted chunks of the 2d document
+            with the same fingerprint id.
+
+            So increasing the fingerprint length has the effect of:
+             - decreasing the number of fingerprinted chunks, both in the 1st
+               and 2d documents. So this should reduce the number of iterations
+               in the nested loop quadratically (if I am not mistaken)
+             - decreasing the number of common fingerprints because the longer
+               is each chunk, the less likely it is to have identical chunks
+
+            But we can't increase the fingerprint length too much because
+            `DuplicateFinder` won't be able to find duplicates shorter than the
+            fingerprinted length. For instance, fingerprinting these texts:
+                "Hi Bob"
+            and
+                "Hello Bob"
+            with an fingerprint length of 4 and and orf of 1 will yield
+            fingerprint ids for the following chunks respectively:
+                "Hi B", "i Bo", " Bob"
+            and
+                "Hell", "ello", "llo ", "lo B", "o Bo", " Bob"
+            and there are no common fingerprints between the 2 texts so no
+            duplicate will be detected.
+
+            So `fingerprintLength` should be set to the same value as
+            `minDuplicateLength`.
         orf: int
-            Open Reading Frame length. Shift size used when moving the
-            fingerprint window over the text (the window having a size of
-            `fingerprintLength` chars)
+            Open Reading Frame, ie the shift size (in number of chars) used when
+            moving the fingerprint window over the text. If not missing any
+            duplicates is important, then this should be set to 1, because
+            otherwise potential duplicates (even very long) can be missed if
+            they were fingerprinted with a different offset.
+
+            For instance, fingerprinting these texts:
+                "Hello Alice"
+            and
+                "Hi Alice"
+            with an fingerprint length of 4 and and orf of 2 will yield
+            fingerprint ids for the following chunks respectively:
+                "Hell", "llo ", "o Al", "Alic", "ice"
+            and
+                "Hi A", " Ali", "lice"
+            and there are no common fingerprints between the 2 texts so no
+            duplicate will be detected.
         caseSensitive: bool
             Whether case should be taken into account when testing if chunks of
             text are equal

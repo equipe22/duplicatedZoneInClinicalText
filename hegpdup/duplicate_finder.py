@@ -94,14 +94,18 @@ class DuplicateFinder:
         Parameters
         ----------
         fingerprintBuilder: Union[CharFingerprintBuilder, WordFingerprintBuilder]
-            fingerprint builder instance to use to generate fingerprints for
+            Fingerprint builder instance to use to generate fingerprints for
             each document
         minDuplicateLength: int
-            Minimum number of characters in duplicates
+            Minimum number of characters in duplicates. Should be set in
+            accordance with the `fingerprintLength` of the fingerprint builder,
+            cf docstrings of `CharFingerprintBuilder` and
+            `WordFingerprintBuilder`
         treeBackend: Optional[TreeBackend]
             Backend to use for overlap trees. If `None` provided, we will select
-            NCLS or INTERVAL_TREE (in that order) if they appear to be available.
-            Using NCLS should provide best performance.
+            NCLS or INTERVAL_TREE (in that order) if they appear to be
+            available. Using NCLS should provide best performance. INTERVAL_TREE
+            performance can be inferior to not using overlap trees at all.
         """
 
         if treeBackend is None:
