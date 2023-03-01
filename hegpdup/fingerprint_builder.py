@@ -12,7 +12,7 @@ class FingerprintBuilder:
     fingerprint ids for identical text chunks.
     """
 
-    def __init__(self, fingerprintLength, orf):
+    def __init__(self, fingerprintLength, orf, caseSensitive=True):
         """
         Parameters
         ----------
@@ -22,10 +22,14 @@ class FingerprintBuilder:
             Open Reading Frame length. Shift size used when moving the
             fingerprint window over the text (the window having a size of
             `fingerprintLength` chars)
+        caseSensitive: bool
+            Whether case should be taken into account when testing if chunks of
+            text are equal
         """
 
         self.fingerprintLength = fingerprintLength
         self.orf = orf
+        self.caseSensitive = caseSensitive
 
         # mapping giving the unique fingerprint id corresponding to a previously
         # seen chunk of text
@@ -48,11 +52,11 @@ class FingerprintBuilder:
             corresponding characters spans, sorted by ascending span
         """
 
+        if not self.caseSensitive:
+            text = text.lower()
+
         # list that will be filled and returned
         spansAndFingerprintIds = []
-
-        # lowercase so we aren't case sensitive
-        text = text.lower()
 
         # position of the 1st char of the current line
         lineOffset = 0
