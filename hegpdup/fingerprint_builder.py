@@ -105,8 +105,9 @@ class FingerprintBuilder:
                 # create and store span
                 start = lineOffset + chunkStart
                 # chunk might end up being shorter than fingerprintLength
-                end = start + len(chunk)
-                span = Span(start, end)
+                chunkLength = len(chunk)
+                end = start + chunkLength
+                span = Span(start, end, length=chunkLength)
                 spansAndFingerprintIds.append((span, fingerprintId))
 
                 if chunkEnd >= lineLength:

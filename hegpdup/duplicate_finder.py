@@ -279,8 +279,16 @@ def _buildDuplicates(targetSpansAndFingerprintIds, sourceDoc, minDuplicateLength
                 if extendedSourceLength != extendedTargetLength:
                     continue
 
-                extendedTargetSpan = Span(duplicate.targetSpan.start, targetSpan.end)
-                extendedSourceSpan = Span(duplicate.sourceSpan.start, sourceSpan.end)
+                extendedTargetSpan = Span(
+                    duplicate.targetSpan.start,
+                    targetSpan.end,
+                    length=extendedTargetLength,
+                )
+                extendedSourceSpan = Span(
+                    duplicate.sourceSpan.start,
+                    sourceSpan.end,
+                    length=extendedSourceLength,
+                )
 
                 # build and store new extended duplicate
                 # (we can't modify the existing instance because the same
@@ -683,9 +691,15 @@ def _trimOrDropDuplicate(duplicate, targetSpanToTrim, minDuplicateLength):
         if trimmedLength < minDuplicateLength:
             return None
         # return new duplicate with trimmed spans
-        targetSpan = Span(duplicate.targetSpan.start, trimStart)
+        targetSpan = Span(
+            duplicate.targetSpan.start,
+            trimStart,
+            length=trimmedLength,
+        )
         sourceSpan = Span(
-            duplicate.sourceSpan.start, duplicate.sourceSpan.start + trimmedLength
+            duplicate.sourceSpan.start,
+            duplicate.sourceSpan.start + trimmedLength,
+            length=trimmedLength,
         )
         return Duplicate(duplicate.sourceDocId, sourceSpan, targetSpan)
 
@@ -696,9 +710,15 @@ def _trimOrDropDuplicate(duplicate, targetSpanToTrim, minDuplicateLength):
         if trimmedLength < minDuplicateLength:
             return None
         # return new duplicate with trimmed spans
-        targetSpan = Span(trimEnd, duplicate.targetSpan.end)
+        targetSpan = Span(
+            trimEnd,
+            duplicate.targetSpan.end,
+            length=trimmedLength,
+        )
         sourceSpan = Span(
-            duplicate.sourceSpan.end - trimmedLength, duplicate.sourceSpan.end
+            duplicate.sourceSpan.end - trimmedLength,
+            duplicate.sourceSpan.end,
+            length=trimmedLength,
         )
         return Duplicate(duplicate.sourceDocId, sourceSpan, targetSpan)
 
