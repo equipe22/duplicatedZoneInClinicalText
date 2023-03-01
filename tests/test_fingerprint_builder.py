@@ -16,6 +16,26 @@ def mock_span_eq(module_mocker):
     )
 
 
+def test_multiline():
+    text = "\n\nHi\nHello\n\n"
+
+    builder = FingerprintBuilder(fingerprintLength=100, allowMultiline=True)
+    spansAndFingerprintIds = builder.buildFingerprints(text)
+    # 1 fingerprinted span covering all the lines
+    assert len(spansAndFingerprintIds) == 1
+    span, _ = spansAndFingerprintIds[0]
+    assert span == Span(0, len(text))
+
+    builder = FingerprintBuilder(fingerprintLength=100, allowMultiline=False)
+    spansAndFingerprintIds = builder.buildFingerprints(text)
+    # 1 fingerprinted span fingerprint per line, without any newline char
+    assert len(spansAndFingerprintIds) == 2
+    span1, _ = spansAndFingerprintIds[0]
+    assert span1 == Span(2, 4)  # Hi
+    span2, _ = spansAndFingerprintIds[1]
+    assert span2 == Span(5, 10)  # Hello
+
+
 _TEST_CASES = [
     # fingerprintLength=1, orf=1
     (
@@ -57,7 +77,6 @@ _TEST_CASES = [
         ],
     ),
     # fingerprintLength=2, orf=2
-    # this is failing
     (
         2,
         2,
@@ -71,7 +90,6 @@ _TEST_CASES = [
 ]
 
 
-@pytest.mark.xfail
 @pytest.mark.parametrize(
     "fingerprintLength,orf,expectedSpansAndFingerprintIds", _TEST_CASES
 )

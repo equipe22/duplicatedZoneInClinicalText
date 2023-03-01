@@ -38,10 +38,9 @@ def test_main(treeBackend, testCaseFile):
         testCase = json.load(fp)
 
     fingerprintLength = testCase["settings"]["fingerprint_length"]
-    orf = testCase["settings"]["orf"]
     minDuplicateLength = testCase["settings"]["min_duplicate_length"]
 
-    fingerprintBuilder = FingerprintBuilder(fingerprintLength, orf)
+    fingerprintBuilder = FingerprintBuilder(fingerprintLength)
     duplicateFinder = DuplicateFinder(
         fingerprintBuilder,
         minDuplicateLength=minDuplicateLength,

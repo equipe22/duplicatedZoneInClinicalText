@@ -1,6 +1,8 @@
+import re
+
 from .span import Span
 
-_CHUNKS_TO_IGNORE = {"\n", "\r\n"}
+_NEWLINE_REGEXP = re.compile(r"[^\r\n]+")
 
 
 class FingerprintBuilder:
@@ -12,7 +14,9 @@ class FingerprintBuilder:
     fingerprint ids for identical text chunks.
     """
 
-    def __init__(self, fingerprintLength, orf, caseSensitive=True):
+    def __init__(
+        self, fingerprintLength, orf=1, caseSensitive=True, allowMultiline=True
+    ):
         """
         Parameters
         ----------
@@ -25,11 +29,15 @@ class FingerprintBuilder:
         caseSensitive: bool
             Whether case should be taken into account when testing if chunks of
             text are equal
+        allowMultiline: bool
+            Whether fingerprints can span over multiple lines. Set to False
+            to prevent multiline duplicates
         """
 
         self.fingerprintLength = fingerprintLength
         self.orf = orf
         self.caseSensitive = caseSensitive
+        self.allowMultiline = allowMultiline
 
         # mapping giving the unique fingerprint id corresponding to a previously
         # seen chunk of text
@@ -55,51 +63,44 @@ class FingerprintBuilder:
         if not self.caseSensitive:
             text = text.lower()
 
-        # list that will be filled and returned
+        if self.allowMultiline:
+            return list(self._buildFingerprints(text, 0))
+
+        # build fingerprints line by line if multiline fingerprints aren't
+        # allowed
         spansAndFingerprintIds = []
-
-        # position of the 1st char of the current line
-        lineOffset = 0
-        for linePosition in range(0, min(self.orf, len(text))):
-            # not sure what that does, something to do with multiline?
-            line = "".join(text[linePosition:])
-            # build fingerprints for current line and add them to spansByFingerprintId
-            self._buildFingerprintsForLine(line, lineOffset, spansAndFingerprintIds)
-
-            lineOffset = lineOffset + len(text[linePosition])
-
-        # sort by span
-        spansAndFingerprintIds = sorted(
-            spansAndFingerprintIds, key=lambda t: (t[0].start, t[0].end)
-        )
+        for match in _NEWLINE_REGEXP.finditer(text):
+            lineStart = match.start()
+            line = match.group()
+            spansAndFingerprintIdsForLine = self._buildFingerprints(line, lineStart)
+            spansAndFingerprintIds.extend(spansAndFingerprintIdsForLine)
 
         return spansAndFingerprintIds
 
-    def _buildFingerprintsForLine(self, line, lineOffset, spansAndFingerprintIds):
+    def _buildFingerprints(self, text, textStart=0):
         """
-        Build the fingerprints of a line and add them to `spansAndFingerprintIds`
+        Yield fingerprint ids and character spans in which they are found in
+        `text`, using `textStart` to offset the spans.
 
         Parameters
         ----------
-        line: str
-            Line for which to build the fingerprints
-        lineOffset: int
-            Position of the line in the full document text
-        spansAndFingerprintIds: List[Tuple[Span, int]]
-            List to which the fingerprint ids and corresponding spans will
-            be added
+        text: str
+            Text for which to build the fingerprints
+        textStart:
+            Position of `text` in the full document text if it is a line rather
+            than the full text
+
+        Returns
+        -------
+        Iterator[Tuple[Span, int]]
+            Iterator over ids of fingerprints contained in `text` and their
+            corresponding characters spans, sorted by ascending span
         """
 
-        lineLength = len(line)
-
-        # construct all chunk offsets in line
-        # (fingerprints will overlap)
-        chunkStarts = range(0, lineLength, self.orf)
-        for chunkStart in chunkStarts:
-            chunkEnd = chunkStart + self.fingerprintLength
-            chunk = line[chunkStart:chunkEnd]
-            if chunk in _CHUNKS_TO_IGNORE:
-                continue
+        textLength = len(text)
+        for start in range(0, textLength, self.orf):
+            end = min(start + self.fingerprintLength, textLength)
+            chunk = text[start:end]
 
             # find existing fingerprint id for chunk or create new id
             # if chunk is unseen
@@ -107,13 +108,9 @@ class FingerprintBuilder:
                 chunk, len(self._fingerprintIdByChunk)
             )
 
-            # create and store span
-            start = lineOffset + chunkStart
-            # chunk might end up being shorter than fingerprintLength
-            chunkLength = len(chunk)
-            end = start + chunkLength
-            span = Span(start, end, length=chunkLength)
-            spansAndFingerprintIds.append((span, fingerprintId))
+            span = Span(textStart + start, textStart + end)
+            yield span, fingerprintId
 
-            if chunkEnd >= lineLength:
+            # if we reached end of text, break out
+            if end == textLength:
                 break

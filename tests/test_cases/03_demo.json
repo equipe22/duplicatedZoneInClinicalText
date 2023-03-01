@@ -1,7 +1,6 @@
 {
     "_description": "1st test from demo",
     "settings": {
-        "orf": 3,
         "fingerprint_length": 10,
         "min_duplicate_length": 16
     },

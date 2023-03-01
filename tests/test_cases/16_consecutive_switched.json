@@ -1,7 +1,6 @@
 {
     "_description": "Two source patterns copy/pasted consecutively in target but switched",
     "settings": {
-        "orf": 1,
         "fingerprint_length": 2,
         "min_duplicate_length": 3
     },

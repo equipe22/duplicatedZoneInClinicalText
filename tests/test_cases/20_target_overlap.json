@@ -1,7 +1,6 @@
 {
     "_description": "Copy/pastes that overlap in target, shortest is trimmed",
     "settings": {
-        "orf": 1,
         "fingerprint_length": 2,
         "min_duplicate_length": 4
     },

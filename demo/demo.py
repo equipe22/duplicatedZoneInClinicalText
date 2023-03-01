@@ -4,7 +4,6 @@ import json
 from hegpdup import FingerprintBuilder, DuplicateFinder
 
 
-orf = 3
 fingerprintLength = 15
 minDuplicateLength = 15
 
@@ -15,7 +14,7 @@ for texts in examples:
     print("************")
 
     # init FingerprintBuilder and DuplicateFinder that will process a batch of documents
-    fingerprintBuilder = FingerprintBuilder(fingerprintLength, orf)
+    fingerprintBuilder = FingerprintBuilder(fingerprintLength)
     duplicateFinder = DuplicateFinder(fingerprintBuilder, minDuplicateLength)
 
     for i, text in enumerate(texts):

@@ -9,7 +9,6 @@ from hegpdup import FingerprintBuilder, DuplicateFinder, TreeBackend
 
 _SAMPLE_TEXTS_DIR = Path(__file__).parent / "samples"
 _FINGERPRINT_LENGTH = 30
-_ORF = 15
 _MIN_DUPLICATE_LENGTH = 30
 _NB_REPEATS = 10
 
@@ -62,7 +61,7 @@ def test_speed(treeBackend, difflibTime):
     texts = _getSampleTexts()
 
     def run():
-        fingerprintBuilder = FingerprintBuilder(_FINGERPRINT_LENGTH, _ORF)
+        fingerprintBuilder = FingerprintBuilder(_FINGERPRINT_LENGTH)
         duplicateFinder = DuplicateFinder(
             fingerprintBuilder,
             minDuplicateLength=_MIN_DUPLICATE_LENGTH,
