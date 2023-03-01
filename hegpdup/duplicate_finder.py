@@ -19,7 +19,20 @@ from .span import Span
 
 
 class _Document:
+    """Fingerprinted document"""
+
     def __init__(self, id, spansByFingerprintId):
+        """
+        Parameters
+        ----------
+        id: str
+            Identifier of the document
+        spansByFingerprintId: Dict[int, List[Span]]
+            Fingerprinted spans of the document, organized by fingerprint id.
+            This is used to easily get all spans of a source document having the
+            same fingerprint id as the span of a target document.
+        """
+
         self.id = id
         self.spansByFingerprintId = spansByFingerprintId
 
@@ -72,8 +85,8 @@ class DuplicateFinder:
     """
     Finds duplicated parts in a set of documents.
 
-    Relies on a fingerprint builder to generate fingerprints for documents,
-    then identifies parts with common fingerprints between each document.
+    Relies on a fingerprint builder to generate fingerprints for each document,
+    then identifies common consecutive fingerprints between documents.
     """
 
     def __init__(self, fingerprintBuilder, minDuplicateLength=2, treeBackend=None):
