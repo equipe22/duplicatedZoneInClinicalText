@@ -271,13 +271,16 @@ def _buildDuplicates(targetSpansAndFingerprintIds, sourceDoc, minDuplicateLength
                 # (this can happen because source spans are not sorted, cf tests
                 # cases 17_consecutive_reuse.json and 18_consecutive reuse.json)
 
-                # in practise, just trying to merge source and target spans and
-                # checking they have the same length seems to be enough and is
-                # more efficient that doing preliminary checks
+                # in practise, just checking if extended source and target spans
+                # have the same length seems to be enough and is more efficient
+                # that doing preliminary checks
+                extendedTargetLength = targetSpan.end - duplicate.targetSpan.start
+                extendedSourceLength = sourceSpan.end - duplicate.sourceSpan.start
+                if extendedSourceLength != extendedTargetLength:
+                    continue
+
                 extendedTargetSpan = Span(duplicate.targetSpan.start, targetSpan.end)
                 extendedSourceSpan = Span(duplicate.sourceSpan.start, sourceSpan.end)
-                if extendedSourceSpan.length != extendedTargetSpan.length:
-                    continue
 
                 # build and store new extended duplicate
                 # (we can't modify the existing instance because the same
@@ -675,30 +678,28 @@ def _trimOrDropDuplicate(duplicate, targetSpanToTrim, minDuplicateLength):
 
     # duplicate overlaps on its right-hand side
     if trimStart < duplicate.targetSpan.end <= trimEnd:
-        # trimmed duplicate has smaller start
-        targetSpan = Span(duplicate.targetSpan.start, trimStart)
+        trimmedLength = trimStart - duplicate.targetSpan.start
         # drop if new length is too short
-        length = targetSpan.length
-        if length < minDuplicateLength:
+        if trimmedLength < minDuplicateLength:
             return None
-        # apply same delta to source span
-        sourceSpan = Span(
-            duplicate.sourceSpan.start, duplicate.sourceSpan.start + length
-        )
         # return new duplicate with trimmed spans
+        targetSpan = Span(duplicate.targetSpan.start, trimStart)
+        sourceSpan = Span(
+            duplicate.sourceSpan.start, duplicate.sourceSpan.start + trimmedLength
+        )
         return Duplicate(duplicate.sourceDocId, sourceSpan, targetSpan)
 
     # duplicate overlaps on its left-hand side
     if trimStart < duplicate.targetSpan.start <= trimEnd:
-        # trimmed duplicate has bigger end
-        targetSpan = Span(trimEnd, duplicate.targetSpan.end)
-        # drop if new length is too shorts
-        length = targetSpan.length
-        if length < minDuplicateLength:
+        trimmedLength = duplicate.targetSpan.end - trimEnd
+        # drop if new length is too short
+        if trimmedLength < minDuplicateLength:
             return None
-            # apply same delta to source span
-        sourceSpan = Span(duplicate.sourceSpan.end - length, duplicate.sourceSpan.end)
         # return new duplicate with trimmed spans
+        targetSpan = Span(trimEnd, duplicate.targetSpan.end)
+        sourceSpan = Span(
+            duplicate.sourceSpan.end - trimmedLength, duplicate.sourceSpan.end
+        )
         return Duplicate(duplicate.sourceDocId, sourceSpan, targetSpan)
 
     # duplicate does not overlap, return as-is
