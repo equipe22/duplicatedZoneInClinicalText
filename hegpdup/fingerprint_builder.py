@@ -42,7 +42,7 @@ class FingerprintBuilder:
 
         Returns
         -------
-        List[Tuple[Span, int]
+        List[Tuple[Span, int]]
             List of ids of fingerprints contained in `text` and their
             corresponding characters spans, sorted by ascending span
         """
@@ -80,7 +80,7 @@ class FingerprintBuilder:
             Line for which to build the fingerprints
         lineOffset: int
             Position of the line in the full document text
-        spansAndFingerprintIds: List[Tuple[Span, int]
+        spansAndFingerprintIds: List[Tuple[Span, int]]
             List to which the fingerprint ids and corresponding spans will
             be added
         """
