@@ -5,10 +5,17 @@ import timeit
 
 import pytest
 
-from hegpdup import CharFingerprintBuilder, DuplicateFinder, TreeBackend
+from hegpdup import (
+    CharFingerprintBuilder,
+    WordFingerprintBuilder,
+    DuplicateFinder,
+    TreeBackend,
+)
 
 _SAMPLE_TEXTS_DIR = Path(__file__).parent / "samples"
-_FINGERPRINT_LENGTH = 30
+_CHAR_FINGERPRINT_LENGTH = 30
+# average number of chars per word is ~5 in french so 30/5 => 6
+_WORD_FINGERPRINT_LENGTH = 6
 _MIN_DUPLICATE_LENGTH = 30
 _NB_REPEATS = 10
 
@@ -53,15 +60,23 @@ def difflibTime():
     return time
 
 
-@pytest.mark.parametrize("treeBackend", TreeBackend)
-def test_speed(treeBackend, difflibTime):
+@pytest.mark.parametrize("fingerprintType", ["char", "word"])
+@pytest.mark.parametrize("treeBackend,", TreeBackend)
+def test_speed(treeBackend, fingerprintType, difflibTime):
     """
     Make sure we are at least 10 times faster than difflib
     """
     texts = _getSampleTexts()
 
     def run():
-        fingerprintBuilder = CharFingerprintBuilder(_FINGERPRINT_LENGTH)
+        if fingerprintType == "char":
+            fingerprintBuilder = CharFingerprintBuilder(
+                fingerprintLength=_CHAR_FINGERPRINT_LENGTH
+            )
+        else:
+            fingerprintBuilder = WordFingerprintBuilder(
+                fingerprintLength=_WORD_FINGERPRINT_LENGTH
+            )
         duplicateFinder = DuplicateFinder(
             fingerprintBuilder,
             minDuplicateLength=_MIN_DUPLICATE_LENGTH,
@@ -71,7 +86,7 @@ def test_speed(treeBackend, difflibTime):
             duplicateFinder.findDuplicates(f"D{i}", text)
 
     averageTime = timeit.timeit(run, number=_NB_REPEATS) / _NB_REPEATS
-    print(treeBackend.value, averageTime)
+    print(treeBackend.value, fingerprintType, averageTime)
 
     if difflibTime is not None:
         assert averageTime < (difflibTime / 10)
@@ -80,4 +95,5 @@ def test_speed(treeBackend, difflibTime):
 if __name__ == "__main__":
     # launch with python3 -O tests/test_speed.py for best results
     for treeBackend in TreeBackend:
-        test_speed(treeBackend, difflibTime=None)
+        for fingerprintType in ["char", "word"]:
+            test_speed(treeBackend, fingerprintType, difflibTime=None)

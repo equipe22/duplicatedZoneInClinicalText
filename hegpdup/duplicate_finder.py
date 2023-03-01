@@ -80,7 +80,7 @@ class DuplicateFinder:
         """
         Parameters
         ----------
-        fingerprintBuilder: CharFingerprintBuilder
+        fingerprintBuilder: Union[CharFingerprintBuilder, WordFingerprintBuilder]
             fingerprint builder instance to use to generate fingerprints for
             each document
         minDuplicateLength: int
