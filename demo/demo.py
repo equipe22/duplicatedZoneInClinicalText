@@ -33,7 +33,7 @@ for texts in examples:
         for duplicate in duplicates:
             print(
                 f"\tsourceDoc={duplicate.sourceDocId}, sourceStart={duplicate.sourceSpan.start}, sourceEnd={duplicate.sourceSpan.end}, "
-                "targetStart={duplicate.targetSpan.start}, targetEnd={duplicate.targetSpan.end}"
+                f"targetStart={duplicate.targetSpan.start}, targetEnd={duplicate.targetSpan.end}"
             )
             duplicate_text = text[duplicate.targetSpan.start : duplicate.targetSpan.end]
-            print("\ttext=" + repr(duplicate_text), end="\n\n")
+            print(f"\ttext=" + repr(duplicate_text), end="\n\n")
