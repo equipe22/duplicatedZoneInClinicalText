@@ -309,16 +309,19 @@ def _buildDuplicates(targetSpansAndFingerprintIds, sourceDoc, minDuplicateLength
 
         # for source spans that have not been used to extend previously
         # existing duplicates, new duplicates must be created
-        for i, sourceSpan in enumerate(sourceSpans):
-            if i not in indicesOfMergedSourceSpans:
-                duplicate = Duplicate(sourceDoc.id, sourceSpan, targetSpan)
-                inProgressDuplicates.append(duplicate)
+        inProgressDuplicates.extend(
+            Duplicate(sourceDoc.id, sourceSpan, targetSpan)
+            for i, sourceSpan in enumerate(sourceSpans)
+            if i not in indicesOfMergedSourceSpans
+        )
 
     # don't forget to add remaining "in-progress" duplicates
-    for duplicate in inProgressDuplicates:
+    finalDuplicates.extend(
+        duplicate
+        for duplicate in inProgressDuplicates
         # only keep if min length criteria is satisfied
-        if duplicate.length >= minDuplicateLength:
-            finalDuplicates.append(duplicate)
+        if duplicate.length >= minDuplicateLength
+    )
 
     return finalDuplicates
 
