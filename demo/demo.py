@@ -1,7 +1,7 @@
 from pathlib import Path
 import json
 
-from hegpdup import FingerprintBuilder, DuplicateFinder
+from hegpdup import CharFingerprintBuilder, DuplicateFinder
 
 
 fingerprintLength = 15
@@ -14,7 +14,7 @@ for texts in examples:
     print("************")
 
     # init FingerprintBuilder and DuplicateFinder that will process a batch of documents
-    fingerprintBuilder = FingerprintBuilder(fingerprintLength)
+    fingerprintBuilder = CharFingerprintBuilder(fingerprintLength)
     duplicateFinder = DuplicateFinder(fingerprintBuilder, minDuplicateLength)
 
     for i, text in enumerate(texts):

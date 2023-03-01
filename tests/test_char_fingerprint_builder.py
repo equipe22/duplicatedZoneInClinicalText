@@ -1,6 +1,6 @@
 import pytest
 
-from hegpdup import FingerprintBuilder, Span
+from hegpdup import CharFingerprintBuilder, Span
 
 
 @pytest.fixture(scope="module", autouse=True)
@@ -19,14 +19,14 @@ def mock_span_eq(module_mocker):
 def test_multiline():
     text = "\n\nHi\nHello\n\n"
 
-    builder = FingerprintBuilder(fingerprintLength=100, allowMultiline=True)
+    builder = CharFingerprintBuilder(fingerprintLength=100, allowMultiline=True)
     spansAndFingerprintIds = builder.buildFingerprints(text)
     # 1 fingerprinted span covering all the lines
     assert len(spansAndFingerprintIds) == 1
     span, _ = spansAndFingerprintIds[0]
     assert span == Span(0, len(text))
 
-    builder = FingerprintBuilder(fingerprintLength=100, allowMultiline=False)
+    builder = CharFingerprintBuilder(fingerprintLength=100, allowMultiline=False)
     spansAndFingerprintIds = builder.buildFingerprints(text)
     # 1 fingerprinted span fingerprint per line, without any newline char
     assert len(spansAndFingerprintIds) == 2
@@ -98,6 +98,6 @@ def test_fingerprint_length_orf_combinations(
 ):
     text = "abcdabc"
 
-    builder = FingerprintBuilder(fingerprintLength, orf)
+    builder = CharFingerprintBuilder(fingerprintLength, orf)
     spansAndFingerprintIds = builder.buildFingerprints(text)
     assert spansAndFingerprintIds == expectedSpansAndFingerprintIds

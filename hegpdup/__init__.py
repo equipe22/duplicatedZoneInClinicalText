@@ -1,3 +1,3 @@
 from .duplicate_finder import DuplicateFinder, Duplicate, TreeBackend
-from .fingerprint_builder import FingerprintBuilder
+from .char_fingerprint_builder import CharFingerprintBuilder
 from .span import Span

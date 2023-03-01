@@ -4,7 +4,7 @@ from pprint import pprint
 
 import pytest
 
-from hegpdup import FingerprintBuilder, DuplicateFinder, TreeBackend
+from hegpdup import CharFingerprintBuilder, DuplicateFinder, TreeBackend
 
 _TEST_CASES_DIR = Path(__file__).parent / "test_cases"
 _TEST_CASES_FILES = sorted(_TEST_CASES_DIR.glob("*.json"))
@@ -40,7 +40,7 @@ def test_main(treeBackend, testCaseFile):
     fingerprintLength = testCase["settings"]["fingerprint_length"]
     minDuplicateLength = testCase["settings"]["min_duplicate_length"]
 
-    fingerprintBuilder = FingerprintBuilder(fingerprintLength)
+    fingerprintBuilder = CharFingerprintBuilder(fingerprintLength)
     duplicateFinder = DuplicateFinder(
         fingerprintBuilder,
         minDuplicateLength=minDuplicateLength,

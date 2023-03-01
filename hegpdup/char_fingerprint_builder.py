@@ -5,12 +5,12 @@ from .span import Span
 _NEWLINE_REGEXP = re.compile(r"[^\r\n]+")
 
 
-class FingerprintBuilder:
+class CharFingerprintBuilder:
     """
-    Builds fingerprints for a set of text documents, for identification of
-    duplicates.
+    Builds fingerprints for a set of text documents by grouping together
+    characters.
 
-    The `FingerprintBuilder` remembers previously seen documents and will reuse
+    The fingerprint builder remembers previously seen documents and will reuse
     fingerprint ids for identical text chunks.
     """
 

@@ -72,7 +72,7 @@ class DuplicateFinder:
     """
     Finds duplicated parts in a set of documents.
 
-    Relies on a `FingerprintBuilder` to generate fingerprints for documents,
+    Relies on a fingerprint builder to generate fingerprints for documents,
     then identifies parts with common fingerprints between each document.
     """
 
@@ -80,8 +80,8 @@ class DuplicateFinder:
         """
         Parameters
         ----------
-        fingerprintBuilder: FingerprintBuilder
-            `FingerprintBuilder` instance to use to generate fingerprints for
+        fingerprintBuilder: CharFingerprintBuilder
+            fingerprint builder instance to use to generate fingerprints for
             each document
         minDuplicateLength: int
             Minimum number of characters in duplicates
@@ -744,7 +744,7 @@ def _findSpansBelongingToDuplicates(spans, duplicates, treeBackend):
     Parameters
     ----------
     spans: List[Span]
-        List of spans of a document, as returned by a `FingerprintBuilder`
+        List of spans of a document, as returned by a fingerprint builder
     duplicates: List[Duplicate]
         List of duplicates of the same document
     treeBackend: TreeBackend

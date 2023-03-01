@@ -5,7 +5,7 @@ import timeit
 
 import pytest
 
-from hegpdup import FingerprintBuilder, DuplicateFinder, TreeBackend
+from hegpdup import CharFingerprintBuilder, DuplicateFinder, TreeBackend
 
 _SAMPLE_TEXTS_DIR = Path(__file__).parent / "samples"
 _FINGERPRINT_LENGTH = 30
@@ -61,7 +61,7 @@ def test_speed(treeBackend, difflibTime):
     texts = _getSampleTexts()
 
     def run():
-        fingerprintBuilder = FingerprintBuilder(_FINGERPRINT_LENGTH)
+        fingerprintBuilder = CharFingerprintBuilder(_FINGERPRINT_LENGTH)
         duplicateFinder = DuplicateFinder(
             fingerprintBuilder,
             minDuplicateLength=_MIN_DUPLICATE_LENGTH,
