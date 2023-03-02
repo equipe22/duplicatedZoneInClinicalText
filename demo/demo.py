@@ -1,10 +1,9 @@
 from pathlib import Path
 import json
 
-from hegpdup import FingerprintBuilder, DuplicateFinder
+from hegpdup import CharFingerprintBuilder, DuplicateFinder
 
 
-orf = 3
 fingerprintLength = 15
 minDuplicateLength = 15
 
@@ -15,7 +14,7 @@ for texts in examples:
     print("************")
 
     # init FingerprintBuilder and DuplicateFinder that will process a batch of documents
-    fingerprintBuilder = FingerprintBuilder([fingerprintLength], orf)
+    fingerprintBuilder = CharFingerprintBuilder(fingerprintLength)
     duplicateFinder = DuplicateFinder(fingerprintBuilder, minDuplicateLength)
 
     for i, text in enumerate(texts):
@@ -33,7 +32,7 @@ for texts in examples:
         for duplicate in duplicates:
             print(
                 f"\tsourceDoc={duplicate.sourceDocId}, sourceStart={duplicate.sourceSpan.start}, sourceEnd={duplicate.sourceSpan.end}, "
-                "targetStart={duplicate.targetSpan.start}, targetEnd={duplicate.targetSpan.end}"
+                f"targetStart={duplicate.targetSpan.start}, targetEnd={duplicate.targetSpan.end}"
             )
             duplicate_text = text[duplicate.targetSpan.start : duplicate.targetSpan.end]
-            print("\ttext=" + repr(duplicate_text), end="\n\n")
+            print(f"\ttext=" + repr(duplicate_text), end="\n\n")

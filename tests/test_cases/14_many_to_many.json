@@ -1,7 +1,7 @@
 {
     "_description": "Complicated scenario with several similarities in source and target texts",
     "settings": {
-        "orf": 1,
+        "fingerprint_type": "char",
         "fingerprint_length": 2,
         "min_duplicate_length": 4
     },

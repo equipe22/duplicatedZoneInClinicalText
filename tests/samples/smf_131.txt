@@ -1,0 +1,204 @@
+Présentation du cas
+
+Cette patiente de 57 ans, en bonne santé habituelle, ­présente depuis dix jours un état fébrile fluctuant avec des pics mesurés jusqu’à 40 °C, ainsi que des douleurs dentaires qui l’incitent à se rendre chez son dentiste. Suspectant un abcès, celui-ci instaure un traitement d’amoxicilline. Cinq jours plus tard, la patiente ne présente plus de douleurs, mais la fièvre persiste et une toux sèche apparaît. Elle consulte son médecin traitant. Il réalise une radiographie thoracique ne montrant pas de foyer infectieux, mais décide de poursuivre l’antibiothérapie pour une durée de cinq jours. A 72 heures d’évolution, les symptômes sont toujours présents et la patiente se rend aux urgences. Le bilan biologique indique une protéine C réactive (CRP) à 39 mg/l (norme: <10) sans leucocytose. Une nouvelle radiographie ne montre toujours pas de pneumonie. Le traitement est modifié pour de la co-amoxicilline. Le lendemain, l’apparition de céphalées frontales lors de la toux la pousse à retourner aux urgences. Hormis une température à 39,7 °C, l’examen clinique est sans particularité. Au bilan sanguin, la CRP augmente (75 mg/l) et les leucocytes sont à 11,2 G/l (norme: 4–10). Des hémocultures sont prélevées et un stix urinaire ne met pas en évidence d’anomalie. Malgré une radiographie normale, une pneumonie à germe atypique est suspectée et un ­traitement de clarithromycine est ajouté à celui de co-amoxicilline. En raison d’un état fébrile persistant, une hospitalisation pour surveillance clinique est proposée à la patiente. Celle-ci refuse, mais revient le lendemain se plaignant de céphalées frontales constantes accompagnées d’une perte d’équilibre et de vertiges rotatoires nouveaux.
+
+Au complément d’anamnèse, la patiente explique s’être récemment rendue en Hongrie pour la pose d’implants dentaires. Elle n’a pas de contact avec des animaux, ni remarqué de piqûre de tique. Il n’y a pas de notion de contage. Par ailleurs, elle ne présente pas de conduites à risque.
+
+La température est mesurée à 39,5 °C. La tension artérielle, la fréquence cardiaque et la saturation en oxygène sont normales. Les status cardio-pulmonaire et ­abdominal sont sans particularité. Le status otorhinolaryngologique (ORL) montre une adénopathie centimétrique mandibulaire droite et l’examen neurologique une légère raideur de nuque.
+
+Au bilan biologique, les leucocytes sont à 10,5 G/l (lymphocytes 1,17 G/l [norme: 1,5–4,0], neutrophiles 9 G/l [norme: 1,4–8,0]) et la CRP à 169 mg/l. Le sodium est à 132 mmol/l (norme: 135–147) sans autre trouble électrolytique. Les tests hépatique et pancréatique sont normaux à l’exception d’une G-GT à 93 U/l (norme: <32). La fonction rénale et la crase sont dans les normes.
+
+Question 1: A ce stade, quel examen complémentaire ne fait pas partie du bilan?
+
+
+a) Tomodensitométrie (CT) cérébral-massif facial
+
+b) Ponction lombaire (PL)
+
+c) Hémocultures
+
+d) Test HIV
+
+e) Cytoponction de l’adénopathie
+
+L’état fébrile, les céphalées, l’abcès dentaire et la raideur de nuque font suspecter une méningite. Un CT cérébral et du massif facial est réalisé. Celui-ci ne montre pas d’atteinte infectieuse, mais des épaississements muqueux des sinus maxillaires avec protrusion de ­matériel dentaire.
+
+En l’absence de signes d’hypertension intracrânienne, une PL est réalisée. L’aspect du liquide céphalo-rachidien (LCR) est eau de roche, avec présence d’une protéinorachie à 1500 mg/l (norme: 150–450) et de cellules lymphocytaires à 96/mm3 (norme: <5). Les lactates et le rapport glucose LCR/plasmatique sont normaux.
+
+Dans le bilan d’une fièvre persistante, trois paires d’hémocultures sont réalisées à la recherche d’une endocardite. En présence d’un syndrome grippal et d’une adénopathie, une primo-infection HIV est évoquée et un test effectué.
+
+Une cytoponction de l’adénopathie est jugée prématuré à ce stade, l’ensemble des données cliniques nous dirigeant vers une cause infectieuse probable.
+
+Devant ces résultats, une méningite bactérienne dé­capitée par l’antibiothérapie reçue en ambulatoire est ­retenue. La co-amoxicilline et la clarithromycine sont stoppées au bénéfice d’un traitement empirique de méningite (dexaméthasone, ceftriaxone et amoxicilline). La patiente ne présente pas de critères d’une encéphalite, l’acyclovir n’est donc pas instauré. Les PCR pour entérovirus, virus herpes simplex (HSV-1 et -2), et virus varicelle-zona (VZV) sont néanmoins recherchées et s’avèrent négatives. La culture du liquide céphalorachidien est stérile. La sérologie pour la borréliose est douteuse, mais le taux limite d’IgM ne permet pas de conclure à une pro­duction intrathécale. Les sérologies pour le virus Epstein-Barr (EBV) et le cytomégalovirus (CMV) montrent une infection ancienne. Le test HIV, la recherche de syphilis et de méningo-encéphalite à tiques (FSME) sont négatifs. Les hémocultures et la culture d’urines sont stériles.
+
+L’état général de la patiente se péjore, la toux sèche est toujours présente, ainsi que les pics fébriles. L’amoxicilline et la dexaméthasone sont stoppées, mais la ceftriaxone est maintenue. Au quatrième jour d’hospitalisation, on note l’apparition de douleurs lombaires et du bas ventre, ainsi que la présence de pertes vaginales muco-purulentes, sans troubles du transit ou de la miction. Le status relève des douleurs à la palpation de la colonne lombaire et un hémi-abdomen inférieur sensible, sans défense ni détente. Le reste de l’examen est non contributif. Le laboratoire montre une thrombopénie à 138 G/l (norme: 150–450), une lymphopénie à 1 G/l, une CRP à 110 mg/l, ainsi qu’un LDH à 792 U/l (n 135–225). Le reste du bilan est dans la norme.
+
+Question 2: D’après l’évolution clinique, quel examen ne vous semble pas indispensable?
+
+
+a) Imagerie à résonance magnétique (IRM) lombaire
+
+b) CT thoraco-abdomino-pelvien
+
+c) Consultation gynécologique
+
+d) Dosage de la bêta-2 microglobuline
+
+e) Tomographie par émission de positons (PET)-CT
+
+En raison d’une fièvre et de douleurs à la palpation lombaire, le diagnostic de spondylodiscite est évoqué, mais infirmé par l’IRM lombaire.
+
+Au vu de la persistance de la toux, l’apparition des ­douleurs abdominales et de pertes génitales, un CT thoraco-abdomino-pelvien est effectué. Celui-ci dévoile la présence d’adénopathies médiastinales importantes (fig. 1), ainsi que des plages pulmonaires de verre dépoli des deux côtés (fig. 2). Absence de foyer infectieux abdominal ou pelvien.
+
+Figure 1: Scanner thoracique (coupe axiale, fenêtre médiastinale après injection): ­multiples adénopathies médiastinales et hilaires (flèches).
+
+Figure 2: Scanner thoracique (coupe axiale, fenêtre parenchymateuse après injection): plusieurs plages pulmonaires bilatérales en verre dépoli (flèches).
+
+En raison de douleurs du bas ventre, de pertes vaginales et de la non spécificité du scanner pour une ­atteinte de la sphère génitale, la patiente bénéficie d’une consultation gynécologique. L’examen clinique est sans particularité, la recherche de gonocoque et chlamydia est négative.
+
+En présence d’adénopathies cervicale et médiastinales, d’une thrombopénie, d’une lymphopénie, et d’un LDH augmenté, une maladie lymphoproliférative est soupçonnée. Le dosage de la bêta-2 microglobuline s’élève à 5,54 mg/l (norme: 0,7–1,8).
+
+La réalisation d’un PET-CT est jugée précoce. A ce stade, d’autres diagnostics sont à exclure avant l’investigation d’une piste oncologique.
+
+L’état général de la patiente s’améliore avec la dispa­rition de ses symptômes. Le traitement antibiotique est stoppé (fenêtre décidée après une semaine de traitement). La formule sanguine se corrige et la CRP est à la baisse. Un jour après l’arrêt de l’antibiothérapie, la patiente note l’apparition de symptômes neurologiques nouveaux de type praxiques (impossibilité de taper un code connu ou d’utiliser un distributeur de boissons). Le status neurologique initial est normal. Le lendemain, la patiente présente un état confusionnel aigu hyperactif accompagné d’un nouvel état fébrile.
+
+Question 3: Quel est votre diagnostic différentiel?
+
+
+a) Encéphalite
+
+b) Lymphome
+
+c) Endocardite
+
+d) Neurosarcoïdose
+
+e) Toutes ces réponses sont justes
+
+Au vu de symptômes neurologiques et d’un état confusionnel, une encéphalite est soupçonnée. Une IRM ­cérébrale est réalisée montrant des accidents vasculaires cérébrals (AVC) ischémiques d’allure emboliques aigus et subaigus (fig. 3) et une prise de contraste pachyméningée, sans argument pour une vasculite. Une nouvelle PL est réalisée avec normalisation de la pléiocytose et de la protéinorachie. La recherche de Cryptococcus neoformans responsable de méningo-encéphalites disséminées est négative.
+
+Figure 3: IRM cérébrale (séquence T1 transverse après injection de gadolinium): ­réhaussement de la lésion de la tête du noyau caudé correspondant à un accident vasculaire cérébral (AVC) ischémique subaigu (flèche). Prise de contraste durale diffuse.
+
+Dans le contexte de possibles emboles septiques, le ­diagnostic d’endocardite est évoqué. Plusieurs paires d’hémocultures sont stériles, une échocardiographie transthoracique ne montre pas de végétations, et des sérologies pour la brucellose, la bartonellose et la rickettsiose sont négatives. La patiente est tout-de-même couverte par co-amoxicilline dans l’attente d’une échocardiographie transoesophagienne qui ne mettra pas en évidence de signes pour une endocardite.
+
+Devant l’image scanographique, le diagnostic différentiel reste une maladie hématologique de type lymphome ou une maladie de système de type sarcoïdose (enzyme de conversion de l’angiotensine dosée à 41 U/l [norme: 20–70]). Une bronchoscopie avec cytoponction des adénopathies est réalisée. Une lymphocytose alvéolaire est retrouvée au lavage bronchoalvéolaire (LBA), sans assez de matériel pour une sous-typisation lymphocytaire. La cytoponction montre un ganglion lymphatique sans granulomes et l’absence de cellules tumorales. La culture du LBA est stérile, les recherches de Mycobacterium tuberculosis et de virus respiratoires sont négatives, hormis un rhinovirus n’expliquant pas le tableau clinique. Un PET-CT est réalisé à la recherche d’un processus lympho-prolifératif qui est absent. En complément, il n’est pas retrouvé de cellules malignes au LCR, une cytométrie de flux revient négative, ainsi que la ­recherche d’anticorps anti-neuronaux.
+
+Devant une présentation initiale compatible avec une méningite aseptique, un LCR montrant une pléiocytose à prédominance lymphocytaire et une protéinorachie, devant la présence d’adénopathies médiastinales au scanner thoracique et de lésions cérébrales parenchymateuses à l’IRM cérébrale et finalement l’apparition de symptômes neurologiques sous forme de troubles praxiques, une possible neurosarcoïdose est suspectée. Cette dernière ne peut être confirmée, en l’absence de maladie granulomateuse à la cytoponction.
+
+Question 4: Quelle est votre stratégie thérapeutique?
+
+
+a) Antibiothérapie à large spectre
+
+b) Corticothérapie par prednisone
+
+c) Méthylprednisolone
+
+d) Surveillance clinique
+
+e) Infliximab
+
+N’ayant pas d’arguments pour une origine infectieuse, la patiente ne présentant pas d’état septique et une non-évolution sous antibiothérapie, la poursuite du traitement en cours n’est pas indiquée.
+
+Une possible neurosarcoïdose étant évoquée, les diagnostics différentiels raisonnablement exclus, l’instauration d’une corticothérapie par prednisone est prescrite. En l’absence d’une atteinte sévèrement invalidante, un traitement par méthylprednisolone n’est pas initié. Une surveillance clinique sans instauration de traitement n’est toutefois pas indiquée à ce stade. La patiente rentre à domicile avec une prescription de prednisone 1 mg/kg/jour.
+
+Un traitement par l’inhibiteur de TNFα n’est recommandé qu’en cas de neurosarcoïdose ne répondant pas au traitement par corticothérapie avec des symptômes importants.
+
+Après trois semaines, l’évolution clinique et biologique est favorable. Cette réponse au traitement renforce l’hypothèse diagnostique d’une neurosarcoïdose.
+
+Question 5: Comment procédez-vous pour la suite de prise en charge?
+
+
+a) Poursuite du traitement
+
+b) Corticothérapie en schéma dégressif
+
+c) Instauration d’un traitement de méthotrexate
+
+d) Radiothérapie du système nerveux central (SNC)
+
+e) IRM cérébrale
+
+Devant l’évolution clinique favorable, un sevrage de la corticothérapie avec schéma de dégression sur deux mois est recommandée.
+
+Le traitement de méthotrexate n’est préconisé qu’en cas de récidive de la maladie après une non réussite du sevrage de la corticothérapie. La radiothérapie du SNC n’est indiquée qu’après échec de tout traitement ­pharmacologique ou d’effets indésirables non supportés liés au traitement pharmacologique.
+
+L’IRM cérébrale n’est recommandée qu’un mois après l’arrêt de la corticothérapie, afin d’évaluer la réponse au traitement.
+
+Discussion
+
+La sarcoïdose est une affection granulomateuse multisystémique d’étiologie inconnue. Il est estimé que 5 à 15% des patients atteints de sarcoïdose systémique développeront des complications neurologiques [1]. Seule la moitié des cas de neurosarcoïdose sont diagnostiqués avant le décès. La prévalence mondiale de la sarcoïdose est estimée à 40 pour 100 000 [2].
+
+Lors d’une atteinte du système nerveux, l’incidence ­annuelle est inférieure à 0,2 pour 100 000 [1]. L’atteinte des nerfs crâniens est la manifestation la plus commune de la maladie (50–70% des patients) [1]. 50% ­patients développent des lésions cérébrales parenchymateuses dont la présentation clinique dépend de leur localisation, 20% des manifestations cognitives et comportementales (hallucinations, delirium, psychose paranoïde, amnésie, démence, schizophrénie, trouble bipolaires) et 10 à 20% une méningite aseptique [1] (tab. 1).
+
+Tableau 1: Manifestations cliniques de la neurosarcoïdose et leur fréquence [1, 3].
+Manifestations	Fréquence
+Atteinte nerf crânien	50–70%
+Lésion cérébrale parenchymateuse	50%
+Manifestation cognitive/comportementale	20%
+Méningite aseptique	10–20%
+Neuropathie périphérique	15%
+Endrocrinopathie	9%
+Epilepsie*	5–10%
+Lésion spinale	5–10%
+Hydrocéphalie	9%
+Neuropathie de petites fibres	30%
+Myopathie	1,4–2,4%
+* S’il y a une inflammation cérébrale active, les crises d’épilepsie peuvent être réfractaires. Si l’inflammation peut être contrôlée, les crises d’épilepsie répondent fréquemment aux traitements ­antiépileptiques standards.
+
+Dans le cadre d’une sarcoïdose, lors d’une suspicion d’atteinte du SNC, les patients doivent bénéficier d’une évaluation radiologique cérébro-cervico-thoracique et lombaire. L’IRM est l’examen radiologique de choix. Elle peut s’avérer normale chez les patients ne pré­sentant qu’une atteinte minime ou sous cortico­thérapie.
+
+L’analyse du LCR montre une pléiocytose à prédo­minance lymphocytaire avec une protéinorachie, et ­parfois une hypoglycorachie (20–40% de cas) [1]. Une ­augmentation des immunoglobulines (bandes oligoclonales, index IgG augmenté), une augmentation de la concentration du lysozyme de la bêta-2 microglobuline et un ratio CD4/CD8 >5 sont souvent retrouvés [1]. La concentration de l’ECA dans le LCR n’est ni spécifique ni sensible. A noter qu’un tiers des patients n’ont pas d’anormalités du LCR [3].
+
+La biopsie du système nerveux montrant des granulomes à l’histologie est le «gold standard» diagnostic. Ce geste est rarement réalisé en raison de son invasivité. En cas de suspicion de neurosarcoïdose du système nerveux périphérique, un électroneuromyogramme (ENMG) est réalisé avec une biopsie neuronale ou musculaire.
+
+Les critères ci-dessus sont nécessaires pour poser le diagnostic de neurosarcoïdose (tab. 2): une présentation clinique compatible, l’exclusion d’une maladie neurologique, infectieuse ou oncologique (tab. 3), et la confirmation histologique d’un organe neuronal ou extraneuronal. Une exploration systémique des organes cibles, en particulier pulmonaire, cardiaque et ophtalmologique est indispensable.
+
+Tableau 2: Critères diagnostics proposés pour la neuro­sarcoïdose des systèmes nerveux central et périphérique (d’après [3]).
+Possible1. La présentation clinique et l’évaluation diagnostique suggèrent une neurosarcoïdose, basé sur les manifestations cliniques et les éléments de l’IRM, du LCR, et/ou de l’ENMG, suggérant une inflammation granulomateuse du système nerveux et après exclusion rigoureuse d’autres causes.2. Il n’y a pas de confirmation pathologique d’une maladie granulomateuse.
+Probable1. Voir en haut sous 1.2. Il y a la confirmation pathologique d’une maladie granulomateuse extraneuronale, compatible avec une sarcoïdose.
+Définitif1. Voir en haut sous 1.2. La biopsie de tissus du système nerveux est compatible avec une neurosarcoïdose. – Type a: Sarcoïdose extraneuronale évidente – Type b: Sarcoïdose extraneuronale non évidente ­(sarcoïdose isolée du SNC)
+Tableau 3: Diagnostic différentiel de la sarcoïdose et de la neurosarcoïdose (d’après (3]).
+Infection ­systémique ou du système nerveux central (SNC)	Maladie de Lyme
+Neurosyphilis
+Infection bactérienne, fongique ou viral du SNC
+Tuberculose
+Maladie de Whipple
+Mycobactérie atypique
+Leucoencéphalopathie progressive ­multifocale
+HIV
+Parasitose
+Affection neuro­logique liée à une atteinte ­systémique	Lupus systémique érythémateux
+Pachyméningite associée à IgG4
+Syndrome de Sjögren
+Maladie de Behçet
+Immunodéficience commune variable
+Malignité	Lymphome
+Carcinose méningée
+Tumeur du SNC
+Histiocytose
+Autres affections neuroinflammatoires	Sclérose multiple
+Neuromyélite optique
+Encéphalomyélite aigue disséminé
+Vasculite primaire ou secondaire du SNC
+Hypophysite lymphocytaire
+Vasculaire	Accident vasculaire cérebral
+Fistule artério-veineuse de la dure-mère
+
+Les corticostéroïdes restent le traitement de choix. Dans les cas de neurosarcoïdose avec des manifestations cliniques légères à modérées, il est recommandé d’initier un traitement de prednisone (0,5–1 mg/kg/j). L’atteinte sévère est d’emblée traitée par méthylprednisolone durant trois à cinq jours (20 mg/kg/j). En cas d’échec de la corticothérapie ou d’effets indésirables, des traitements alternatifs peuvent être proposés (fig. 4). Si le traitement est inefficace ou mal toléré ou si le patient présente une urgence neurologique, la neurochirurgie et la radiothérapie du SNC restent une option.
+
+Figure 4: Algorithme thérapeutique proposé pour la neurosarcoïdose [1, 4].
+
+MTX: méthotrexate, AZA: azathioprine, Chl: chloroquine, MM: mycophenolate mofetil, Cycl: cyclosporine A.
+
+Conclusion
+
+La présentation clinique variable, l’absence de spécificité des divers examens complémentaires, ainsi que la difficulté à obtenir un examen histologique pathognomonique, font de la neurosarcoïdose un vrai «challenge» diagnostic pour le clinicien. Malgré le panel de traitements à disposition, seul deux tiers des patients voit leur état clinique s’améliorer [5].
+
+Actuellement peu de données littéraires sont disponibles, probablement lié à la méconnaissance des multiples facettes cliniques de la neurosarcoïdose et à la difficulté de pouvoir poser le diagnostic. Une meilleure reconnaissance clinique semble être un prélude indispensable à toute avancée scientifique dans ce ­domaine.
+
+Réponses:
+
+
+Question 1: e; Question 2: e; Question 3: e; Question 4: b;
+Question 5: b.

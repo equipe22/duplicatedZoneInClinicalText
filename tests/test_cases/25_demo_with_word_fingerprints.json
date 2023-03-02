@@ -1,8 +1,8 @@
 {
-    "_description": "3d test from demo",
+    "_description": "3d test from demo but with word fingerprints",
     "settings": {
-        "fingerprint_type": "char",
-        "fingerprint_length": 10,
+        "fingerprint_type": "word",
+        "fingerprint_length": 2,
         "min_duplicate_length": 16
     },
     "docs": [
@@ -19,11 +19,11 @@
         {
             "source_doc_id": "D0",
             "target_doc_id": "D1",
-            "source_start": 74,
-            "source_end": 169,
-            "target_start": 13,
-            "target_end": 108,
-            "text": ", we aim at evaluating the duplications found within patient records in more than 650,000 text."
+            "source_start": 76,
+            "source_end": 168,
+            "target_start": 15,
+            "target_end": 107,
+            "text": "we aim at evaluating the duplications found within patient records in more than 650,000 text"
         }
     ]
 }

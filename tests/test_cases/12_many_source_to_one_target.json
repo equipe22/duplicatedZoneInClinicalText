@@ -1,7 +1,7 @@
 {
     "_description": "One pattern in target with several possible patterns in source, longest pattern must be picked. Here the extra part comes before the common part.",
     "settings": {
-        "orf": 1,
+        "fingerprint_type": "char",
         "fingerprint_length": 2,
         "min_duplicate_length": 4
     },

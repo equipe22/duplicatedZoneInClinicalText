@@ -1,0 +1,100 @@
+Contexte
+
+Les vertiges, les nausées et les vomissements sont des symptômes fréquemment rencontrés en consultation médicale [1]. L’anamnèse ciblée et l’examen physique permettent de délimiter les différentes étiologies potentielles et d’initier des étapes diagnostiques supplémentaires. Même en cas de tableau symptomatique diffus, il convient toujours d’exclure une cause somatique.
+
+Présentation du cas
+Anamnèse
+
+Une patiente de 22 ans, de poids normal, s’est présentée au centre des urgences en raison de nausées et vomissements présents depuis environ un mois, associés à des vertiges à type de tangage progressifs. Les vomissements survenaient indépendamment du moment de la journée, avec néanmoins une prédominance postprandiale, et s’accompagnaient de douleurs épigastriques. Les vertiges étaient renforcés lors des changements de position et s’amélioraient en position allongée. Par la suite, la patiente a en outre développé des céphalées lors des efforts physiques, des problèmes de concentration et une diplopie dans toutes les directions du regard. Elle a déclaré ne pas souffrir de céphalées matinales et ne pas avoir présenté d’épisodes symptomatiques similaires par le passé. Un bilan gastroentérologique réalisé lors de l’apparition des symptômes, incluant gastroscopie, échographie et imagerie par résonance magnétique (IRM) de l’abdomen, s’est révélé sans particularités. Des tentatives de traitement par analgésiques, antiémétiques et inhibiteurs de la pompe à protons n’ont entraîné aucune amélioration. Parmi les antécédents médicaux connus de la patiente figuraient un strabisme opéré durant l’enfance, des troubles de l’endormissement et de la continuité du sommeil occasionnels, ainsi qu’un trouble du déficit de l’attention-hyperactivité (TDAH), qui n’était pas traité par médicaments au moment où la patiente s’est présentée. Comme traitement au long cours, la patiente prenait une contraception hormonale. La patiente a exclu une grossesse potentielle et a affirmé ne pas consommer d’alcool, de nicotine et de drogues. L’anamnèse familiale était négative.
+
+Statut
+
+L’examen physique a révélé une légère instabilité de la démarche et de la posture, ainsi que des saccades de refixation lors du test d’impulsion de la tête vers la gauche chez la patiente présentant un léger strabisme convergent malgré une opération préalable du strabisme; la motricité oculaire et pupillaire était au demeurant sans particularités. Les paramètres vitaux et le reste de l’examen physique étaient normaux.
+
+Résultats, diagnostic et évolution
+
+Les analyses de laboratoire réalisées à l’admission (hémogramme, coagulation, biochimie, test de grossesse) étaient normales.
+
+Au vu de l’anamnèse et du statut neurologique, une origine centrale des symptômes a été postulée. De façon concordante, l’IRM du neurocrâne a montré une hydrocéphalie obstructive chronique dans le cadre d’une sténose de l’aqueduc, le plus vraisemblablement consécutive à une malformation membraneuse en cordon (fig. 1A).
+
+A l’examen ophtalmologique complémentaire, des papilles proéminentes ont certes été constatées, mais sans mise en évidence univoque d’une stase papillaire.
+
+Afin d’abaisser la pression intracrânienne en préopératoire, la patiente a reçu un traitement symptomatique par acétazolamide durant trois jours, qui a produit une bonne réponse clinique, avec ensuite une diminution progressive du traitement sur trois jours. Nous avons alors procédé à un traitement chirurgical endoscopique, qui a consisté en une ventriculocisternostomie au niveau du troisième ventricule. En postopératoire, la circulation du liquide céphalo-rachidien (LCR) à partir du troisième ventricule s’est à nouveau normalisée, avec une régression considérable des nausées. L’IRM postopératoire a montré une ventriculostomie suffisante, avec un drainage rétabli du LCR (fig. 1B).
+
+Figure 1: A) Clichés d’imagerie par résonance magnétique en coupe sagittale et pondération T2 avec sténose de l’aqueduc marquée (flèche rouge) et B) ventriculostomie du troisième ventricule marquée et artéfact de flux (flèche blanche) en postopératoire.
+
+Après une hospitalisation de cinq jours, la patiente a pu rentrer chez elle dans un bon état général. Les examens neuropsychiatriques complémentaires réalisés en pré- et en postopératoire n’ont pas indiqué de signes de limitations cognitives. En postopératoire, la patiente a toutefois signalé une nette amélioration subjective de la capacité de concentration. Au cours des mois ayant précédé la pose du diagnostic, la patiente n’avait pas remarqué d’altérations des performances cognitives, sachant qu’elle avait des troubles de l’apprentissage et de la concentration préexistants. Lors du contrôle de suivi neurochirurgical ambulatoire deux mois après l’opération, la patiente ne présentait plus de symptômes. Des contrôles semestriels sont planifiés.
+
+Discussion
+
+Il est question de nausées chroniques et de vomissements chroniques à partir d’une durée des symptômes de quatre semaines. Dans le cadre du diagnostic différentiel, les symptômes chroniques, qui sont entre autres plus difficiles à cerner, amènent à suspecter d’autres causes (tab. 1) que les symptômes de plus courte durée, qui doivent en premier lieu faire penser à des infections, ainsi qu’à des causes médicamenteuses/toxiques ou métaboliques. Par le biais d’une anamnèse ciblée, il est déjà possible de délimiter les principaux diagnostics différentiels (tab. 2).
+
+Tableau 1: Exemples de causes gastro-intestinales et non gastro-intestinales de nausées et de vomissements chroniques (adapté d’après [2]).
+Causes gastro-intestinales
+Fréquentes	Rares
+• Œsophagiennes: achalasie, diverticule de Zenker, sténoses• Gastriques: gastroparésie, ulcère, sténose du pylore, dyspepsie fonctionnelle• Pancréatite chronique• Hépatobiliaires: hépatite, obstruction biliaire, néoplasie• Intestinales: sténose, pseudo-obstruction chronique• Vasculaires: angine abdominale	• Constipation sévère• Maladies inflammatoires chroniques de l’intestin
+Causes non gastro-intestinales
+Fréquentes	Rares
+• Médicaments et toxines: opiacés, anti-inflammatoires non stéroïdiens, agents chimiothérapeutiques, antiarythmiques, antihypertenseurs, antibiotiques, antiépileptiques, marijuana (syndrome d’hyperémèse cannabinoïde) • Vestibulaires: labyrinthite, maladie de Menière, otite moyenne chronique• Cardiaques: ischémie, insuffisance cardiaque• Rénales: insuffisance rénale chronique, urémie• Endocriniennes/métaboliques: diabète sucré, hyponatrémie• Neurologiques: maladie de Parkinson, migraine• Grossesse• Psychiatriques: anorexie, boulimie, trouble anxieux, dépression, abus d’alcool• Autres: syndrome des vomissements cycliques	• Endocriniennes/métaboliques: hyperthyroïdie, insuffisance corticosurrénalienne, hypercalcémie• Neurologiques: hydrocéphalie, anévrisme cérébral, processus expansif cérébral (néoplasie, hémorragie, abcès), méningite chronique, thrombose des sinus veineux cérébraux, pseudotumeur cérébrale, dérèglement du système nerveux autonome, maladies démyélinisantes• Oncologiques: syndromes paranéoplasiques, radiothérapie• Autres: porphyrie, fièvre méditerranéenne familiale, glaucome, allergie/intolérance alimentaire
+Tableau 2: Eléments anamnestiques fournissant des pistes sur l’étiologie chez les adultes avec nausées et vomissements chroniques (adapté d’après [2]).
+Anamnèse	Symptôme évocateur de (exemples)
+Vomissements matinaux à jeun	Grossesse, urémie, abus d’alcool, hypertension intracrânienne
+Vomissements postprandiaux	Origine gastroentérologique (entre autres ulcère gastrique/gastrite, gastroparésie, sténose du pylore), origine psychiatrique (entre autres anorexie, boulimie)
+Vomissements en jet	Sténose du pylore, hypertension intracrânienne
+Nausées/vomissements augmentant ­insidieusement	Effet indésirable médicamenteux, grossesse, gastroparésie, origine métabolique (entre autres diabète sucré, hyponatrémie, hypercalcémie), hypertension intracrânienne
+Vomissements sévères persistants épisodiques	Syndrome des vomissements cycliques, syndrome d’hyperémèse cannabinoïde
+Vomissements soulageant des douleurs ­abdominales	Ileus
+Symptômes concomitants:	Céphalées	Origine centrale (entre autres migraine, hypertension intracrânienne, processus expansif/anévrisme cérébral, méningite), origine ophtalmologique (entre autres glaucome)
+Vertiges	Origine centrale (entre autres ischémie/hémorragie, hypertension intracrânienne, migraine), origine périphérique (entre autres vertige positionnel paroxystique bénin, labyrinthite, maladie de Menière, otite moyenne)
+Trouble visuel	Origine centrale (entre autres hypertension intracrânienne, processus expansif/anévrisme cérébral, maladies démyélinisantes), origine ophtalmologique (entre autres glaucome)
+Déficit neurologique focal	Ischémie/hémorragie cérébrale, processus expansif cérébral (entre autres néoplasie, abcès)
+Douleurs thoraciques	Ischémie cardiaque
+Douleurs abdominales	Origine gastroduodénale (entre autres gastrite, ulcère gastrique/duodénal), pancréatite, origine hépatobiliaire (entre autres hépatite, obstruction des voies biliaires, néoplasie), origine intestinale (entre autres iléus, ischémie intestinale, allergie/intolérance alimentaire)
+Néoplasie préexistante	Effet indésirable médicamenteux (entre autres opiacés, agents chimiothérapeutiques), origine métabolique/paranéoplasique (entre autres hyponatrémie, hypercalcémie), métastase cérébrale, radiothérapie
+Nouveau traitement médicamenteux ouchangement de traitement médicamenteux	Effet indésirable médicamenteux, interaction médicamenteuse
+Consommation de drogues	Effet indésirable de drogues
+
+Lors de l’examen physique, il faut entre autres être attentif à la présence d’un méningisme, de troubles de la motricité oculaire et de déficits neurologiques focaux, qui sont évocateurs d’une origine centrale des nausées/vomissements chroniques. Le «signe de Russel» désigne des lésions cutanées causées par les incisives au niveau du dos des mains, qui peuvent se retrouver en cas de vomissements provoqués (entre autres en cas de boulimie) [2].
+
+Alors qu’il faut plutôt s’attendre à des vomissements matinaux à jeun en cas d’hypertension intracrânienne, notre patiente présentait avant tout des vomissements postprandiaux, si bien qu’un bilan gastroentérologique a initialement été réalisé lors de l’apparition des symptômes. C’est uniquement lorsque les symptômes neurologiques concomitants sont apparus par la suite qu’une cause centrale a été suspectée.
+
+L’hydrocéphalie triventriculaire par sténose de l’aqueduc, qui a été identifiée comme étant la cause des symptômes chez notre patiente, est définie comme une dilatation pathologique du système liquidien interne (dilatation des ventricules latéraux et du troisième ventricule, mais configuration normale du quatrième ventricule). D’une manière générale, une hydrocéphalie peut être causée par trois principaux mécanismes: production augmentée de LCR, réabsorption réduite ou obstruction au niveau du système ventriculaire. Par ailleurs, la distinction est faite entre l’hydrocéphalie communicante (par production excessive ou réabsorption insuffisante) et l’hydrocéphalie non communicante (par obstruction au niveau du système ventriculaire) (tab. 3).
+
+Tableau 3: Formes d’hydrocéphalie (adapté d’après [3]).
+Hydrocéphalie (H.) communicante
+H. par malrésorption	Réabsorption réduite du LCR, par ex. après hémorragies ou infections, provoquant un trouble de la réabsorption par congestion des villosités arachnoïdiennes
+H. a vacuo	Dilatation des espaces liquidiens internes et externes, par ex. après résection tumorale ou dans le cadre d’une atrophie liée à l’âge; sans valeur pathologique primaire
+H. hypersécrétoire	Production excessive de LCR, très rare, en cas de papillome du plexus
+H. à pression normale	Pics nocturnes pathologiques d’hypertension intracrânienne, mais pression intracrânienne au demeurant normale, avec triade symptomatique typique (démence, incontinence, marche à petits pas: triade de HAKIM)
+Hypertension intracrânienne idiopathique	Pseudotumeur cérébrale, rare; étiologie indéterminée, femmes jeunes ayant comme symptôme principal des céphalées
+Hydrocéphalie non communicante
+H. obstructive	Perturbation de la circulation du LCR, par ex. par obstruction de l’aqueduc dans le cadre d’une tumeur, d’une hémorragie, d’un kyste ou de malformations congénitales
+LCR: liquide céphalo-rachidien.
+
+Une quantité de 500 ml par jour de LCR est produite dans le plexus choroïde (avant tout dans les deux ventricules latéraux). Le LCR baigne le cerveau et la moelle épinière, sert de moyen de transport et d’amortisseur vis-à-vis des forces physiques externes et est finalement réabsorbé via les villosités arachnoïdiennes durales et le long des poches des racines nerveuses à hauteur de la moelle épinière [3].
+
+L’aqueduc (Aqueductus mesencephali), qui fait office de connexion entre le troisième et le quatrième ventricule, est la zone la plus étroite de tout le système liquidien, avec un diamètre de seulement quelques millimètres (fig. 2).
+
+Figure 2: Constitution du système liquidien (source: CSF Circulation: Open Stax Anatomy and Physiology 2016.https://commons.wikimedia.org/wiki/File:1317_CFS_Circulation.jpg. Licence: CC BY 4.0 [https://creativecommons.org/licenses/by/4.0], via Wikimedia Commons).
+
+Etant donné que la réabsorption du LCR a uniquement lieu à partir du quatrième ventricule, l’aqueduc représente une zone de prédilection pour les troubles de l’écoulement du LCR [4].
+
+En cas de sténose, il se produit une stase liquidienne, une élévation de la pression intracrânienne, et ainsi une hydrocéphalie obstructive. Les troubles de l’écoulement du LCR peuvent être congénitaux ou, plus rarement, acquis. Environ 20% de toutes les hydrocéphalies sont causées par des sténoses de l’aqueduc, qui ne représentent toutefois plus que 3% de tous les cas à l’âge adulte [5]. Les causes congénitales les plus fréquentes de sténose de l’aqueduc sont la gliose et les malformations membraneuses. En outre, des sténoses de l’aqueduc se rencontrent dans le cadre de malformations syndromiques congénitales [6]. La plupart des sténoses deviennent déjà symptomatiques durant l’enfance. Toutefois, des sténoses congénitales peuvent aussi uniquement devenir symptomatiques à un âge plus avancé en raison d’une plus grande réserve de compensation du cerveau en développement durant l’enfance, bien que les mécanismes de compensation ne soient à ce jour pas définitivement élucidés. Le développement d’une hydrocéphalie durant la phase de croissance peut, du fait des sutures crâniennes non fermées, parfois déjà donner lieu à des signes cliniques extérieurs, tels qu’une augmentation du volume du crâne («macrocéphalie progressive») et une fontanelle bombée. Ces signes cliniques peuvent toutefois aussi faire défaut et ils ne sont pas présents dans l’hydrocéphalie de l’adulte acquise après la fermeture de la fontanelle. Parmi les symptômes possibles d’une hydrocéphalie encore compensée figurent les céphalées matinales et les épisodes de nausées, les difficultés d’apprentissage, mais également des symptômes endocrinologiques liés à la pression sur l’hypothalamus ou des troubles du regard et de l’accommodation liés à la traction exercée par les ventricules congestionnés au niveau des tubercules quadrijumeaux [4, 5]. Avec la décompensation croissante, des vomissements matinaux à jeun, des limitations du champ visuel et une instabilité de la marche s’y ajoutent [5]. La présentation clinique est très variable; les symptômes les plus fréquemment décrits sont les céphalées, qui sont typiquement accentuées lors des activités physiques, ainsi que les troubles oculaires. A un âge plus avancé, les symptômes correspondent plutôt à ceux de l’hydrocéphalie à pression normale (tab. 3) [4]. Les sténoses acquises peuvent être causées par des traumatismes, des processus expansifs, des hémorragies ou des inflammations [3], sachant que ces causes peuvent également amener des sténoses congénitales encore compensées à devenir symptomatiques [4]. En cas de sténose de l’aqueduc nouvellement diagnostiquée, des causes acquises, telles que des inflammations, des tumeurs ou des malformations vasculaires, devraient dans tous les cas être exclues (par imagerie) même lorsqu’une cause congénitale est admise. En raison de sa sensibilité plus élevée, l’IRM doit être privilégiée.
+
+Une élévation soudaine de la pression intracrânienne peut constituer une affection aiguë potentiellement fatale en raison du risque d’engagement. Les symptômes typiques sont la baisse soudaine de la vigilance allant jusqu’au coma, la bradycardie et l’hypertension (réflexe de Cushing). Le développement lent d’une hydrocéphalie chronique se caractérise, quant à lui, plutôt par les symptômes diffus mentionnés ci-dessus [3].
+
+La mesure diagnostique la plus simple et la moins invasive est la recherche ophtalmologique d’une stase papillaire. Dans la pratique, on aura cependant recours à la TDM ou à l’IRM cérébrale afin de clarifier immédiatement la cause et en raison de la faible sensibilité [7] et de la faible spécificité [8] de l’examen du fond d’œil.
+
+L’objectif du traitement de l’hydrocéphalie obstructive est de rétablir la circulation du LCR. La méthode thérapeutique de choix en cas de sténoses de l’aqueduc est la cisternostomie du troisième ventricule. Elle consiste à créer une ouverture au niveau du plancher du troisième ventricule par endoscopie en préservant le tissu cérébral, afin que le LCR puisse s’écouler hors du ventricule dans la citerne basale. En cas de sélection minutieuse des patients, le taux de succès primaire est élevé; il arrive qu’une révision doive être réalisée par la suite. Les complications, telles qu’infections ou lésions vasculaires potentiellement fatales au niveau de l’artère basilaire, sont rares [9].
+
+Une alternative possible ou une option secondaire en cas d’échec de la cisternostomie est l’implantation d’un shunt cérébral avec dérivation du LCR en direction péritonéale, pleurale ou, plus rarement, atriale, via un système de tubes contrôlé par des valves. Les inconvénients en sont la plus grande invasivité de l’opération et la persistance d’un corps étranger, qui est associée à un risque d’infection, de drainage excessif ou insuffisant et de défaillance du matériel, ce qui peut nécessiter plusieurs contrôles de suivi et révisions [6].
+
+Un traitement médicamenteux par diurétiques osmotiques ou inhibiteurs de l’anhydrase carbonique afin d’abaisser la pression intracrânienne est indiqué en soutien et sur une courte durée avant la prise en charge chirurgicale définitive.
+
+L’essentiel pour la pratique
+
+• Les vertiges, les nausées et les vomissements sont des symptômes non spécifiques, avec de vastes diagnostics différentiels possibles. Une anamnèse approfondie et un examen clinique fournissent toutefois déjà des renseignements importants quant à la cause.
+
+• Chez les patients ayant des symptômes correspondants (céphalées, troubles visuels, vertiges, troubles cognitifs, nausées et vomissements), il convient également de songer à une hydrocéphalie dans le cadre du diagnostic différentiel.
+
+• Même des sténoses de l’aqueduc congénitales peuvent uniquement devenir symptomatiques plus tard, avec la diminution des mécanismes de compensation.

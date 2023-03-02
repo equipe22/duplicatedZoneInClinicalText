@@ -19,9 +19,22 @@ from .span import Span
 
 
 class _Document:
-    def __init__(self, id, spansByFingerprintId):
+    """Fingerprinted document"""
+
+    def __init__(self, id, spansByFingerprint):
+        """
+        Parameters
+        ----------
+        id: str
+            Identifier of the document
+        spansByFingerprint: Dict[str, List[Span]]
+            Fingerprinted spans of the document, organized by fingerprint.
+            This is used to easily get all spans of a source document having the
+            same fingerprint as the span of a target document.
+        """
+
         self.id = id
-        self.spansByFingerprintId = spansByFingerprintId
+        self.spansByFingerprint = spansByFingerprint
 
 
 class Duplicate:
@@ -45,6 +58,8 @@ class Duplicate:
             length as `sourceSpan`
         """
 
+        assert sourceSpan.length == targetSpan.length
+
         self.sourceDocId = sourceDocId
         self.sourceSpan = sourceSpan
         self.targetSpan = targetSpan
@@ -52,9 +67,6 @@ class Duplicate:
     @property
     def length(self):
         return self.targetSpan.length
-
-    def __hash__(self):
-        return hash((self.sourceDocId, self.sourceSpan, self.targetSpan))
 
     def __repr__(self):
         return f"Duplicate(sourceDocId={self.sourceDocId}, sourceSpan={self.sourceSpan!r}, targetSpan={self.targetSpan!r})"
@@ -73,23 +85,27 @@ class DuplicateFinder:
     """
     Finds duplicated parts in a set of documents.
 
-    Relies on a `FingerprintBuilder` to generate fingerprints for documents,
-    then identifies parts with common fingerprints between each document.
+    Relies on a fingerprint builder to generate fingerprints for each document,
+    then identifies common consecutive fingerprints between documents.
     """
 
     def __init__(self, fingerprintBuilder, minDuplicateLength=2, treeBackend=None):
         """
         Parameters
         ----------
-        fingerprintBuilder: FingerprintBuilder
-            `FingerprintBuilder` instance to use to generate fingerprints for
+        fingerprintBuilder: Union[CharFingerprintBuilder, WordFingerprintBuilder]
+            Fingerprint builder instance to use to generate fingerprints for
             each document
         minDuplicateLength: int
-            Minimum number of characters in duplicates
+            Minimum number of characters in duplicates. Should be set in
+            accordance with the `fingerprintLength` of the fingerprint builder,
+            cf docstrings of `CharFingerprintBuilder` and
+            `WordFingerprintBuilder`
         treeBackend: Optional[TreeBackend]
             Backend to use for overlap trees. If `None` provided, we will select
-            NCLS or INTERVAL_TREE (in that order) if they appear to be available.
-            Using NCLS should provide best performance.
+            NCLS or INTERVAL_TREE (in that order) if they appear to be
+            available. Using NCLS should provide best performance. INTERVAL_TREE
+            performance can be inferior to not using overlap trees at all.
         """
 
         if treeBackend is None:
@@ -133,13 +149,13 @@ class DuplicateFinder:
         if docId in self._docsById:
             raise Exception(f"Already processed document with id {docId}")
 
-        # retrieve fingerprint ids with spans, sorted by spans
-        spansAndFingerprintIds = self.fingerprintBuilder.buildFingerprints(docText)
+        # retrieve fingerprints with spans, sorted by spans
+        spansAndFingerprints = self.fingerprintBuilder.buildFingerprints(docText)
 
         duplicates = []
         for previousDoc in self._docsById.values():
             docDuplicates = _buildDuplicates(
-                spansAndFingerprintIds,
+                spansAndFingerprints,
                 sourceDoc=previousDoc,
                 minDuplicateLength=self.minDuplicateLength,
             )
@@ -150,29 +166,29 @@ class DuplicateFinder:
 
         # pre-compute spans that are part of duplicates
         indicesOfDuplicatesSpans = _findSpansBelongingToDuplicates(
-            [s for s, _ in spansAndFingerprintIds], duplicates, self.treeBackend
+            [s for s, _ in spansAndFingerprints], duplicates, self.treeBackend
         )
-        # transform list of spans and fingerprint ids to mapping of fingerprint
-        # id to spans
-        spansByFingerprintId = {}
-        for i, (span, fingerprintId) in enumerate(spansAndFingerprintIds):
+        # transform list of spans and fingerprints to mapping of fingerprints to
+        # spans
+        spansByFingerprint = {}
+        for i, (span, fingerprint) in enumerate(spansAndFingerprints):
             # if the span belong to a duplicate we ignore it,
             # because we are only interested in recreating the duplication link
             # to the "source-most" initial document
             if i in indicesOfDuplicatesSpans:
                 continue
 
-            spansByFingerprintId.setdefault(fingerprintId, []).append(span)
+            spansByFingerprint.setdefault(fingerprint, []).append(span)
 
-        doc = _Document(docId, spansByFingerprintId)
+        doc = _Document(docId, spansByFingerprint)
         self._docsById[doc.id] = doc
         return duplicates
 
 
-def _buildDuplicates(targetSpansAndFingerprintIds, sourceDoc, minDuplicateLength):
+def _buildDuplicates(targetSpansAndFingerprints, sourceDoc, minDuplicateLength):
     """
     Create a list of `Duplicate` objects, by finding and merging all consecutive
-    pairs of spans with common fingerprint ids in source and target docs. This
+    pairs of spans with common fingerprints in source and target docs. This
     part is often the one that takes the most of the computing time.
 
     In simple cases, this will yield a list of non-overlapping non-contiguous
@@ -207,8 +223,8 @@ def _buildDuplicates(targetSpansAndFingerprintIds, sourceDoc, minDuplicateLength
 
     Parameters
     ----------
-    targetSpansAndFingerprintIds: List[Tuple[Span, int]]
-        List of fingerprint ids and corresponding spans in target document.
+    targetSpansAndFingerprints: List[Tuple[Span, str]]
+        List of fingerprints and corresponding spans in target document.
         Must be sorted by ascending spans
     sourceDoc: Document
         Document to be used as source
@@ -230,20 +246,20 @@ def _buildDuplicates(targetSpansAndFingerprintIds, sourceDoc, minDuplicateLength
     finalDuplicates = []
 
     # process each span in target doc (must be sorted)
-    for targetSpan, fingerprintId in targetSpansAndFingerprintIds:
+    for targetSpan, fingerprint in targetSpansAndFingerprints:
         # get corresponding spans (ie with same fingerprint) in source doc
-        sourceSpans = sourceDoc.spansByFingerprintId.get(fingerprintId)
+        sourceSpans = sourceDoc.spansByFingerprint.get(fingerprint)
         if not sourceSpans:
             continue
 
         extendedDuplicates = []
-        mergedSourceSpans = []  # NB: using a list is faster than a set here
+        indicesOfMergedSourceSpans = set()
 
         # for each "in-progress" duplicate, try to extend it with the target
         # span and each source span
         for duplicate in inProgressDuplicates:
             extended = False
-            for sourceSpan in sourceSpans:
+            for i, sourceSpan in enumerate(sourceSpans):
                 # source and target spans should have the same length since they
                 # refer to the same fingerprint
                 assert sourceSpan.length == targetSpan.length
@@ -274,13 +290,24 @@ def _buildDuplicates(targetSpansAndFingerprintIds, sourceDoc, minDuplicateLength
                 # (this can happen because source spans are not sorted, cf tests
                 # cases 17_consecutive_reuse.json and 18_consecutive reuse.json)
 
-                # in practise, just trying to merge source and target spans and
-                # checking they have the same length seems to be enough and is
-                # more efficient that doing preliminary checks
-                extendedTargetSpan = Span(duplicate.targetSpan.start, targetSpan.end)
-                extendedSourceSpan = Span(duplicate.sourceSpan.start, sourceSpan.end)
-                if extendedSourceSpan.length != extendedTargetSpan.length:
+                # in practise, just checking if extended source and target spans
+                # have the same length seems to be enough and is more efficient
+                # that doing preliminary checks
+                extendedTargetLength = targetSpan.end - duplicate.targetSpan.start
+                extendedSourceLength = sourceSpan.end - duplicate.sourceSpan.start
+                if extendedSourceLength != extendedTargetLength:
                     continue
+
+                extendedTargetSpan = Span(
+                    duplicate.targetSpan.start,
+                    targetSpan.end,
+                    length=extendedTargetLength,
+                )
+                extendedSourceSpan = Span(
+                    duplicate.sourceSpan.start,
+                    sourceSpan.end,
+                    length=extendedSourceLength,
+                )
 
                 # build and store new extended duplicate
                 # (we can't modify the existing instance because the same
@@ -296,7 +323,7 @@ def _buildDuplicates(targetSpansAndFingerprintIds, sourceDoc, minDuplicateLength
                 # remember this source span has been used to extend a
                 # pre-existing duplicate (we don't need to create a new
                 # duplicate for it later)
-                mergedSourceSpans.append(sourceSpan)
+                indicesOfMergedSourceSpans.add(i)
 
             # "in-progress" duplicate has not been extended. Since target spans
             # are sorted, we know it won't be extended by upcoming spans so we
@@ -312,16 +339,19 @@ def _buildDuplicates(targetSpansAndFingerprintIds, sourceDoc, minDuplicateLength
 
         # for source spans that have not been used to extend previously
         # existing duplicates, new duplicates must be created
-        for sourceSpan in sourceSpans:
-            if sourceSpan not in mergedSourceSpans:
-                duplicate = Duplicate(sourceDoc.id, sourceSpan, targetSpan)
-                inProgressDuplicates.append(duplicate)
+        inProgressDuplicates.extend(
+            Duplicate(sourceDoc.id, sourceSpan, targetSpan)
+            for i, sourceSpan in enumerate(sourceSpans)
+            if i not in indicesOfMergedSourceSpans
+        )
 
     # don't forget to add remaining "in-progress" duplicates
-    for duplicate in inProgressDuplicates:
+    finalDuplicates.extend(
+        duplicate
+        for duplicate in inProgressDuplicates
         # only keep if min length criteria is satisfied
-        if duplicate.length >= minDuplicateLength:
-            finalDuplicates.append(duplicate)
+        if duplicate.length >= minDuplicateLength
+    )
 
     return finalDuplicates
 
@@ -675,30 +705,40 @@ def _trimOrDropDuplicate(duplicate, targetSpanToTrim, minDuplicateLength):
 
     # duplicate overlaps on its right-hand side
     if trimStart < duplicate.targetSpan.end <= trimEnd:
-        # trimmed duplicate has smaller start
-        targetSpan = Span(duplicate.targetSpan.start, trimStart)
+        trimmedLength = trimStart - duplicate.targetSpan.start
         # drop if new length is too short
-        length = targetSpan.length
-        if length < minDuplicateLength:
+        if trimmedLength < minDuplicateLength:
             return None
-        # apply same delta to source span
-        sourceSpan = Span(
-            duplicate.sourceSpan.start, duplicate.sourceSpan.start + length
-        )
         # return new duplicate with trimmed spans
+        targetSpan = Span(
+            duplicate.targetSpan.start,
+            trimStart,
+            length=trimmedLength,
+        )
+        sourceSpan = Span(
+            duplicate.sourceSpan.start,
+            duplicate.sourceSpan.start + trimmedLength,
+            length=trimmedLength,
+        )
         return Duplicate(duplicate.sourceDocId, sourceSpan, targetSpan)
 
     # duplicate overlaps on its left-hand side
     if trimStart < duplicate.targetSpan.start <= trimEnd:
-        # trimmed duplicate has bigger end
-        targetSpan = Span(trimEnd, duplicate.targetSpan.end)
-        # drop if new length is too shorts
-        length = targetSpan.length
-        if length < minDuplicateLength:
+        trimmedLength = duplicate.targetSpan.end - trimEnd
+        # drop if new length is too short
+        if trimmedLength < minDuplicateLength:
             return None
-            # apply same delta to source span
-        sourceSpan = Span(duplicate.sourceSpan.end - length, duplicate.sourceSpan.end)
         # return new duplicate with trimmed spans
+        targetSpan = Span(
+            trimEnd,
+            duplicate.targetSpan.end,
+            length=trimmedLength,
+        )
+        sourceSpan = Span(
+            duplicate.sourceSpan.end - trimmedLength,
+            duplicate.sourceSpan.end,
+            length=trimmedLength,
+        )
         return Duplicate(duplicate.sourceDocId, sourceSpan, targetSpan)
 
     # duplicate does not overlap, return as-is
@@ -721,7 +761,7 @@ def _findSpansBelongingToDuplicates(spans, duplicates, treeBackend):
     Parameters
     ----------
     spans: List[Span]
-        List of spans of a document, as returned by a `FingerprintBuilder`
+        List of spans of a document, as returned by a fingerprint builder
     duplicates: List[Duplicate]
         List of duplicates of the same document
     treeBackend: TreeBackend
