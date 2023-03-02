@@ -27,10 +27,10 @@ class _Document:
         ----------
         id: str
             Identifier of the document
-        spansByFingerprintId: Dict[int, List[Span]]
-            Fingerprinted spans of the document, organized by fingerprint id.
+        spansByFingerprintId: Dict[str, List[Span]]
+            Fingerprinted spans of the document, organized by fingerprint.
             This is used to easily get all spans of a source document having the
-            same fingerprint id as the span of a target document.
+            same fingerprint as the span of a target document.
         """
 
         self.id = id
@@ -149,7 +149,7 @@ class DuplicateFinder:
         if docId in self._docsById:
             raise Exception(f"Already processed document with id {docId}")
 
-        # retrieve fingerprint ids with spans, sorted by spans
+        # retrieve fingerprints with spans, sorted by spans
         spansAndFingerprintIds = self.fingerprintBuilder.buildFingerprints(docText)
 
         duplicates = []
@@ -168,8 +168,8 @@ class DuplicateFinder:
         indicesOfDuplicatesSpans = _findSpansBelongingToDuplicates(
             [s for s, _ in spansAndFingerprintIds], duplicates, self.treeBackend
         )
-        # transform list of spans and fingerprint ids to mapping of fingerprint
-        # id to spans
+        # transform list of spans and fingerprints to mapping of fingerprints to
+        # spans
         spansByFingerprintId = {}
         for i, (span, fingerprintId) in enumerate(spansAndFingerprintIds):
             # if the span belong to a duplicate we ignore it,
@@ -188,7 +188,7 @@ class DuplicateFinder:
 def _buildDuplicates(targetSpansAndFingerprintIds, sourceDoc, minDuplicateLength):
     """
     Create a list of `Duplicate` objects, by finding and merging all consecutive
-    pairs of spans with common fingerprint ids in source and target docs. This
+    pairs of spans with common fingerprints in source and target docs. This
     part is often the one that takes the most of the computing time.
 
     In simple cases, this will yield a list of non-overlapping non-contiguous
@@ -223,8 +223,8 @@ def _buildDuplicates(targetSpansAndFingerprintIds, sourceDoc, minDuplicateLength
 
     Parameters
     ----------
-    targetSpansAndFingerprintIds: List[Tuple[Span, int]]
-        List of fingerprint ids and corresponding spans in target document.
+    targetSpansAndFingerprintIds: List[Tuple[Span, str]]
+        List of fingerprints and corresponding spans in target document.
         Must be sorted by ascending spans
     sourceDoc: Document
         Document to be used as source

@@ -16,31 +16,24 @@ def mock_span_eq(module_mocker):
     )
 
 
-def _spansAndFingerprintIdsToChunkTexts(spansAndFingerprintIds, text):
-    return [text[s.start : s.end] for s, _ in spansAndFingerprintIds]
-
-
 def test_multiline():
     text = "\n\nHi Bob\nHello Bob\n\n"
 
     builder = WordFingerprintBuilder(fingerprintLength=100, allowMultiline=True)
     spansAndFingerprintIds = builder.buildFingerprints(text)
-    # 1 fingerprinted span covering all the lines (except leading/trailing)
-    assert len(spansAndFingerprintIds) == 1
-    span, _ = spansAndFingerprintIds[0]
-    assert span == Span(2, len(text) - 2)
+    # 1 fingerprint covering all the lines (except leading/trailing)
+    assert spansAndFingerprintIds == [(Span(2, len(text) - 2), "Hi Bob\nHello Bob")]
 
     builder = WordFingerprintBuilder(fingerprintLength=100, allowMultiline=False)
     spansAndFingerprintIds = builder.buildFingerprints(text)
-    # 1 fingerprinted span fingerprint per line, without any newline char
-    assert len(spansAndFingerprintIds) == 2
-    span1, _ = spansAndFingerprintIds[0]
-    assert span1 == Span(2, 8)  # Hi Bob
-    span2, _ = spansAndFingerprintIds[1]
-    assert span2 == Span(9, 18)  # Hello Bob
+    # 1 fingerprint fingerprint per line, without any newline char
+    assert spansAndFingerprintIds == [
+        (Span(2, 8), "Hi Bob"),
+        (Span(9, 18), "Hello Bob"),
+    ]
 
 
-def test_chunks():
+def test_fingerprints_boundaries():
     """Test chunks are built by concatenating words and in-between chars"""
 
     builder = WordFingerprintBuilder(fingerprintLength=3)
@@ -49,14 +42,14 @@ def test_chunks():
     # leading and trailing non-word chars are not included in any chunk
     text = "- Hello, Alice,   what's up?  "
     spansAndFingerprintIds = builder.buildFingerprints(text)
-    chunkTexts = _spansAndFingerprintIdsToChunkTexts(spansAndFingerprintIds, text)
-    assert chunkTexts == ["Hello, Alice,   what", "Alice,   what's", "what's up"]
+    fingerprints = [f for _, f in spansAndFingerprintIds]
+    assert fingerprints == ["Hello, Alice,   what", "Alice,   what's", "what's up"]
 
     # edge case: number of words less that fingerprint length
     text = " - Hello, Alice "
     spansAndFingerprintIds = builder.buildFingerprints(text)
-    chunkTexts = _spansAndFingerprintIdsToChunkTexts(spansAndFingerprintIds, text)
-    assert chunkTexts == ["Hello, Alice"]
+    fingerprints = [f for _, f in spansAndFingerprintIds]
+    assert fingerprints == ["Hello, Alice"]
 
 
 _TEST_CASES = [
@@ -65,12 +58,12 @@ _TEST_CASES = [
         2,
         1,
         [
-            (Span(0, 10), 0),  # hello, how
-            (Span(7, 14), 1),  # how are
-            (Span(11, 18), 2),  # are you
-            (Span(15, 23), 3),  # you? how
-            (Span(20, 27), 1),  # how are
-            (Span(24, 34), 4),  # are things
+            (Span(0, 10), "hello, how"),
+            (Span(7, 14), "how are"),
+            (Span(11, 18), "are you"),
+            (Span(15, 23), "you? how"),
+            (Span(20, 27), "how are"),
+            (Span(24, 34), "are things"),
         ],
     ),
     # fingerprintLength=3, orf=1
@@ -78,11 +71,11 @@ _TEST_CASES = [
         3,
         1,
         [
-            (Span(0, 14), 0),  # hello, how are
-            (Span(7, 18), 1),  # how are you
-            (Span(11, 23), 2),  # are you? how
-            (Span(15, 27), 3),  # you? how are
-            (Span(20, 34), 4),  # how are things
+            (Span(0, 14), "hello, how are"),
+            (Span(7, 18), "how are you"),
+            (Span(11, 23), "are you? how"),
+            (Span(15, 27), "you? how are"),
+            (Span(20, 34), "how are things"),
         ],
     ),
     # fingerprintLength=2, orf=2
@@ -90,10 +83,10 @@ _TEST_CASES = [
         2,
         2,
         [
-            (Span(0, 10), 0),  # hello, how
-            (Span(11, 18), 1),  # are you
-            (Span(20, 27), 2),  # how are
-            (Span(28, 34), 3),  # things (tail chunk is shorter but not left out)
+            (Span(0, 10), "hello, how"),
+            (Span(11, 18), "are you"),
+            (Span(20, 27), "how are"),
+            (Span(28, 34), "things"),  # tail chunk is shorter but not left out
         ],
     ),
 ]
@@ -106,9 +99,10 @@ def test_fingerprint_length_orf_combinations(
     fingerprintLength, orf, expectedSpansAndFingerprintIds
 ):
     """
-    Test spans and fingerprint ids obtained for various combinations of
+    Test spans and fingerprints obtained for various combinations of
     fingerprint lengths and orfs for a given text
     """
+
     text = "hello, how are you? how are things?"
 
     builder = WordFingerprintBuilder(fingerprintLength, orf)

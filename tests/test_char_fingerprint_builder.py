@@ -21,19 +21,16 @@ def test_multiline():
 
     builder = CharFingerprintBuilder(fingerprintLength=100, allowMultiline=True)
     spansAndFingerprintIds = builder.buildFingerprints(text)
-    # 1 fingerprinted span covering all the lines
-    assert len(spansAndFingerprintIds) == 1
-    span, _ = spansAndFingerprintIds[0]
-    assert span == Span(0, len(text))
+    # 1 fingerprint span covering all the lines
+    assert spansAndFingerprintIds == [(Span(0, len(text)), text)]
 
     builder = CharFingerprintBuilder(fingerprintLength=100, allowMultiline=False)
     spansAndFingerprintIds = builder.buildFingerprints(text)
-    # 1 fingerprinted span fingerprint per line, without any newline char
-    assert len(spansAndFingerprintIds) == 2
-    span1, _ = spansAndFingerprintIds[0]
-    assert span1 == Span(2, 4)  # Hi
-    span2, _ = spansAndFingerprintIds[1]
-    assert span2 == Span(5, 10)  # Hello
+    # 1 fingerprint per line, without any newline char
+    assert spansAndFingerprintIds == [
+        (Span(2, 4), "Hi"),
+        (Span(5, 10), "Hello"),
+    ]
 
 
 _TEST_CASES = [
@@ -42,13 +39,13 @@ _TEST_CASES = [
         1,
         1,
         [
-            (Span(0, 1), 0),  # a
-            (Span(1, 2), 1),  # b
-            (Span(2, 3), 2),  # c
-            (Span(3, 4), 3),  # d
-            (Span(4, 5), 0),  # a
-            (Span(5, 6), 1),  # b
-            (Span(6, 7), 2),  # c
+            (Span(0, 1), "a"),
+            (Span(1, 2), "b"),
+            (Span(2, 3), "c"),
+            (Span(3, 4), "d"),
+            (Span(4, 5), "a"),
+            (Span(5, 6), "b"),
+            (Span(6, 7), "c"),
         ],
     ),
     # fingerprintLength=2, orf=1
@@ -56,12 +53,12 @@ _TEST_CASES = [
         2,
         1,
         [
-            (Span(0, 2), 0),  # ab
-            (Span(1, 3), 1),  # bc
-            (Span(2, 4), 2),  # cd
-            (Span(3, 5), 3),  # da
-            (Span(4, 6), 0),  # ab
-            (Span(5, 7), 1),  # bc
+            (Span(0, 2), "ab"),
+            (Span(1, 3), "bc"),
+            (Span(2, 4), "cd"),
+            (Span(3, 5), "da"),
+            (Span(4, 6), "ab"),
+            (Span(5, 7), "bc"),
         ],
     ),
     # fingerprintLength=3, orf=1
@@ -69,11 +66,11 @@ _TEST_CASES = [
         3,
         1,
         [
-            (Span(0, 3), 0),  # abc
-            (Span(1, 4), 1),  # bcd
-            (Span(2, 5), 2),  # cda
-            (Span(3, 6), 3),  # dab
-            (Span(4, 7), 0),  # abc
+            (Span(0, 3), "abc"),
+            (Span(1, 4), "bcd"),
+            (Span(2, 5), "cda"),
+            (Span(3, 6), "dab"),
+            (Span(4, 7), "abc"),
         ],
     ),
     # fingerprintLength=2, orf=2
@@ -81,10 +78,10 @@ _TEST_CASES = [
         2,
         2,
         [
-            (Span(0, 2), 0),  # ab
-            (Span(2, 4), 1),  # cd
-            (Span(4, 6), 0),  # ab
-            (Span(6, 7), 2),  # c (tail chunk is shorter but not left out)
+            (Span(0, 2), "ab"),
+            (Span(2, 4), "cd"),
+            (Span(4, 6), "ab"),
+            (Span(6, 7), "c"),  # tail chunk is shorter but not left out
         ],
     ),
 ]
@@ -96,6 +93,11 @@ _TEST_CASES = [
 def test_fingerprint_length_orf_combinations(
     fingerprintLength, orf, expectedSpansAndFingerprintIds
 ):
+    """
+    Test spans and fingerprints obtained for various combinations of
+    fingerprint lengths and orfs for a given text
+    """
+
     text = "abcdabc"
 
     builder = CharFingerprintBuilder(fingerprintLength, orf)
