@@ -154,8 +154,6 @@ class WordFingerprintBuilder:
         if not self.caseSensitive:
             text = text.lower()
 
-        spansAndFingerprintIds = []
-
         if self.allowMultiline:
             return list(self._buildFingerprints(text, 0))
 
