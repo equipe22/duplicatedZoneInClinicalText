@@ -4,7 +4,7 @@ import warnings
 from .span import Span
 
 _DEFAULT_WORD_REGEXP = re.compile(r"[\w\d]+")
-_NEWLINE_REGEXP = re.compile(r"[^\r\n]+")
+_LINE_REGEXP = re.compile(r"[^\r\n]+")
 
 
 class WordFingerprintBuilder:
@@ -156,7 +156,7 @@ class WordFingerprintBuilder:
         # build fingerprints line by line if multiline fingerprints aren't
         # allowed
         spansAndFingerprintIds = []
-        for match in _NEWLINE_REGEXP.finditer(text):
+        for match in _LINE_REGEXP.finditer(text):
             lineStart = match.start()
             line = match.group()
             spansAndFingerprintIdsForLine = self._buildFingerprints(line, lineStart)
