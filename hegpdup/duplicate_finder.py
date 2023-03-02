@@ -43,7 +43,7 @@ class Duplicate:
     designated by characters spans
     """
 
-    __slots__ = "sourceDocId", "sourceSpan", "targetSpan"
+    __slots__ = "sourceDocId", "sourceSpan", "targetSpan", "length"
 
     def __init__(self, sourceDocId, sourceSpan, targetSpan):
         """
@@ -63,10 +63,7 @@ class Duplicate:
         self.sourceDocId = sourceDocId
         self.sourceSpan = sourceSpan
         self.targetSpan = targetSpan
-
-    @property
-    def length(self):
-        return self.targetSpan.length
+        self.length = targetSpan.length
 
     def __repr__(self):
         return f"Duplicate(sourceDocId={self.sourceDocId}, sourceSpan={self.sourceSpan!r}, targetSpan={self.targetSpan!r})"
