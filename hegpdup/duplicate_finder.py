@@ -704,7 +704,7 @@ def _trimOrDropDuplicate(duplicate, targetSpanToTrim, minDuplicateLength):
         return None
 
     # duplicate overlaps on its right-hand side
-    if trimStart < duplicate.targetSpan.end <= trimEnd:
+    if trimStart < duplicate.targetSpan.end < trimEnd:
         trimmedLength = trimStart - duplicate.targetSpan.start
         # drop if new length is too short
         if trimmedLength < minDuplicateLength:
@@ -723,7 +723,7 @@ def _trimOrDropDuplicate(duplicate, targetSpanToTrim, minDuplicateLength):
         return Duplicate(duplicate.sourceDocId, sourceSpan, targetSpan)
 
     # duplicate overlaps on its left-hand side
-    if trimStart < duplicate.targetSpan.start <= trimEnd:
+    if trimStart < duplicate.targetSpan.start < trimEnd:
         trimmedLength = duplicate.targetSpan.end - trimEnd
         # drop if new length is too short
         if trimmedLength < minDuplicateLength:
