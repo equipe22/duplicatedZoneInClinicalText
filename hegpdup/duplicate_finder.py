@@ -21,20 +21,20 @@ from .span import Span
 class _Document:
     """Fingerprinted document"""
 
-    def __init__(self, id, spansByFingerprintId):
+    def __init__(self, id, spansByFingerprint):
         """
         Parameters
         ----------
         id: str
             Identifier of the document
-        spansByFingerprintId: Dict[str, List[Span]]
+        spansByFingerprint: Dict[str, List[Span]]
             Fingerprinted spans of the document, organized by fingerprint.
             This is used to easily get all spans of a source document having the
             same fingerprint as the span of a target document.
         """
 
         self.id = id
-        self.spansByFingerprintId = spansByFingerprintId
+        self.spansByFingerprint = spansByFingerprint
 
 
 class Duplicate:
@@ -150,12 +150,12 @@ class DuplicateFinder:
             raise Exception(f"Already processed document with id {docId}")
 
         # retrieve fingerprints with spans, sorted by spans
-        spansAndFingerprintIds = self.fingerprintBuilder.buildFingerprints(docText)
+        spansAndFingerprints = self.fingerprintBuilder.buildFingerprints(docText)
 
         duplicates = []
         for previousDoc in self._docsById.values():
             docDuplicates = _buildDuplicates(
-                spansAndFingerprintIds,
+                spansAndFingerprints,
                 sourceDoc=previousDoc,
                 minDuplicateLength=self.minDuplicateLength,
             )
@@ -166,26 +166,26 @@ class DuplicateFinder:
 
         # pre-compute spans that are part of duplicates
         indicesOfDuplicatesSpans = _findSpansBelongingToDuplicates(
-            [s for s, _ in spansAndFingerprintIds], duplicates, self.treeBackend
+            [s for s, _ in spansAndFingerprints], duplicates, self.treeBackend
         )
         # transform list of spans and fingerprints to mapping of fingerprints to
         # spans
-        spansByFingerprintId = {}
-        for i, (span, fingerprintId) in enumerate(spansAndFingerprintIds):
+        spansByFingerprint = {}
+        for i, (span, fingerprint) in enumerate(spansAndFingerprints):
             # if the span belong to a duplicate we ignore it,
             # because we are only interested in recreating the duplication link
             # to the "source-most" initial document
             if i in indicesOfDuplicatesSpans:
                 continue
 
-            spansByFingerprintId.setdefault(fingerprintId, []).append(span)
+            spansByFingerprint.setdefault(fingerprint, []).append(span)
 
-        doc = _Document(docId, spansByFingerprintId)
+        doc = _Document(docId, spansByFingerprint)
         self._docsById[doc.id] = doc
         return duplicates
 
 
-def _buildDuplicates(targetSpansAndFingerprintIds, sourceDoc, minDuplicateLength):
+def _buildDuplicates(targetSpansAndFingerprints, sourceDoc, minDuplicateLength):
     """
     Create a list of `Duplicate` objects, by finding and merging all consecutive
     pairs of spans with common fingerprints in source and target docs. This
@@ -223,7 +223,7 @@ def _buildDuplicates(targetSpansAndFingerprintIds, sourceDoc, minDuplicateLength
 
     Parameters
     ----------
-    targetSpansAndFingerprintIds: List[Tuple[Span, str]]
+    targetSpansAndFingerprints: List[Tuple[Span, str]]
         List of fingerprints and corresponding spans in target document.
         Must be sorted by ascending spans
     sourceDoc: Document
@@ -246,9 +246,9 @@ def _buildDuplicates(targetSpansAndFingerprintIds, sourceDoc, minDuplicateLength
     finalDuplicates = []
 
     # process each span in target doc (must be sorted)
-    for targetSpan, fingerprintId in targetSpansAndFingerprintIds:
+    for targetSpan, fingerprint in targetSpansAndFingerprints:
         # get corresponding spans (ie with same fingerprint) in source doc
-        sourceSpans = sourceDoc.spansByFingerprintId.get(fingerprintId)
+        sourceSpans = sourceDoc.spansByFingerprint.get(fingerprint)
         if not sourceSpans:
             continue
 

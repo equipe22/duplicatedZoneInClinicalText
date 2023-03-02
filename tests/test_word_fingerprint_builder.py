@@ -20,35 +20,35 @@ def test_multiline():
     text = "\n\nHi Bob\nHello Bob\n\n"
 
     builder = WordFingerprintBuilder(fingerprintLength=100, allowMultiline=True)
-    spansAndFingerprintIds = builder.buildFingerprints(text)
+    spansAndFingerprints = builder.buildFingerprints(text)
     # 1 fingerprint covering all the lines (except leading/trailing)
-    assert spansAndFingerprintIds == [(Span(2, len(text) - 2), "Hi Bob\nHello Bob")]
+    assert spansAndFingerprints == [(Span(2, len(text) - 2), "Hi Bob\nHello Bob")]
 
     builder = WordFingerprintBuilder(fingerprintLength=100, allowMultiline=False)
-    spansAndFingerprintIds = builder.buildFingerprints(text)
+    spansAndFingerprints = builder.buildFingerprints(text)
     # 1 fingerprint fingerprint per line, without any newline char
-    assert spansAndFingerprintIds == [
+    assert spansAndFingerprints == [
         (Span(2, 8), "Hi Bob"),
         (Span(9, 18), "Hello Bob"),
     ]
 
 
 def test_fingerprints_boundaries():
-    """Test chunks are built by concatenating words and in-between chars"""
+    """Test fingerprints are built by concatenating words and in-between chars"""
 
     builder = WordFingerprintBuilder(fingerprintLength=3)
 
     # spaces and non-words characters between words are included in chunks
     # leading and trailing non-word chars are not included in any chunk
     text = "- Hello, Alice,   what's up?  "
-    spansAndFingerprintIds = builder.buildFingerprints(text)
-    fingerprints = [f for _, f in spansAndFingerprintIds]
+    spansAndFingerprints = builder.buildFingerprints(text)
+    fingerprints = [f for _, f in spansAndFingerprints]
     assert fingerprints == ["Hello, Alice,   what", "Alice,   what's", "what's up"]
 
     # edge case: number of words less that fingerprint length
     text = " - Hello, Alice "
-    spansAndFingerprintIds = builder.buildFingerprints(text)
-    fingerprints = [f for _, f in spansAndFingerprintIds]
+    spansAndFingerprints = builder.buildFingerprints(text)
+    fingerprints = [f for _, f in spansAndFingerprints]
     assert fingerprints == ["Hello, Alice"]
 
 
@@ -93,10 +93,10 @@ _TEST_CASES = [
 
 
 @pytest.mark.parametrize(
-    "fingerprintLength,orf,expectedSpansAndFingerprintIds", _TEST_CASES
+    "fingerprintLength,orf,expectedspansAndFingerprints", _TEST_CASES
 )
 def test_fingerprint_length_orf_combinations(
-    fingerprintLength, orf, expectedSpansAndFingerprintIds
+    fingerprintLength, orf, expectedspansAndFingerprints
 ):
     """
     Test spans and fingerprints obtained for various combinations of
@@ -106,5 +106,5 @@ def test_fingerprint_length_orf_combinations(
     text = "hello, how are you? how are things?"
 
     builder = WordFingerprintBuilder(fingerprintLength, orf)
-    spansAndFingerprintIds = builder.buildFingerprints(text)
-    assert spansAndFingerprintIds == expectedSpansAndFingerprintIds
+    spansAndFingerprints = builder.buildFingerprints(text)
+    assert spansAndFingerprints == expectedspansAndFingerprints

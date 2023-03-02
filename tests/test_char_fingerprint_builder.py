@@ -20,14 +20,14 @@ def test_multiline():
     text = "\n\nHi\nHello\n\n"
 
     builder = CharFingerprintBuilder(fingerprintLength=100, allowMultiline=True)
-    spansAndFingerprintIds = builder.buildFingerprints(text)
+    spansAndFingerprints = builder.buildFingerprints(text)
     # 1 fingerprint span covering all the lines
-    assert spansAndFingerprintIds == [(Span(0, len(text)), text)]
+    assert spansAndFingerprints == [(Span(0, len(text)), text)]
 
     builder = CharFingerprintBuilder(fingerprintLength=100, allowMultiline=False)
-    spansAndFingerprintIds = builder.buildFingerprints(text)
+    spansAndFingerprints = builder.buildFingerprints(text)
     # 1 fingerprint per line, without any newline char
-    assert spansAndFingerprintIds == [
+    assert spansAndFingerprints == [
         (Span(2, 4), "Hi"),
         (Span(5, 10), "Hello"),
     ]
@@ -88,10 +88,10 @@ _TEST_CASES = [
 
 
 @pytest.mark.parametrize(
-    "fingerprintLength,orf,expectedSpansAndFingerprintIds", _TEST_CASES
+    "fingerprintLength,orf,expectedspansAndFingerprints", _TEST_CASES
 )
 def test_fingerprint_length_orf_combinations(
-    fingerprintLength, orf, expectedSpansAndFingerprintIds
+    fingerprintLength, orf, expectedspansAndFingerprints
 ):
     """
     Test spans and fingerprints obtained for various combinations of
@@ -101,5 +101,5 @@ def test_fingerprint_length_orf_combinations(
     text = "abcdabc"
 
     builder = CharFingerprintBuilder(fingerprintLength, orf)
-    spansAndFingerprintIds = builder.buildFingerprints(text)
-    assert spansAndFingerprintIds == expectedSpansAndFingerprintIds
+    spansAndFingerprints = builder.buildFingerprints(text)
+    assert spansAndFingerprints == expectedspansAndFingerprints

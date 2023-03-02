@@ -153,14 +153,14 @@ class WordFingerprintBuilder:
 
         # build fingerprints line by line if multiline fingerprints aren't
         # allowed
-        spansAndFingerprintIds = []
+        spansAndFingerprints = []
         for match in _LINE_REGEXP.finditer(text):
             lineStart = match.start()
             line = match.group()
-            spansAndFingerprintIdsForLine = self._buildFingerprints(line, lineStart)
-            spansAndFingerprintIds.extend(spansAndFingerprintIdsForLine)
+            spansAndFingerprintsForLine = self._buildFingerprints(line, lineStart)
+            spansAndFingerprints.extend(spansAndFingerprintsForLine)
 
-        return spansAndFingerprintIds
+        return spansAndFingerprints
 
     def _buildFingerprints(self, text, textStart=0):
         """
