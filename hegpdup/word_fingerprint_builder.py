@@ -184,20 +184,32 @@ class WordFingerprintBuilder:
 
         # get start/end boundaries of all words using regexp
         wordSpans = [match.span() for match in self.wordRegexp.finditer(text)]
+        nbWords = len(wordSpans)
+        if nbWords == 0:
+            return
 
         # build fingerprints for consecutive words
-        nbWords = len(wordSpans)
-        for i in range(0, nbWords, self.orf):
+        fingerprintLength = min(self.fingerprintLength, nbWords)
+
+        wordEnd = 0
+        for wordStart in range(0, nbWords - self.fingerprintLength + 1, self.orf):
             # take start of current word
-            start, _ = wordSpans[i]
+            start, _ = wordSpans[wordStart]
             # take end of last word to include in fingerprint
-            end_i = min(i + self.fingerprintLength, nbWords)
-            _, end = wordSpans[end_i - 1]
+            wordEnd = wordStart + fingerprintLength
+            _, end = wordSpans[wordEnd - 1]
 
             fingerprint = text[start:end]
             span = Span(textStart + start, textStart + end)
+            assert span.length == len(fingerprint)
             yield span, fingerprint
 
-            # if we reached end of list of words, break out
-            if end_i == nbWords:
-                break
+        # when nbWords is not a multiple of fingerprintLength, we have to handle
+        # the tail
+        if wordEnd != nbWords:
+            wordStart = wordEnd
+            start, _ = wordSpans[wordStart]
+            _, end = wordSpans[-1]
+            fingerprint = text[start:end]
+            span = Span(textStart + start, textStart + end)
+            yield span, fingerprint
