@@ -491,6 +491,7 @@ def _removeOverlappingDuplicates_NoTree(duplicates, minDuplicateLength):
             # overlapping duplicate was trimmed
             # (a new instance was returned)
             elif trimmedDuplicate is not otherDuplicate:
+                assert trimmedDuplicate.length < otherDuplicate.length
                 # erase previous instance with new instance
                 duplicates[i] = trimmedDuplicate
                 # we need to sort again since a duplicate is now shorter
@@ -567,7 +568,7 @@ def _removeOverlappingDuplicates_IntervalTree(duplicates, minDuplicateLength):
                 # here _trimOrDropDuplicate() should always return None or a new
                 # instance, not the original instance untouched, because we know
                 # it overlaps
-                assert trimmedDuplicate is not overlappingDuplicate
+                assert trimmedDuplicate.length < overlappingDuplicate.length
                 # erase previous instance with new instance
                 duplicates[otherI] = trimmedDuplicate
                 # we need to sort again since a duplicate is now shorter
@@ -647,6 +648,7 @@ def _removeOverlappingDuplicates_NCLS(duplicates, minDuplicateLength):
             # overlapping duplicate was trimmed
             # (a new instance was returned)
             elif trimmedDuplicate is not overlappingDuplicate:
+                assert trimmedDuplicate.length < overlappingDuplicate.length
                 # erase previous instance with new instance
                 duplicates[otherI] = trimmedDuplicate
                 # we need to sort again since a duplicate is now shorter
