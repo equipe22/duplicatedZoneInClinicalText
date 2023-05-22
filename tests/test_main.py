@@ -4,7 +4,7 @@ from pprint import pprint
 
 import pytest
 
-from hegpdup import (
+from duplicatefinder import (
     CharFingerprintBuilder,
     WordFingerprintBuilder,
     DuplicateFinder,

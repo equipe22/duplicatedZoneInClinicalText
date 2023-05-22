@@ -5,7 +5,7 @@ import timeit
 
 import pytest
 
-from hegpdup import (
+from duplicatefinder import (
     CharFingerprintBuilder,
     WordFingerprintBuilder,
     DuplicateFinder,

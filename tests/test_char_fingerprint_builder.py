@@ -1,6 +1,6 @@
 import pytest
 
-from hegpdup import CharFingerprintBuilder, Span
+from duplicatefinder import CharFingerprintBuilder, Span
 
 
 @pytest.fixture(scope="module", autouse=True)
@@ -11,7 +11,7 @@ def mock_span_eq(module_mocker):
         return self.start == other.start and self.end == other.end
 
     module_mocker.patch(
-        "hegpdup.Span.__eq__",
+        "duplicatefinder.Span.__eq__",
         spans_are_equal,
     )
 
