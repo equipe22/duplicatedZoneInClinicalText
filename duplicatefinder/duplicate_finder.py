@@ -43,7 +43,7 @@ class Duplicate:
     designated by characters spans
     """
 
-    __slots__ = "sourceDocId", "sourceSpan", "targetSpan"
+    __slots__ = "sourceDocId", "sourceSpan", "targetSpan", "length"
 
     def __init__(self, sourceDocId, sourceSpan, targetSpan):
         """
@@ -63,10 +63,7 @@ class Duplicate:
         self.sourceDocId = sourceDocId
         self.sourceSpan = sourceSpan
         self.targetSpan = targetSpan
-
-    @property
-    def length(self):
-        return self.targetSpan.length
+        self.length = targetSpan.length
 
     def __repr__(self):
         return f"Duplicate(sourceDocId={self.sourceDocId}, sourceSpan={self.sourceSpan!r}, targetSpan={self.targetSpan!r})"
@@ -491,6 +488,7 @@ def _removeOverlappingDuplicates_NoTree(duplicates, minDuplicateLength):
             # overlapping duplicate was trimmed
             # (a new instance was returned)
             elif trimmedDuplicate is not otherDuplicate:
+                assert trimmedDuplicate.length < otherDuplicate.length
                 # erase previous instance with new instance
                 duplicates[i] = trimmedDuplicate
                 # we need to sort again since a duplicate is now shorter
@@ -533,21 +531,27 @@ def _removeOverlappingDuplicates_IntervalTree(duplicates, minDuplicateLength):
         range(len(duplicates)),
         key=lambda i: duplicates[i].length,
     )
+    # blacklist of dropped duplicates
+    indicesOfDroppedDuplicates = set()
     while indicesOfDuplicates:
-        # keep biggest
+        # get next longest duplicate
         i = indicesOfDuplicates.pop()
+        # check if not dropped
+        if i in indicesOfDroppedDuplicates:
+            continue
+        # keep it
         duplicate = duplicates[i]
         keptDuplicates.append(duplicate)
 
         # process all other duplicates that overlap with the one we just kept
         mustSort = False
-        indicesToDrop = set()
         for interval in tree.overlap(
             duplicate.targetSpan.start, duplicate.targetSpan.end
         ):
             otherI = interval.data
             # skip when encountering original duplicate (overlaps with itself)
-            if otherI == i:
+            # or duplicate that was already dropped
+            if otherI == i or otherI in indicesOfDroppedDuplicates:
                 continue
 
             # trim or drop overlapping duplicate
@@ -557,9 +561,9 @@ def _removeOverlappingDuplicates_IntervalTree(duplicates, minDuplicateLength):
             )
             # overlapping duplicate was dropped (became too short or empty)
             if trimmedDuplicate is None:
-                # remember index to delete for later
-                # (we are iterating over indicesOfDuplicates right now)
-                indicesToDrop.add(otherI)
+                # blacklist dropped (faster than removing otherI from
+                # indicesOfDuplicates because we don't know its position)
+                indicesOfDroppedDuplicates.add(otherI)
                 # update interval tree
                 tree.remove(interval)
             # overlapping duplicate was trimmed
@@ -567,7 +571,7 @@ def _removeOverlappingDuplicates_IntervalTree(duplicates, minDuplicateLength):
                 # here _trimOrDropDuplicate() should always return None or a new
                 # instance, not the original instance untouched, because we know
                 # it overlaps
-                assert trimmedDuplicate is not overlappingDuplicate
+                assert trimmedDuplicate.length < overlappingDuplicate.length
                 # erase previous instance with new instance
                 duplicates[otherI] = trimmedDuplicate
                 # we need to sort again since a duplicate is now shorter
@@ -578,15 +582,14 @@ def _removeOverlappingDuplicates_IntervalTree(duplicates, minDuplicateLength):
                     trimmedDuplicate.targetSpan.start : trimmedDuplicate.targetSpan.end
                 ] = otherI
 
-        # delete from queue duplicates that were dropped
-        if indicesToDrop:
-            indicesOfDuplicates = [
-                i for i in indicesOfDuplicates if i not in indicesToDrop
-            ]
-
         # re-sort if some duplicate were trimmed
         if mustSort:
-            indicesOfDuplicates.sort(key=lambda i: duplicates[i].length)
+            # and also removed dropped duplicates while we are at it, this will
+            # speed up the sort and drain the queue
+            indicesOfDuplicates = sorted(
+                (i for i in indicesOfDuplicates if i not in indicesOfDroppedDuplicates),
+                key=lambda i: duplicates[i].length,
+            )
 
     # restore initial sorting
     keptDuplicates.sort(key=lambda d: (d.targetSpan.start, d.targetSpan.end))
@@ -617,21 +620,26 @@ def _removeOverlappingDuplicates_NCLS(duplicates, minDuplicateLength):
         range(len(duplicates)),
         key=lambda i: duplicates[i].length,
     )
-
+    # blacklist of dropped duplicates
+    indicesOfDroppedDuplicates = set()
     while indicesOfDuplicates:
-        # keep biggest
+        # get next longest duplicate
         i = indicesOfDuplicates.pop()
+        # check if not dropped
+        if i in indicesOfDroppedDuplicates:
+            continue
+        # keep it
         duplicate = duplicates[i]
         keptDuplicates.append(duplicate)
 
         # process all other duplicates that overlap with the one we just kept
         mustSort = False
-        indicesToDrop = set()
         for _, _, otherI in tree.find_overlap(
             duplicate.targetSpan.start, duplicate.targetSpan.end
         ):
             # skip when encountering original duplicate (overlaps with itself)
-            if otherI == i:
+            # or duplicate that was already dropped
+            if otherI == i or otherI in indicesOfDroppedDuplicates:
                 continue
 
             # trim or drop overlapping duplicate
@@ -641,26 +649,26 @@ def _removeOverlappingDuplicates_NCLS(duplicates, minDuplicateLength):
             )
             # overlapping duplicate was dropped (became too short or empty)
             if trimmedDuplicate is None:
-                # remember index to delete for later
-                # (we are iterating over indicesOfDuplicates right now)
-                indicesToDrop.add(otherI)
+                # blacklist dropped (faster than removing otherI from
+                # indicesOfDuplicates because we don't know its position)
+                indicesOfDroppedDuplicates.add(otherI)
             # overlapping duplicate was trimmed
             # (a new instance was returned)
             elif trimmedDuplicate is not overlappingDuplicate:
+                assert trimmedDuplicate.length < overlappingDuplicate.length
                 # erase previous instance with new instance
                 duplicates[otherI] = trimmedDuplicate
                 # we need to sort again since a duplicate is now shorter
                 mustSort = True
 
-        # delete from queue duplicates that were dropped
-        if indicesToDrop:
-            indicesOfDuplicates = [
-                i for i in indicesOfDuplicates if i not in indicesToDrop
-            ]
-
         # re-sort if some duplicate were trimmed
         if mustSort:
-            indicesOfDuplicates.sort(key=lambda i: duplicates[i].length)
+            # and also removed dropped duplicates while we are at it, this will
+            # speed up the sort and drain the queue
+            indicesOfDuplicates = sorted(
+                (i for i in indicesOfDuplicates if i not in indicesOfDroppedDuplicates),
+                key=lambda i: duplicates[i].length,
+            )
 
     # restore initial sorting
     keptDuplicates.sort(key=lambda d: (d.targetSpan.start, d.targetSpan.end))
@@ -704,7 +712,7 @@ def _trimOrDropDuplicate(duplicate, targetSpanToTrim, minDuplicateLength):
         return None
 
     # duplicate overlaps on its right-hand side
-    if trimStart < duplicate.targetSpan.end <= trimEnd:
+    if trimStart < duplicate.targetSpan.end < trimEnd:
         trimmedLength = trimStart - duplicate.targetSpan.start
         # drop if new length is too short
         if trimmedLength < minDuplicateLength:
@@ -723,7 +731,7 @@ def _trimOrDropDuplicate(duplicate, targetSpanToTrim, minDuplicateLength):
         return Duplicate(duplicate.sourceDocId, sourceSpan, targetSpan)
 
     # duplicate overlaps on its left-hand side
-    if trimStart < duplicate.targetSpan.start <= trimEnd:
+    if trimStart < duplicate.targetSpan.start < trimEnd:
         trimmedLength = duplicate.targetSpan.end - trimEnd
         # drop if new length is too short
         if trimmedLength < minDuplicateLength:

@@ -182,12 +182,24 @@ class CharFingerprintBuilder:
         """
 
         textLength = len(text)
-        for start in range(0, textLength, self.orf):
-            end = min(start + self.fingerprintLength, textLength)
+        if textLength == 0:
+            return
+
+        fingerprintLength = min(self.fingerprintLength, textLength)
+
+        end = 0
+        for start in range(0, textLength - fingerprintLength + 1, self.orf):
+            end = start + fingerprintLength
             fingerprint = text[start:end]
             span = Span(textStart + start, textStart + end)
+            assert span.length == len(fingerprint)
             yield span, fingerprint
 
-            # if we reached end of text, break out
-            if end == textLength:
-                break
+        # when textLength is not a multiple of fingerprintLength, we have to
+        # handle the tail
+        if end != textLength:
+            start = end
+            end = textLength
+            fingerprint = text[start:textLength]
+            span = Span(textStart + start, textStart + end)
+            yield span, fingerprint
