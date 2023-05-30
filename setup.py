@@ -13,7 +13,7 @@ setup(
         "ncls":  ["ncls>=0.0.66", "numpy"],
         "intervaltree":  ["intervaltree>=3.0.0"],
     },
-    version="0.1",
+    version="0.2",
     keywords = ["TEXT", "DUPLICATION", "DUPLICATE", "CLINICAL"],
     url="https://github.com/equipe22/duplicatedZoneInClinicalText",
     long_description=long_description,

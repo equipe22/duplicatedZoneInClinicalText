@@ -1,9 +1,17 @@
 # Duplicate Text Finder
 
-A python library to detect duplicated zones in text. Primarily meant to detect
+`duptextfinder` is a python library to detect duplicated zones in text. Primarily meant to detect
 copy/paste across medical documents. Should be faster than python's built-in
 `difflib` algorithm and more robust to whitespace, newlines and other irrelevant
 characters.
+
+## Installation
+
+`duptextfinder` can be installed through pip:
+
+```
+pip install duptextfinder
+```
 
 ## Usage
 
