@@ -1,0 +1,38 @@
+{
+    "_description": "Two consecutive copy/paste in target with the 2d one reusing part of the same source (must be careful during merging/extension when checking bounds of source spans, we will encounter as source span that overlaps with previous source spans but that is not after)",
+    "settings": {
+        "fingerprint_type": "char",
+        "fingerprint_length": 2,
+        "min_duplicate_length": 2
+    },
+    "docs": [
+        {
+            "id": "D0",
+            "text": "Hello Alice how are you?"
+        },
+        {
+            "id": "D1",
+            "text": "Hello Alice how are you Alice?"
+        }
+    ],
+    "duplicates": [
+        {
+            "source_doc_id": "D0",
+            "target_doc_id": "D1",
+            "source_start": 0,
+            "source_end": 23,
+            "target_start": 0,
+            "target_end": 23,
+            "text": "Hello Alice how are you"
+        },
+        {
+            "source_doc_id": "D0",
+            "target_doc_id": "D1",
+            "source_start": 5,
+            "source_end": 11,
+            "target_start": 23,
+            "target_end": 29,
+            "text": " Alice"
+        }
+    ]
+}

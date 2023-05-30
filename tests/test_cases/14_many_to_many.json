@@ -1,0 +1,38 @@
+{
+    "_description": "Complicated scenario with several similarities in source and target texts",
+    "settings": {
+        "fingerprint_type": "char",
+        "fingerprint_length": 2,
+        "min_duplicate_length": 4
+    },
+    "docs": [
+        {
+            "id": "D0",
+            "text": "Hello Alice, how are you Alice my dear, have you seen my dear Bob?"
+        },
+        {
+            "id": "D1",
+            "text": "Hi Alice my dear, where is my dear Bob?"
+        }
+    ],
+    "duplicates": [
+        {
+            "source_doc_id": "D0",
+            "target_doc_id": "D1",
+            "source_start": 24,
+            "source_end": 40,
+            "target_start": 2,
+            "target_end": 18,
+            "text": " Alice my dear, "
+        },
+        {
+            "source_doc_id": "D0",
+            "target_doc_id": "D1",
+            "source_start": 53,
+            "source_end": 66,
+            "target_start": 26,
+            "target_end": 39,
+            "text": " my dear Bob?"
+        }
+    ]
+}

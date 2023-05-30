@@ -1,0 +1,43 @@
+{
+    "_description": "Duplicate pasted from 1st doc to 2d them from 2d to 3rd",
+    "settings": {
+        "fingerprint_type": "char",
+        "fingerprint_length": 2,
+        "min_duplicate_length": 7,
+        "allow_overlaps": true
+    },
+    "docs": [
+        {
+            "id": "D0",
+            "text": "Hello Jeremiah, how are you? Bye"
+        },
+        {
+            "id": "D1",
+            "text": "Good morning Jeremiah. What's up? Seen you soon"
+        },
+        {
+            "id": "D2",
+            "text": "Greetings Jeremiah! I hope you are doing well"
+        }
+    ],
+    "duplicates": [
+        {
+            "source_doc_id": "D0",
+            "target_doc_id": "D1",
+            "source_start": 5,
+            "source_end": 14,
+            "target_start": 12,
+            "target_end": 21,
+            "text": " Jeremiah"
+        },
+        {
+            "source_doc_id": "D0",
+            "target_doc_id": "D2",
+            "source_start": 5,
+            "source_end": 14,
+            "target_start": 9,
+            "target_end": 18,
+            "text": " Jeremiah"
+        }
+    ]
+}

@@ -1,0 +1,214 @@
+Description du cas
+
+Une patiente de 72 ans est adressée par son médecin de famille afin de procéder à l’évaluation d’altérations eczématiformes dans la région de la poitrine et au niveau du dos des mains. Depuis le printemps 2016, elle présentait en outre des lésions rosacéiformes dans le visage, avant tout au niveau des joues et autour du nez. Il n’y avait quasiment pas de prurit. Au toucher, les lésions cutanées étaient légèrement douloureuses. Les lésions cutanées étaient présentes depuis plusieurs mois, mais se sont accentuées depuis juin 2016 (patiente adressée par son médecin de famille et vue en première consultation en novembre 2016). L’application topique de métronidazole (Rosalox®) et de corticostéroïdes topiques de classe 3 (furoate de mométasone [Elocom crème®]) durant 2 semaines a uniquement entraîné une légère amélioration.
+
+Parmi les autres diagnostics de la patiente figurent une rhinoconjonctivite allergique aux pollens avec immunothérapie spécifique par voie sous-cutanée réalisée en 1985/86, une pseudo-polyarthrite rhizomélique (premier diagnostic en août 2013) traitée par corticothérapie au long cours par des comprimés de prednisone (Prednitop®) 5 mg/2,5 mg par jour en alternance, un syndrome d’apnée obstructive du sommeil traité par ventilation en pression positive continue (CPAP) depuis 2001, une carence en vitamine D et en vitamine B12 (substituées), ainsi qu’une hypertension artérielle. Les médicaments pris quotidiennement par la patiente sont les suivants:
+
+Aperçu des médicaments pris par la patiente
+
+
+Prednisone 5 mg/2,5 mg par jour en alternance 1-0-0
+
+Pantoprazole 40 mg 1-0-0
+
+Candésartan 16 mg (nouveau, depuis l’été 2016) 1-0-0
+
+Vitamine D3 en gouttes 6-0-0
+
+Vitarubin® i.m. tous les 3 mois
+
+La patiente signale que les lésions cutanées s’aggravent durant les mois d’été, mais que tout va bien tant qu’elle utilise de la crème solaire. Au printemps dernier, elle n’avait plus de crème solaire, et une forte éruption cutanée s’est alors développée au niveau des mains, du décolleté et du visage.
+
+A l’examen physique, des plaques érythémateuses, en partie squameuses, annulaires confluentes sont retrouvées au niveau du cou, du décolleté et des avant-bras (fig. 1). Le reste du tégument, y compris la muqueuse intrabuccale, est sans particularité.
+
+Figure 1: Manifestations cliniques au niveau du décolleté (A ) et du dos de la main droite (B ) (publication avec le consentement de la patiente).
+
+Question 1: Quel est le diagnostic différentiel le plus plausible?
+
+
+a) Erythème polymorphe
+
+b) Porphyrie (porphyrie cutanée tardive)
+
+c) Lupus érythémateux cutané subaigu (LECS)
+
+d) Photodermatose polymorphe
+
+e) Granulome annulaire
+
+En raison de la morphologie des lésions et de leur localisation avec une prédominance au niveau des zones exposées au soleil, il convient impérativement de songer à un lupus érythémateux cutané.
+
+L’érythème polymorphe se présente sous forme de ­lésions en cocarde typiquement composées de trois zones concentriques, sans desquamation. Les lésions sont souvent localisées au niveau de la paume des mains et de la plante des pieds et parfois au niveau de la muqueuse intrabuccale, mais pas en premier lieu au niveau des zones exposées au soleil.
+
+La porphyrie acquise (porphyrie cutanée tardive) se ­caractérise typiquement par la coexistence de croûtes hémorragiques, érosions, cicatrices atrophiques, défauts de pigmentation et grains de milium post-bulleux, ce qui fait défaut dans le cas présent.
+
+La photodermatose polymorphe provoque généralement des lésions moins infiltrantes, plutôt papulo-vésiculeuses, très prurigineuses. Qui plus est, le dos des mains est assez rarement touché.
+
+L’aspect annulaire des lésions pourrait certes coïncider avec un granulome annulaire, mais une atteinte épidermique (desquamation) fait typiquement défaut dans ce dernier. En outre, les zones exposées au soleil ne sont pas les localisations de prédilection des lésions du granulome annulaire.
+
+Question 2: Quelle(s) mesure(s) diagnostique(s) initiez-vous à présent?
+
+
+a) Hémogramme, créatinine, valeurs hépatiques
+
+b) Prélèvement sanguin avec recherche d’anticorps antinucléaires (AAN), d’anticorps anti-SSA, d’anticorps anti-SSB, d’anticorps anti-histones et d’anticorps anti-ADNdb
+
+c) Biopsie cutanée avec analyse histologique et immunofluorescence directe
+
+d) Radiographie thoracique
+
+e) Les propositions a, b et c sont correctes
+
+Dans le cadre de notre diagnostic de suspicion d’un lupus érythémateux cutané subaigu (LECS), il est impératif de réaliser une biopsie cutanée avec analyse histologique et immunofluorescence directe, qui permet de mettre en évidence des anticorps liés aux tissus dans la peau. Parmi les autres examens de laboratoire, il convient de procéder à la détermination des anticorps anti-Ro(SSA) et des anticorps anti-La(SSB), qui sont positifs chez 70% [1] à 99% [2] des patients atteints de LECS, des anticorps anti-histones, qui sont spécifiques du LECS induit par des médicaments, des AAN et des anticorps anti-ADNdb pour exclure un lupus érythémateux disséminé (LED), ainsi que de l’hémogramme pour exclure des cytopénies ou une atteinte organique, qui indiquent également un LED.
+
+Sérologie
+
+L’hématologie n’a pas révélé de cytopénies. Une nette élévation des anticorps anti-SSA (240 U/ml; valeur de référence: >10 = négatifs), des anticorps anti-SSB (205 U/ml; valeur de référence: >10 = négatifs) et des AAN (1:1280; valeur de référence: <1:40 = négatifs) a été constatée; les anticorps anti-ADNdb et anti-histones étaient normaux.
+
+Description histologique
+
+Dermatite d’interface avec vacuolisation de la zone de jonction et mise en évidence de corps cytoïdes. Dans la partie supérieure du derme, infiltrat cellulaire mixte principalement composé de lymphocytes avec quelques granulocytes neutrophiles isolés. Extension focale de l’infiltrat à l’épiderme. Dans la partie intermédiaire du derme, infiltrats lymphocytaires périvasculaires modérément prononcés de délimitation relativement nette.
+
+Immunopathologie
+
+L’immunofluorescence directe a uniquement révélé des altérations non spécifiques.
+
+Diagnostic histologique
+
+Compatible avec une dermatite lupoïde.
+
+Question 3: Quel diagnostic pouvez-vous à présent poser?
+
+
+a) Lupus érythémateux cutané subaigu (LECS)
+
+b) Lupus érythémateux disséminé (LED)
+
+c) Lupus érythémateux discoïde
+
+d) Lupus érythémateux induit par des médicaments
+
+e) Syndrome de Sjögren
+
+Compte tenu de l’anamnèse avec un caractère clairement photo-dépendant des lésions, de la localisation des lésions et du tableau clinique, des anticorps anti-SSA et anti-SSB positifs ainsi que des anomalies histologiques compatibles, le diagnostic de LECS peut être posé.
+
+Au vu des AAN et des anticorps anti-ADNdb négatifs, de l’absence d’atteinte organique et de l’hématologie normale, les critères pour le diagnostic d’un LED ne sont pas remplis.
+
+Les anticorps anti-histones négatifs ne cadrent pas avec un lupus érythémateux induit par des médicaments.
+
+Le lupus érythémateux discoïde se présente sous forme de plaques érythémateuses discoïdes, ce qui ne concorde pas avec le tableau clinique et sérologique de la patiente.
+
+Le syndrome de Sjögren est certes associé à des anticorps anti-SSA et anti-SSB positifs, mais il s’accompagne principalement d’une atteinte des glandes exocrines, et non pas de la peau.
+
+Question 4: Quelle approche thérapeutique est indiquée?
+
+
+a) Application quotidienne systématique d’une protection solaire avec un indice de protection élevé (IP 50+)
+
+b) Application de corticostéroïdes topiques de classe 2 ou 3, 1× par jour pour au maximum 14 jours (corps 14 jours; visage 7 jours), puis passage à un inhibiteur de la calcineurine topique (Protopic® pommade) 1× par jour
+
+c) Antipaludique systémique hydroxychloroquine (Plaquenil®), comprimé de 200 mg 1× par jour
+
+d) Les propositions a et b sont correctes
+
+e) Les propositions a, b et c sont correctes
+
+Etant donné que le LECS est favorisé par les rayons UV, une protection solaire quotidienne est obligatoire. Initialement, il convient d’utiliser 1x par jour un cortico­stéroïde topique de classe 2–3 comme traitement anti-inflammatoire primaire, puis de passer au plus tard après 2 semaines à un inhibiteur de la calcineurine topique. Dans le cas présent, un traitement par Plaquenil® 200 mg 1× par jour a été initié. Ce traitement influence les réactions immunologiques (complément et réaction antigène-anticorps) et il a une action anti-inflammatoire et photoprotectrice.
+
+Question 5: Quels examens complémentaires devraient encore être réalisés?
+
+
+a) Analyse urinaire pour rechercher une néphrite
+
+b) Echographie rénale et radiographie thoracique
+
+c) Examen ophtalmologique à cause de Plaquenil® (en raison de la rétinopathie)
+
+d) Les propositions a et b sont correctes
+
+e) Les propositions a, b et c sont correctes
+
+Dans la mesure où le LECS peut évoluer en LED (voir ci-dessous), il est nécessaire d’exclure une atteinte organique systémique, principalement une atteinte rénale. Par ailleurs, dans le cadre du traitement par Plaquenil®, il est impératif de réaliser un examen ophtalmologique afin d’exclure une rétinopathie. Dans le cas présent, la patiente ne présentait pas d’atteinte rénale et pas de rétinopathie. Avec le traitement mentionné ci-dessus, une nette amélioration des lésions cutanées a déjà été constatée après quelques semaines. La patiente est restée asymptomatique sous traitement.
+
+Discussion
+Aperçu des formes de lupus érythémateux
+
+Le lupus érythémateux (LE) est une maladie auto-immune causée par des lésions du tissu conjonctif vasculaire consécutives au dépôt de complexes immuns dans la membrane basale de la peau et des organes. Il convient de faire la distinction entre le lupus érythémateux disséminé (LED), qui est une affection multi-systémique grave, et les formes exclusivement cutanées. Parmi ces dernières figurent le lupus érythémateux cutané aigu (LECA), le lupus érythémateux cutané subaigu (LECS) et le lupus érythémateux cutané chronique (LECC). Ces subdivisions reposent sur les différences en termes de présentation clinique, d’évolution, et de caractéristiques histologiques et immunosérologiques (tab. 1).
+
+Tableau 1:Classification du lupus érythémateux.
+Lupus érythémateux cutané(classification modifiée d’après Gilliam/Sontheimer)	Lupus érythémateux cutané aigu (LECA)
+ 	Lupus érythémateux cutané subaigu (LECS)avec les sous-types suivants:	Papulo-squameux
+Annulaire
+LECS pityriasiforme
+LECS poïkilodermique bulleux
+ 	Lupus érythémateux cutané chronique (LECC)avec les sous-types suivants:	Lupus discoïde (CDLE)
+Lupus érythémateux tumide
+Lupus érythémateux profond / panniculite lupique
+Lupus-engelure
+Lupus érythémateux disséminé (LED)	Les critères de l’«American College of Rheumatology» (ACR) sont utilisés pour le diagnostic du LED.
+
+Environ 5–10% des cas de LECS et 5% des cas de LECC évoluent en LED avec le temps; des contrôles cliniques et sérologiques réguliers sont dès lors nécessaires [1–3]. Toutefois, le LECS peut également donner lieu à des symptômes systémiques, tels que malaise, arthralgies et faiblesse.
+
+Dans les lignes qui suivent, nous nous concentrons exclusivement sur le LECS, qui est le diagnostic posé chez la patiente présentée.
+
+Lupus érythémateux cutané subaigu (LECS)
+Présentations cliniques
+
+Le LECS est une manifestation exclusivement cutanée du LE. En sont le plus souvent atteintes les femmes d’âge jeune à moyen [1]. Sur le plan clinique, le LECS se présente souvent sous forme de lésions squameuses annulaires ou papulo-squameuses [1, 3]. Avec le temps, les lésions annulaires peuvent confluer et avoir un aspect polycyclique, tandis que les plaques papulo-squameuses confluent et présentent le plus souvent un aspect réticulé [1]. Les autres présentations du LECS, telles que le type pityriasiforme ou le type poïkilodermique bulleux, sont nettement plus rares [1].
+
+Localisation
+
+En raison de la photosensibilité accrue, les manifestations cutanées sont le plus souvent localisées au niveau des zones exposées au soleil (épaules, nuque, en forme de V au niveau du décolleté, faces d’extension des bras) [1, 2]. Au niveau du visage, le triangle sous-mentonnier peut être épargné [3].
+
+Facteurs étiologiques
+
+La plupart des cas de LECS sont d’origine idiopathique. Jusqu’à 12% des cas de LECS ont une origine médicamenteuse [2]. Les médicaments suivants sont connus pour être des déclencheurs du LECS: hydrochlorothiazide [2, 3], inhibiteurs de l’enzyme de conversion de l’angiotensine, terbinafine [3], diltiazem et fluoxétine [4]. La durée entre la première prise du médicament et la survenue des symptômes peut atteindre 2 ans ou plus [2, 4].
+
+Le LECS est en outre une paranéoplasie facultative, qui peut survenir dans le cadre de diverses tumeurs, avant tout solides (cancer des poumons/bronchique, de l’estomac, du foie, du sein, de la prostate et de l’utérus, lymphome hodgkinien, carcinome épidermoïde de la tête et du cou).
+
+La grossesse peut aggraver les lésions cutanées du LECC et du LECS, voire les déclencher pour la première fois. Chez les mères ayant des anticorps anti-Ro-/SSA, un lupus néonatal s’observe dans env. 2% des cas [5].
+
+Un traitement de substitution hormonale augmente non seulement le risque de LED, mais également le risque de LECC. Deux études datant de 2005 ont montré qu’une contraception orale devrait uniquement être prescrite en cas maladie inactive ou stable (pas d’atteinte du système nerveux central ou des reins) [5].
+
+Considérations diagnostiques supplémentaires
+
+70% [1] à 99% [2] des patients atteints de LECS présentent des anticorps anti-Ro(SSA) positifs et env. 38% présentent des anticorps anti-La(SSB) élevés. Les anticorps anti-ADNdb sont négatifs [4].
+
+Sur le plan génétique moléculaire, les patients atteints de LECS présentent une prédisposition pour les HLA-A1, -B8 et -DR3 [3].
+
+Dans le cadre du LECS induit par des médicaments, les analyses sérologiques révèlent des anticorps anti-histones élevés dans jusqu’à 95% des cas [5]; ces anticorps sont spécifiques du LECS induit par des médicaments [3]. Les anticorps anti-ADNdb et les ENA sont généralement négatifs (<5%) [3].
+
+Dans une étude rétrospective de Dema T. Aliniemi et al. [2] conduite avec 90 patients, env. 20% des patients atteints de LECS remplissaient formellement les critères du «American College of Rheumatology» (ACR) pour le diagnostic de LED, mais une atteinte organique systémique a néanmoins uniquement été retrouvée chez 1% d’entre eux. De la même manière, Kuhn et al. ont rapporté qu’env. 50% des patients atteints de LECS rempliraient les critères de l’ACR pour un LED, bien qu’ils ne souffrent pas de LED [3]. Cela s’explique par le fait que quatre des critères sont des critères cutanés (érythème en ailes de papillon, lésions discoïdes, ulcérations des muqueuses, photosensibilité accrue) et se traduit par un surdiagnostic du LED chez des patients qui présentent uniquement des lésions cutanées [3].
+
+Diagnostic différentiel
+
+Le diagnostic différentiel du LECS englobe le psoriasis vulgaire ou l’eczéma séborrhéique, le tinea corporis, le mycosis fongoïde, l’érythème annulaire centrifuge, le pityriasis rubra pilaire et l’eczéma nummulaire [3].
+
+Evolution
+
+Les lésions cutanées guérissent typiquement sans atrophie ni cicatrices [2, 3]. Une guérison spontanée est possible. Dans 5–10% des cas, le LECS évolue en LED [4].
+
+Traitement
+
+Photoprotection: Etant donné que le LE cutané est très photosensible, les patients doivent appliquer de façon conséquente et quotidienne une protection solaire (UVA, UVB) [1]. Il convient tout particulièrement d’éviter l’exposition directe au soleil en milieu de journée (11–15 heures).
+
+Abstinence tabagique: Le tabagisme peut d’une part provoquer une exacerbation du LE cutané et d’autre part réduire l’efficacité des médicaments antipaludiques [1].
+
+Evitement des médicaments déclencheurs: Vu que de nombreuses classes de médicaments peuvent déclencher un LE cutané, les médicaments suspects devraient si possible être délaissés au profit d’autres classes de substances [1].
+
+Corticostéroïdes: Les corticostéroïdes topiques en monothérapie sont souvent inappropriés. Les corticostéroïdes topiques très puissants appliqués durant 2 semaines (par ex. bétaméthasone et propionate de clobétasol 0,05%) montrent une efficacité nettement supérieure à celle des corticostéroïdes peu puissants (par ex. hydrocortisone 1%) [1]. Les corticostéroïdes oraux (par ex. prednisone 1 mg/kg pendant 2 semaines) peuvent être utiles pour parvenir à contrôler la situation chez les patients fortement touchés, mais ils ne sont pas recommandés comme traitement de routine en raison de l’effet thérapeutique uniquement temporaire et des effets indésirables, tels que diabète sucré, ostéoporose et insuffisance surrénale [1].
+
+Inhibiteurs de la calcineurine topiques: Le tacrolimus et le pimécrolimus présentent une efficacité modérée dans le traitement du LE cutané. Plus les lésions cutanées sont épaisses, plus la réponse thérapeutique est faible. Ces principes actifs ont un excellent profil de sécurité et peuvent également être appliqués sur le visage et les espaces intertrigineux [1].
+
+Rétinoïdes topiques: Les lésions hyperkératosiques ­répondent aux rétinoïdes topiques, mais des irritations cutanées peuvent survenir en tant qu’effet indésirable [1].
+
+Médicaments antipaludiques: Les médicaments antipaludiques présentent une bonne efficacité et un profil de sécurité favorable. Jusqu’à 75% des patients répondent à une monothérapie ou à un traitement d’association [1, 2]. L’hydroxychloroquine à la dose de 6,5 mg/kg/jour (env. 400 mg/jour en deux prises) en tant que traitement initial entraîne généralement une réponse clinique après 2–3 mois. En cas de réponse insuffisante, l’hydroxychloroquine peut être remplacée par de la chloroquine à la dose de 4 mg/kg/jour (l’association de ces deux substances n’est pas recommandée en raison du risque accru de rétinopathie). En cas de réponse thérapeutique satisfaisante, la dose d’hydroxychloroquine peut être réduite à 200 mg/jour. Le traitement doit être poursuivi durant 1–2 ans afin de supprimer totalement l’activité du LE cutané [2]. Des contrôles ophtalmologiques (examen du fond d’œil et examen du champ visuel) et des contrôles de laboratoire (hémogramme et valeurs hépatiques) devraient être réalisés régulièrement [1, 2].
+
+Dapsone: Chez les patients atteints de LECC, la posologie s’élève à 50–200 mg/jour. Etant donné qu’il s’agit d’un inducteur obligatoire de la méthémoglobine et d’une anémie hémolytique, l’hémogramme, le LDH et les enzymes hépatiques doivent être contrôlés régulièrement. Avant l’initiation du traitement, la détermination de l’activité de la G6PD est impérative.
+
+En particulier dans les cas largement réfractaires aux corticostéroïdes, des immunosuppresseurs, tels que l’azathioprine (1–2,5 mg/kg de poids corporel [PC] par jour), sont administrés en plus, ainsi que du cyclophosphamide par voie orale (1–2 mg/kg PC par jour). Alternativement, il est possible d’administrer du méthotrexate (15 mg/semaine), qui peut entraîner une amélioration d’une arthrite, d’une vascularite cutanée, d’une myosite et d’une sérosite. Les rétinoïdes systémiques (tels que l’isotrétinoïne et l’acitrétine) représentent également une option chez les patients atteints de LECC et de LECS en cas de résistance au traitement ou d’intolérance aux médicaments antipaludiques. Le mycophénolate mofétil (MMF) (2–3 g/jour) était associé à de bons succès thérapeutiques pour les manifestations cutanées du LE. Le thalidomide (50–100 mg/jour), qui possède des propriétés immunomodulatrices et anti-inflammatoires, peut également être utilisé pour le traitement du LECS.
+
+Réponses
+
+
+Question 1: c. Question 2: e. Question 3: a. Question 4: e. ­Question 5: e.

@@ -1,0 +1,38 @@
+{
+    "_description": "Texts with newlines",
+    "settings": {
+        "fingerprint_type": "char",
+        "fingerprint_length": 10,
+        "min_duplicate_length": 16
+    },
+    "docs": [
+        {
+            "id": "D0",
+            "text": "A significant part of medical knowledge is stored as unstructured free text.\nHowever, clinical narratives are known to contain duplicated sections due to clinicians’copy/paste parts of a former report into a new one."
+        },
+        {
+            "id": "D1",
+            "text": "A significant part of medical knowledge is present in structured data and you need to work with text.\nclinical narratives are known to contain duplicated sections."
+        }
+    ],
+    "duplicates": [
+        {
+            "source_doc_id": "D0",
+            "target_doc_id": "D1",
+            "source_start": 0,
+            "source_end": 43,
+            "target_start": 0,
+            "target_end": 43,
+            "text": "A significant part of medical knowledge is "
+        },
+        {
+            "source_doc_id": "D0",
+            "source_end": 146,
+            "source_start": 86,
+            "target_doc_id": "D1",
+            "target_end": 162,
+            "target_start": 102,
+            "text": "clinical narratives are known to contain duplicated sections"
+        }
+    ]
+}

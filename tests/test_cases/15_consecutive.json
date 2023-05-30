@@ -1,0 +1,38 @@
+{
+    "_description": "One pattern in source copy/pasted consecutively in target",
+    "settings": {
+        "fingerprint_type": "char",
+        "fingerprint_length": 2,
+        "min_duplicate_length": 3
+    },
+    "docs": [
+        {
+            "id": "D0",
+            "text": "Alice"
+        },
+        {
+            "id": "D1",
+            "text": "AliceAlice"
+        }
+    ],
+    "duplicates": [
+        {
+            "source_doc_id": "D0",
+            "target_doc_id": "D1",
+            "source_start": 0,
+            "source_end": 5,
+            "target_start": 0,
+            "target_end": 5,
+            "text": "Alice"
+        },
+        {
+            "source_doc_id": "D0",
+            "target_doc_id": "D1",
+            "source_start": 0,
+            "source_end": 5,
+            "target_start": 5,
+            "target_end": 10,
+            "text": "Alice"
+        }
+    ]
+}

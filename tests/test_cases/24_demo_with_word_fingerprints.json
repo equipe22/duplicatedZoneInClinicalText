@@ -1,0 +1,47 @@
+{
+    "_description": "2d test from demo but with word fingerprints",
+    "settings": {
+        "fingerprint_type": "word",
+        "fingerprint_length": 2,
+        "min_duplicate_length": 16
+    },
+    "docs": [
+        {
+            "id": "D0",
+            "text": "However, clinical narratives are known to contain duplicated sections due to clinicians’copy/paste parts of a former report into a new one."
+        },
+        {
+            "id": "D1",
+            "text": "noisy informations are present in clinical narratives due to clinicians’ copy/paste parts of a former report into a new one."
+        }
+    ],
+    "duplicates": [
+        {
+            "source_doc_id": "D0",
+            "target_doc_id": "D1",
+            "source_start": 9,
+            "source_end": 28,
+            "target_start": 34,
+            "target_end": 53,
+            "text": "clinical narratives"
+        },
+        {
+            "source_doc_id": "D0",
+            "target_doc_id": "D1",
+            "source_start": 70,
+            "source_end": 87,
+            "target_start": 54,
+            "target_end": 71,
+            "text": "due to clinicians"
+        },
+        {
+            "source_doc_id": "D0",
+            "target_doc_id": "D1",
+            "source_start": 88,
+            "source_end": 138,
+            "target_start": 73,
+            "target_end": 123,
+            "text": "copy/paste parts of a former report into a new one"
+        }
+    ]
+}

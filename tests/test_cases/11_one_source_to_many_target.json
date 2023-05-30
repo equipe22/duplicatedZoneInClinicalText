@@ -1,0 +1,38 @@
+{
+    "_description": "One source pattern copy/pasted several times in target",
+    "settings": {
+        "fingerprint_type": "char",
+        "fingerprint_length": 2,
+        "min_duplicate_length": 4
+    },
+    "docs": [
+        {
+            "id": "D0",
+            "text": "Hello Alice"
+        },
+        {
+            "id": "D1",
+            "text": "Hello Bob, Hello David"
+        }
+    ],
+    "duplicates": [
+        {
+            "source_doc_id": "D0",
+            "target_doc_id": "D1",
+            "source_start": 0,
+            "source_end": 6,
+            "target_start": 0,
+            "target_end": 6,
+            "text": "Hello "
+        },
+        {
+            "source_doc_id": "D0",
+            "target_doc_id": "D1",
+            "source_start": 0,
+            "source_end": 6,
+            "target_start": 11,
+            "target_end": 17,
+            "text": "Hello "
+        }
+    ]
+}

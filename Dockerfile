@@ -1,7 +1,7 @@
 FROM python:3.7.0-alpine3.8
 MAINTAINER William Digan william.digan@aphp.fr
 WORKDIR /home
-RUN pip3 install -I intervaltree==2.1.0
+RUN pip3 install -I intervaltree==3.1.0
 RUN apk update \
   && apk add --no-cache  --virtual build-deps gcc python3-dev musl-dev \
   && apk add postgresql-dev \
@@ -14,21 +14,23 @@ RUN apk add --no-cache procps bash
 
 
 RUN apk add --no-cache graphviz
+RUN pip3 install --upgrade pip
 RUN pip3 install gprof2dot
 
 ENV DOCKYARD_SRC=duplication
 #Directory in container for all project files
 ENV DOCKYARD_SRVHOME=/srv
 #Directory in container for project source files
-ENV DOCKYARD_SRVPROJ=/srv/src
+ENV DOCKYARD_SRVPROJ=/srv/duplicatefinder
 #Update the default application repository sources list
 
 # Create application subdirectories
 # RUN mkdir $DOCKYARD_SRVHOME
-ADD src /srv/src
-COPY data/demo.txt /tmp
+ADD . /srv/duplicatefinder
 # Install Python Source
 WORKDIR $DOCKYARD_SRVPROJ
+RUN pip3 install .
+
 #to start the server uncomment this
 RUN touch /home/logs.txt
 # CMD ["tail -f /ho;e/logs.txt"]

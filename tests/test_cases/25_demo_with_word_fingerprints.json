@@ -1,0 +1,29 @@
+{
+    "_description": "3d test from demo but with word fingerprints",
+    "settings": {
+        "fingerprint_type": "word",
+        "fingerprint_length": 2,
+        "min_duplicate_length": 16
+    },
+    "docs": [
+        {
+            "id": "D0",
+            "text": "In this study, even if we work to evaluated our algorithms in this example, we aim at evaluating the duplications found within patient records in more than 650,000 text."
+        },
+        {
+            "id": "D1",
+            "text": "In this study, we aim at evaluating the duplications found within patient records in more than 650,000 text."
+        }
+    ],
+    "duplicates": [
+        {
+            "source_doc_id": "D0",
+            "target_doc_id": "D1",
+            "source_start": 76,
+            "source_end": 168,
+            "target_start": 15,
+            "target_end": 107,
+            "text": "we aim at evaluating the duplications found within patient records in more than 650,000 text"
+        }
+    ]
+}
