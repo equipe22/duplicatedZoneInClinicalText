@@ -5,7 +5,7 @@ import timeit
 
 import pytest
 
-from duplicatefinder import (
+from duptextfinder import (
     CharFingerprintBuilder,
     WordFingerprintBuilder,
     DuplicateFinder,

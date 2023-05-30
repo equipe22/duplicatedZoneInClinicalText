@@ -4,7 +4,7 @@ from pprint import pprint
 
 import pytest
 
-from duplicatefinder import (
+from duptextfinder import (
     CharFingerprintBuilder,
     WordFingerprintBuilder,
     DuplicateFinder,

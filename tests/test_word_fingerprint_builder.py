@@ -1,6 +1,6 @@
 import pytest
 
-from duplicatefinder import WordFingerprintBuilder, Span
+from duptextfinder import WordFingerprintBuilder, Span
 
 
 @pytest.fixture(scope="module", autouse=True)
@@ -11,7 +11,7 @@ def mock_span_eq(module_mocker):
         return self.start == other.start and self.end == other.end
 
     module_mocker.patch(
-        "duplicatefinder.Span.__eq__",
+        "duptextfinder.Span.__eq__",
         spans_are_equal,
     )
 

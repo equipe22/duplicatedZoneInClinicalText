@@ -4,10 +4,10 @@ from setuptools import setup
 long_description = (Path(__file__).parent / "README.md").read_text()
 
 setup(
-    name="duplicatefinder",
+    name="duptextfinder",
     description="Detect duplicated zones in (clinical) text",
     license="GPLv3",
-    packages=["duplicatefinder"],
+    packages=["duptextfinder"],
     extras_require = {
         "tests": ["pytest", "pytest-mock"],
         "ncls":  ["ncls>=0.0.66", "numpy"],
