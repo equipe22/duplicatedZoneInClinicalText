@@ -1,7 +1,7 @@
 from pathlib import Path
 import json
 
-from duplicatefinder import CharFingerprintBuilder, DuplicateFinder
+from duptextfinder import CharFingerprintBuilder, DuplicateFinder
 
 
 fingerprintLength = 15

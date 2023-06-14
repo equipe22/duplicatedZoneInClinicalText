@@ -21,12 +21,12 @@ ENV DOCKYARD_SRC=duplication
 #Directory in container for all project files
 ENV DOCKYARD_SRVHOME=/srv
 #Directory in container for project source files
-ENV DOCKYARD_SRVPROJ=/srv/duplicatefinder
+ENV DOCKYARD_SRVPROJ=/srv/duptextfinder
 #Update the default application repository sources list
 
 # Create application subdirectories
 # RUN mkdir $DOCKYARD_SRVHOME
-ADD . /srv/duplicatefinder
+ADD . /srv/duptextfinder
 # Install Python Source
 WORKDIR $DOCKYARD_SRVPROJ
 RUN pip3 install .
