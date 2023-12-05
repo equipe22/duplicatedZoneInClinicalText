@@ -6,14 +6,14 @@ long_description = (Path(__file__).parent / "README.md").read_text()
 setup(
     name="duptextfinder",
     description="Detect duplicated zones in (clinical) text",
-    license="GPLv3",
+    license="AGPLv3",
     packages=["duptextfinder"],
     extras_require = {
         "tests": ["pytest", "pytest-mock"],
         "ncls":  ["ncls>=0.0.66", "numpy"],
         "intervaltree":  ["intervaltree>=3.0.0"],
     },
-    version="0.2",
+    version="0.2.post1",
     keywords = ["TEXT", "DUPLICATION", "DUPLICATE", "CLINICAL"],
     url="https://github.com/equipe22/duplicatedZoneInClinicalText",
     long_description=long_description,
