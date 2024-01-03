@@ -6,7 +6,7 @@ long_description = (Path(__file__).parent / "README.md").read_text()
 setup(
     name="duptextfinder",
     description="Detect duplicated zones in (clinical) text",
-    license="AGPLv3",
+    license="MIT",
     packages=["duptextfinder"],
     extras_require = {
         "tests": ["pytest", "pytest-mock"],
